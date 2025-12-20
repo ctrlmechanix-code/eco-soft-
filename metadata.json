@@ -1,0 +1,5 @@
+{
+  "name": "ECO-SORT",
+  "description": "A smart campus e-waste management system to streamline the reporting, collection, and recycling of electronic waste. This app guides users through identifying e-waste, finding collection points, and tracks their environmental impact.",
+  "requestFramePermissions": []
+}
