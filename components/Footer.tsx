@@ -3,7 +3,7 @@ import React from 'react';
 import { Recycle, Twitter, Github, Linkedin, ArrowRight, Instagram, Mail, MapPin } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
-const FooterLink = ({ to, children }: { to: string; children: React.ReactNode }) => (
+const FooterLink = ({ to, children }: { to: string; children?: React.ReactNode }) => (
     <li>
         <Link 
             to={to} 
@@ -15,10 +15,12 @@ const FooterLink = ({ to, children }: { to: string; children: React.ReactNode })
     </li>
 );
 
-const SocialIcon = ({ href, children, label }: { href: string; children: React.ReactNode; label: string }) => (
+const SocialIcon = ({ href, children, label }: { href: string; children?: React.ReactNode; label: string }) => (
      <a 
         href={href} 
         aria-label={label}
+        target="_blank"
+        rel="noopener noreferrer"
         className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:bg-emerald-500/10 hover:border-emerald-500/50 hover:text-emerald-400 transition-all duration-300 backdrop-blur-sm"
     >
         {children}
@@ -64,10 +66,10 @@ const Footer = () => {
                         </p>
                         
                         <div className="flex gap-4 pt-2">
-                            <SocialIcon href="#" label="Twitter"><Twitter className="w-5 h-5" /></SocialIcon>
-                            <SocialIcon href="#" label="GitHub"><Github className="w-5 h-5" /></SocialIcon>
-                            <SocialIcon href="#" label="LinkedIn"><Linkedin className="w-5 h-5" /></SocialIcon>
-                            <SocialIcon href="#" label="Instagram"><Instagram className="w-5 h-5" /></SocialIcon>
+                            <SocialIcon href="https://twitter.com" label="Twitter"><Twitter className="w-5 h-5" /></SocialIcon>
+                            <SocialIcon href="https://github.com" label="GitHub"><Github className="w-5 h-5" /></SocialIcon>
+                            <SocialIcon href="https://linkedin.com" label="LinkedIn"><Linkedin className="w-5 h-5" /></SocialIcon>
+                            <SocialIcon href="https://instagram.com" label="Instagram"><Instagram className="w-5 h-5" /></SocialIcon>
                         </div>
                     </div>
                     
@@ -106,7 +108,7 @@ const Footer = () => {
                              />
                              <button 
                                 type="submit"
-                                className="absolute right-1.5 top-1.5 p-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md transition-colors shadow-lg shadow-emerald-900/20"
+                                className="absolute right-1.5 top-1.5 p-1.5 bg-emerald-600 hover:bg-emerald-50 text-white rounded-md transition-colors shadow-lg shadow-emerald-900/20"
                              >
                                  <ArrowRight className="w-4 h-4" />
                              </button>

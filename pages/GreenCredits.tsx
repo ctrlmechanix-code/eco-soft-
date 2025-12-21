@@ -6,7 +6,7 @@ import AnimatedCounter from '../components/ui/AnimatedCounter';
 import { Trophy, Award, Zap, Crown } from 'lucide-react';
 import Icon from '../components/ui/Icon';
 
-const PageWrapper = ({ children }: { children: React.ReactNode }) => (
+const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

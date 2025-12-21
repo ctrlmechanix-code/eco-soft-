@@ -38,3 +38,24 @@ export interface QuestionFlowAnswers {
     intent?: string;
     location?: string;
 }
+
+export interface UserActivity {
+    id: number;
+    date: string;
+    item: string;
+    category: string;
+    action: string;
+    credits: number;
+    status: 'Verified' | 'Processing' | 'Completed';
+}
+
+export interface BlogPost {
+    id: string;
+    title: string;
+    excerpt: string;
+    content: string;
+    date: string;
+    author: string;
+    category: string;
+    image: string;
+}

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { GoogleGenAI } from '@google/genai';
 import { Sparkles, Image as ImageIcon, Loader, AlertCircle, Key } from 'lucide-react';
 
-const PageWrapper = ({ children }: { children: React.ReactNode }) => (
+const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

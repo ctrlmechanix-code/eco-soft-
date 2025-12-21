@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Leaf, Globe, Recycle, Wind } from 'lucide-react';
 import AnimatedCounter from '../components/ui/AnimatedCounter';
 
-const PageWrapper = ({ children }: { children: React.ReactNode }) => (
+const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

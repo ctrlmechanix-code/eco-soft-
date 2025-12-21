@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { collectionPoints } from '../data/mockData';
 import { MapPin, Clock, ArrowUpRight } from 'lucide-react';
 
-const PageWrapper = ({ children }: { children: React.ReactNode }) => (
+const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

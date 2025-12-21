@@ -12,11 +12,12 @@ import Result from './pages/Result';
 import CollectionPoints from './pages/CollectionPoints';
 import GreenCredits from './pages/GreenCredits';
 import Dashboard from './pages/Dashboard';
-import ImageGenerator from './pages/ImageGenerator';
 import AboutUs from './pages/AboutUs';
 import Sustainability from './pages/Sustainability';
 import Careers from './pages/Careers';
 import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
+import Profile from './pages/Profile';
 
 const AppLayout = () => {
     const location = useLocation();
@@ -47,13 +48,14 @@ function App() {
           <Route path="/collection-points" element={<CollectionPoints />} />
           <Route path="/credits" element={<GreenCredits />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/image-generator" element={<ImageGenerator />} />
+          <Route path="/profile" element={<Profile />} />
           
           {/* Company Pages */}
           <Route path="/about" element={<AboutUs />} />
           <Route path="/sustainability" element={<Sustainability />} />
           <Route path="/careers" element={<Careers />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<BlogPost />} />
         </Route>
         <Route path="/auth" element={<Auth />} />
       </Routes>

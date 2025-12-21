@@ -6,7 +6,7 @@ import { questionFlowData } from '../data/mockData';
 import type { QuestionFlowAnswers } from '../types';
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
 
-const PageWrapper = ({ children }: { children: React.ReactNode }) => (
+const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
     <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

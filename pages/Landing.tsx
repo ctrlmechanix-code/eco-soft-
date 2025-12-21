@@ -6,7 +6,7 @@ import { ArrowRight, Recycle, Check, Leaf, Zap, BarChart3, Globe, ShieldCheck } 
 import { impactStats } from '../data/mockData';
 import AnimatedCounter from '../components/ui/AnimatedCounter';
 
-const PageWrapper = ({ children }: { children: React.ReactNode }) => (
+const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
@@ -35,7 +35,7 @@ const Landing = () => {
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
                     className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 text-sm font-medium mb-8"
                 >
                     <span className="relative flex h-2 w-2">
@@ -48,7 +48,7 @@ const Landing = () => {
                 <motion.h1 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
                     className="text-5xl md:text-7xl font-bold tracking-tight text-slate-900 mb-8 leading-[1.1]"
                 >
                     Sustainability meets <br className="hidden md:block"/>
@@ -58,7 +58,7 @@ const Landing = () => {
                 <motion.p 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
                     className="text-xl text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed"
                 >
                     Transform how your campus handles e-waste. An elegant, data-driven platform to report, recover, and reward responsible disposal.
@@ -67,7 +67,7 @@ const Landing = () => {
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
                     className="flex flex-col sm:flex-row gap-4 justify-center"
                 >
                     <button 
