@@ -114,7 +114,7 @@ const CollectionPoints = () => {
                 </div>
 
                 {/* Detail View or Map Area */}
-                <div className="lg:w-2/3 h-full flex flex-col gap-6">
+                <div className={`lg:w-2/3 h-full flex flex-col gap-6 ${!selectedPoint ? 'hidden lg:flex' : 'flex'}`}>
                     <AnimatePresence mode="wait">
                         {selectedPoint ? (
                             <motion.div
@@ -122,7 +122,7 @@ const CollectionPoints = () => {
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: 20 }}
-                                className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-xl p-8 lg:p-10 flex flex-col h-full overflow-hidden"
+                                className="bg-white dark:bg-slate-900 rounded-3xl md:rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-xl p-6 md:p-8 lg:p-10 flex flex-col h-full overflow-hidden"
                             >
                                 <button 
                                     onClick={() => setSelectedPoint(null)}

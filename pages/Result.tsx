@@ -100,7 +100,7 @@ const Result = () => {
                 className="relative z-10 w-full max-w-5xl bg-white/80 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-white/60 overflow-hidden flex flex-col md:flex-row"
             >
                 {/* Left Side: Visual & Status */}
-                <div className="md:w-5/12 relative overflow-hidden p-10 flex flex-col justify-between min-h-[400px]">
+                <div className="md:w-5/12 relative overflow-hidden p-6 md:p-10 flex flex-col justify-between min-h-[300px] md:min-h-[400px]">
                      {/* Dynamic Background for Left Panel */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-50`} />
                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
@@ -155,7 +155,7 @@ const Result = () => {
                 </div>
 
                 {/* Right Side: Details & Actions */}
-                <div className="md:w-7/12 p-8 md:p-12 flex flex-col bg-white/40">
+                <div className="md:w-7/12 p-6 md:p-12 flex flex-col bg-white/40">
                     <div className="flex-grow">
                         <motion.div
                              initial={{ opacity: 0 }}

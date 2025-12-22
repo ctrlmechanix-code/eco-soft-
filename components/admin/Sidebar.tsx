@@ -33,7 +33,7 @@ const Sidebar = () => {
     ];
 
     return (
-        <aside className="fixed left-0 top-0 h-screen w-64 bg-slate-900 text-slate-300 flex flex-col z-50">
+        <aside className="fixed left-0 top-0 h-screen w-64 bg-slate-900 text-slate-300 flex-col z-50 hidden md:flex">
             {/* Logo Area */}
             <div className="h-16 flex items-center px-6 border-b border-slate-800">
                 <div className="flex items-center gap-2 text-white">

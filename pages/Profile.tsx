@@ -112,21 +112,21 @@ const Profile = () => {
     return (
         <PageWrapper>
             {/* Header Section */}
-            <div className="relative bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 md:p-12 shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden mb-12">
+            <div className="relative bg-white dark:bg-slate-900 rounded-3xl md:rounded-[2.5rem] p-6 md:p-12 shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden mb-12">
                 <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-emerald-600 to-teal-500 dark:from-emerald-700 dark:to-teal-800"></div>
                 
-                <div className="relative flex flex-col md:flex-row items-end md:items-center gap-6 mt-12">
+                <div className="relative flex flex-col md:flex-row items-center md:items-center gap-6 mt-12">
                     <motion.div 
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
-                        className="w-32 h-32 rounded-3xl bg-white dark:bg-slate-800 p-1.5 shadow-xl"
+                        className="w-24 h-24 md:w-32 md:h-32 rounded-3xl bg-white dark:bg-slate-800 p-1.5 shadow-xl"
                     >
                         <img src={userData.avatar} alt={userData.name} className="w-full h-full rounded-2xl bg-slate-50 dark:bg-slate-900" />
                     </motion.div>
                     
-                    <div className="flex-grow mb-2">
+                    <div className="flex-grow mb-2 text-center md:text-left">
                         <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{userData.name}</h1>
-                        <div className="flex flex-wrap items-center gap-4 text-slate-500 dark:text-slate-400 mt-2">
+                        <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 text-slate-500 dark:text-slate-400 mt-2">
                             <span className="flex items-center gap-1.5 text-sm">
                                 <User className="w-4 h-4" /> Student
                             </span>
@@ -227,7 +227,7 @@ const Profile = () => {
 
             <div className="grid lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-1">
-                    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden h-full min-h-[500px] flex flex-col">
+                    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden h-full min-h-[400px] md:min-h-[500px] flex flex-col">
                         <div className="p-8 border-b border-slate-100 dark:border-slate-800">
                             <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                                 <MessageSquare className="w-5 h-5 text-blue-500" /> Messaging Portal
@@ -269,7 +269,7 @@ const Profile = () => {
                 </div>
 
                 <div className="lg:col-span-2">
-                    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden h-full min-h-[500px] flex flex-col">
+                    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden h-full min-h-[400px] md:min-h-[500px] flex flex-col">
                         {activeChatId ? (
                             <>
                                 <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/30 dark:bg-slate-800/30">
