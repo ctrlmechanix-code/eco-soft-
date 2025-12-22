@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Coins, CheckCircle2 } from 'lucide-react';
 
@@ -18,27 +19,27 @@ const AdminCredits = () => {
         setTimeout(() => setSaved(false), 2000);
     };
 
-    const inputClasses = "w-32 px-4 py-2.5 rounded-xl bg-white border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-right font-bold text-slate-700 placeholder:text-slate-400";
+    const inputClasses = "w-32 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-right font-bold text-slate-700 dark:text-white placeholder:text-slate-400";
 
     return (
         <div>
             <div className="flex justify-between items-center mb-8">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-900">Credit System</h1>
-                    <p className="text-slate-500">Configure point values and view transaction logs.</p>
+                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Credit System</h1>
+                    <p className="text-slate-500 dark:text-slate-400">Configure point values and view transaction logs.</p>
                 </div>
             </div>
 
-            <div className="bg-white rounded-xl border border-slate-200 p-8 shadow-sm text-center max-w-2xl mx-auto">
-                <div className="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-4 text-amber-500">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm text-center max-w-2xl mx-auto">
+                <div className="w-16 h-16 bg-amber-50 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-amber-500">
                     <Coins className="w-8 h-8" />
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Credit Configuration</h3>
-                <p className="text-slate-500 mb-6">Manage how many points users earn per action.</p>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Credit Configuration</h3>
+                <p className="text-slate-500 dark:text-slate-400 mb-6">Manage how many points users earn per action.</p>
                 
                 <div className="grid gap-4 text-left">
-                    <div className="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                        <span className="font-medium text-slate-700">Recycle Item</span>
+                    <div className="flex justify-between items-center p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
+                        <span className="font-medium text-slate-700 dark:text-slate-200">Recycle Item</span>
                         <input 
                             type="number" 
                             value={rates.recycle}
@@ -46,8 +47,8 @@ const AdminCredits = () => {
                             className={inputClasses}
                         />
                     </div>
-                    <div className="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                        <span className="font-medium text-slate-700">Donate Item</span>
+                    <div className="flex justify-between items-center p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
+                        <span className="font-medium text-slate-700 dark:text-slate-200">Donate Item</span>
                         <input 
                             type="number" 
                             value={rates.donate}
@@ -55,8 +56,8 @@ const AdminCredits = () => {
                             className={inputClasses}
                         />
                     </div>
-                    <div className="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                        <span className="font-medium text-slate-700">Repair Item</span>
+                    <div className="flex justify-between items-center p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
+                        <span className="font-medium text-slate-700 dark:text-slate-200">Repair Item</span>
                         <input 
                             type="number" 
                             value={rates.repair}

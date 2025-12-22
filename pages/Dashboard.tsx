@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -31,19 +32,19 @@ const StatCard = ({ stat }: { stat: typeof mockStats[0] }) => {
     return (
         <motion.div
             whileHover={{ y: -5 }}
-            className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm"
+            className="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm"
         >
             <div className="flex justify-between items-start mb-4">
-                <div className={`p-3 rounded-xl ${stat.gradientLight}`}>
+                <div className={`p-3 rounded-xl ${stat.gradientLight} dark:bg-opacity-20`}>
                      <img src={stat.icon} alt={stat.label} className="w-6 h-6" />
                 </div>
-                <span className="flex items-center text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
+                <span className="flex items-center text-xs font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 px-2 py-1 rounded-full">
                     +12% <ArrowUpRight className="w-3 h-3 ml-1" />
                 </span>
             </div>
             <div>
-                <p className="text-sm font-medium text-slate-500">{stat.label}</p>
-                <h3 className="text-3xl font-bold text-slate-900 mt-1">
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{stat.label}</p>
+                <h3 className="text-3xl font-bold text-slate-900 dark:text-white mt-1">
                     <AnimatedCounter to={stat.value} />
                 </h3>
             </div>
@@ -112,13 +113,13 @@ const Dashboard = () => {
         <PageWrapper>
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
-                    <p className="text-slate-500 mt-1">Overview of campus sustainability metrics.</p>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1">Overview of campus sustainability metrics.</p>
                 </div>
                 <div className="flex-shrink-0">
                     <button 
                         onClick={handleDownloadReport}
-                        className="w-full md:w-auto px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors flex items-center justify-center gap-2"
+                        className="w-full md:w-auto px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
                     >
                         <Download className="w-4 h-4" />
                         Download Report
@@ -144,21 +145,21 @@ const Dashboard = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="lg:col-span-2 bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm"
+                    className="lg:col-span-2 bg-white dark:bg-slate-900 p-6 md:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm"
                 >
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
                         <div>
-                             <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                             <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                                 <TrendingUp className="w-5 h-5 text-emerald-500"/> Activity Trends
                             </h2>
-                            <p className="text-sm text-slate-500">Recycled vs Repaired devices over the last 6 months</p>
+                            <p className="text-sm text-slate-500 dark:text-slate-400">Recycled vs Repaired devices over the last 6 months</p>
                         </div>
                     </div>
                     
                     <div className="h-[300px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={chartData} margin={{ top: 10, right: 0, left: -20, bottom: 0 }} barSize={32}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9"/>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" className="dark:opacity-10"/>
                                 <XAxis 
                                     dataKey="name" 
                                     tickLine={false} 
@@ -172,7 +173,7 @@ const Dashboard = () => {
                                     tick={{fill: '#94a3b8', fontSize: 12}} 
                                 />
                                 <Tooltip 
-                                    cursor={{fill: '#f8fafc'}}
+                                    cursor={{fill: '#f8fafc', opacity: 0.5}}
                                     contentStyle={{
                                         backgroundColor: '#fff', 
                                         borderRadius: '12px', 
@@ -187,13 +188,13 @@ const Dashboard = () => {
                     </div>
                 </motion.div>
 
-                <div className="bg-slate-900 rounded-3xl p-6 md:p-8 text-white flex flex-col justify-center relative overflow-hidden">
+                <div className="bg-slate-900 dark:bg-black rounded-3xl p-6 md:p-8 text-white flex flex-col justify-center relative overflow-hidden border border-slate-900 dark:border-slate-800">
                      <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-500/30 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
                      <h3 className="text-xl font-bold mb-6 relative z-10">Quick Actions</h3>
                      <div className="space-y-4 relative z-10">
                          <button 
                             onClick={() => navigate('/collection-points')}
-                            className="w-full py-4 px-5 bg-white/10 hover:bg-white/20 active:scale-95 rounded-xl text-left text-sm font-medium transition-all flex items-center justify-between group"
+                            className="w-full py-4 px-5 bg-white/10 hover:bg-white/20 active:scale-95 rounded-xl text-left text-sm font-medium transition-all flex items-center justify-between group border border-white/5"
                          >
                              <div className="flex items-center gap-3">
                                 <Calendar className="w-5 h-5 text-emerald-400"/>
@@ -203,7 +204,7 @@ const Dashboard = () => {
                          </button>
                          <button 
                             onClick={handlePrintLabel}
-                            className="w-full py-4 px-5 bg-white/10 hover:bg-white/20 active:scale-95 rounded-xl text-left text-sm font-medium transition-all flex items-center justify-between group"
+                            className="w-full py-4 px-5 bg-white/10 hover:bg-white/20 active:scale-95 rounded-xl text-left text-sm font-medium transition-all flex items-center justify-between group border border-white/5"
                          >
                              <div className="flex items-center gap-3">
                                 <Printer className="w-5 h-5 text-blue-400"/>

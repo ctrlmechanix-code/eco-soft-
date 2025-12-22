@@ -129,40 +129,40 @@ const AdminRedemptions = () => {
         r.category.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const inputClasses = "w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-slate-700";
+    const inputClasses = "w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:bg-white dark:focus:bg-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-slate-700 dark:text-white";
 
     return (
         <div>
             <div className="flex justify-between items-center mb-8">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-900">Rewards Management</h1>
-                    <p className="text-slate-500">Manage catalog and process redemption requests.</p>
+                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Rewards Management</h1>
+                    <p className="text-slate-500 dark:text-slate-400">Manage catalog and process redemption requests.</p>
                 </div>
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-slate-200 mb-6">
+            <div className="flex border-b border-slate-200 dark:border-slate-800 mb-6">
                 <button 
                     onClick={() => setActiveTab('requests')}
-                    className={`px-6 py-4 text-sm font-bold border-b-2 transition-colors flex items-center gap-2 ${activeTab === 'requests' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+                    className={`px-6 py-4 text-sm font-bold border-b-2 transition-colors flex items-center gap-2 ${activeTab === 'requests' ? 'border-blue-600 text-blue-600 dark:text-blue-400' : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
                 >
                     <Clock className="w-4 h-4" /> Requests {pendingRedemptions.length > 0 && <span className="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">{pendingRedemptions.length}</span>}
                 </button>
                 <button 
                     onClick={() => setActiveTab('catalog')}
-                    className={`px-6 py-4 text-sm font-bold border-b-2 transition-colors flex items-center gap-2 ${activeTab === 'catalog' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+                    className={`px-6 py-4 text-sm font-bold border-b-2 transition-colors flex items-center gap-2 ${activeTab === 'catalog' ? 'border-blue-600 text-blue-600 dark:text-blue-400' : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
                 >
                     <Gift className="w-4 h-4" /> Reward Catalog
                 </button>
             </div>
 
             {activeTab === 'requests' && (
-                <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div className="p-6 border-b border-slate-100">
-                        <h3 className="font-bold text-slate-900">Pending Approvals</h3>
+                <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                    <div className="p-6 border-b border-slate-100 dark:border-slate-800">
+                        <h3 className="font-bold text-slate-900 dark:text-white">Pending Approvals</h3>
                     </div>
                     <table className="w-full text-left text-sm">
-                        <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
+                        <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
                             <tr>
                                 <th className="px-6 py-4">Request ID</th>
                                 <th className="px-6 py-4">User</th>
@@ -171,26 +171,26 @@ const AdminRedemptions = () => {
                                 <th className="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100">
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {pendingRedemptions.length > 0 ? (
                                 pendingRedemptions.map((r) => (
-                                    <tr key={r.id}>
-                                        <td className="px-6 py-4 font-mono text-slate-500 text-xs">{r.id}</td>
-                                        <td className="px-6 py-4 font-medium text-slate-900">{r.userId}</td>
-                                        <td className="px-6 py-4">{r.rewardName}</td>
-                                        <td className="px-6 py-4 font-bold text-slate-700">{r.creditsCost}</td>
+                                    <tr key={r.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                        <td className="px-6 py-4 font-mono text-slate-500 dark:text-slate-400 text-xs">{r.id}</td>
+                                        <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">{r.userId}</td>
+                                        <td className="px-6 py-4 dark:text-slate-300">{r.rewardName}</td>
+                                        <td className="px-6 py-4 font-bold text-slate-700 dark:text-slate-200">{r.creditsCost}</td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex justify-end gap-2">
                                                 <button 
                                                     onClick={() => updateRedemption(r.id, 'approved')}
-                                                    className="p-2 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-colors"
+                                                    className="p-2 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-lg hover:bg-emerald-200 dark:hover:bg-emerald-900/50 transition-colors"
                                                     title="Approve"
                                                 >
                                                     <CheckCircle2 className="w-4 h-4" />
                                                 </button>
                                                 <button 
                                                     onClick={() => updateRedemption(r.id, 'rejected')}
-                                                    className="p-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
+                                                    className="p-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
                                                     title="Reject"
                                                 >
                                                     <XCircle className="w-4 h-4" />
@@ -201,7 +201,7 @@ const AdminRedemptions = () => {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={5} className="p-8 text-center text-slate-500">No pending requests.</td>
+                                    <td colSpan={5} className="p-8 text-center text-slate-500 dark:text-slate-400">No pending requests.</td>
                                 </tr>
                             )}
                         </tbody>
@@ -219,7 +219,7 @@ const AdminRedemptions = () => {
                                 placeholder="Search rewards..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all text-sm"
+                                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all text-sm text-slate-900 dark:text-white"
                             />
                         </div>
                         <button 
@@ -232,19 +232,19 @@ const AdminRedemptions = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {filteredRewards.map((reward) => (
-                            <div key={reward.id} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col group hover:shadow-md transition-all">
-                                <div className="h-40 bg-slate-50 relative overflow-hidden">
+                            <div key={reward.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col group hover:shadow-md transition-all">
+                                <div className="h-40 bg-slate-50 dark:bg-slate-800 relative overflow-hidden">
                                     <img src={reward.imageUrl} alt={reward.name} className="w-full h-full object-cover" />
                                     <div className="absolute top-2 right-2 flex gap-2">
                                         <button 
                                             onClick={() => handleEditReward(reward)}
-                                            className="p-2 bg-white/90 backdrop-blur-sm rounded-lg text-slate-600 hover:text-blue-600 hover:bg-white shadow-sm transition-colors"
+                                            className="p-2 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-lg text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white dark:hover:bg-slate-800 shadow-sm transition-colors"
                                         >
                                             <Edit2 className="w-3.5 h-3.5" />
                                         </button>
                                         <button 
                                             onClick={() => handleDeleteReward(reward.id)}
-                                            className="p-2 bg-white/90 backdrop-blur-sm rounded-lg text-slate-600 hover:text-red-600 hover:bg-white shadow-sm transition-colors"
+                                            className="p-2 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-lg text-slate-600 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-white dark:hover:bg-slate-800 shadow-sm transition-colors"
                                         >
                                             <Trash2 className="w-3.5 h-3.5" />
                                         </button>
@@ -255,13 +255,13 @@ const AdminRedemptions = () => {
                                 </div>
                                 <div className="p-5 flex flex-col flex-1">
                                     <div className="flex justify-between items-start mb-2">
-                                        <h3 className="font-bold text-slate-900 line-clamp-1">{reward.name}</h3>
-                                        <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md whitespace-nowrap">
+                                        <h3 className="font-bold text-slate-900 dark:text-white line-clamp-1">{reward.name}</h3>
+                                        <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-md whitespace-nowrap">
                                             {reward.creditCost} pts
                                         </span>
                                     </div>
-                                    <p className="text-xs text-slate-500 line-clamp-2 mb-4 flex-1">{reward.description}</p>
-                                    <div className="flex items-center justify-between text-xs font-medium text-slate-400 pt-3 border-t border-slate-50">
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mb-4 flex-1">{reward.description}</p>
+                                    <div className="flex items-center justify-between text-xs font-medium text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-50 dark:border-slate-800">
                                         <span className="capitalize">{reward.category.replace('_', ' ')}</span>
                                         <span>Stock: {reward.stock === 'unlimited' ? '∞' : reward.stock}</span>
                                     </div>
@@ -275,16 +275,16 @@ const AdminRedemptions = () => {
             {/* Reward Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden max-h-[90vh] overflow-y-auto">
-                        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 sticky top-0 z-10">
-                            <h3 className="text-lg font-bold text-slate-900">{editingReward ? 'Edit Reward' : 'Add New Reward'}</h3>
-                            <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl w-full max-w-lg overflow-hidden max-h-[90vh] overflow-y-auto border border-slate-100 dark:border-slate-800">
+                        <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50 sticky top-0 z-10">
+                            <h3 className="text-lg font-bold text-slate-900 dark:text-white">{editingReward ? 'Edit Reward' : 'Add New Reward'}</h3>
+                            <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
                         <form onSubmit={handleSaveReward} className="p-6 space-y-4">
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Reward Name</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Reward Name</label>
                                 <input 
                                     type="text" 
                                     required
@@ -296,7 +296,7 @@ const AdminRedemptions = () => {
                             </div>
                             
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Description</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Description</label>
                                 <textarea 
                                     required
                                     rows={2}
@@ -309,7 +309,7 @@ const AdminRedemptions = () => {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-1.5">Category</label>
+                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Category</label>
                                     <select 
                                         value={formData.category}
                                         onChange={e => setFormData({...formData, category: e.target.value as any})}
@@ -322,7 +322,7 @@ const AdminRedemptions = () => {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-1.5">Credit Cost</label>
+                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Credit Cost</label>
                                     <input 
                                         type="number" 
                                         required
@@ -336,7 +336,7 @@ const AdminRedemptions = () => {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-1.5">Min Tier</label>
+                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Min Tier</label>
                                     <select 
                                         value={formData.minTier}
                                         onChange={e => setFormData({...formData, minTier: e.target.value as any})}
@@ -349,14 +349,14 @@ const AdminRedemptions = () => {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-1.5">Stock</label>
+                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Stock</label>
                                     <div className="flex gap-2">
                                         <input 
                                             type="number" 
                                             disabled={isUnlimitedStock}
                                             value={isUnlimitedStock ? '' : formData.stock}
                                             onChange={e => setFormData({...formData, stock: parseInt(e.target.value)})}
-                                            className={`${inputClasses} ${isUnlimitedStock ? 'bg-slate-100 text-slate-400' : ''}`}
+                                            className={`${inputClasses} ${isUnlimitedStock ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500' : ''}`}
                                             placeholder={isUnlimitedStock ? "∞" : "0"}
                                         />
                                         <div className="flex items-center">
@@ -367,14 +367,14 @@ const AdminRedemptions = () => {
                                                 className="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                                                 id="unlimited"
                                             />
-                                            <label htmlFor="unlimited" className="ml-2 text-xs font-bold text-slate-500">Unlimited</label>
+                                            <label htmlFor="unlimited" className="ml-2 text-xs font-bold text-slate-500 dark:text-slate-400">Unlimited</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Image URL</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Image URL</label>
                                 <input 
                                     type="text" 
                                     value={formData.imageUrl || ''}
@@ -386,7 +386,7 @@ const AdminRedemptions = () => {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-1.5">Redemption Type</label>
+                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Redemption Type</label>
                                     <select 
                                         value={formData.redemptionType}
                                         onChange={e => setFormData({...formData, redemptionType: e.target.value as any})}
@@ -400,7 +400,7 @@ const AdminRedemptions = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Terms & Conditions</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Terms & Conditions</label>
                                 <textarea 
                                     rows={2}
                                     value={formData.termsAndConditions || ''}

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { mockSubmissions, leaderboard } from '../../data/mockData';
 import type { Submission, ActivityLog, LeaderboardUser } from '../../types';
@@ -104,36 +105,36 @@ const AdminSubmissions = () => {
         <div>
             <div className="flex justify-between items-center mb-8">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-900">Submission Verification</h1>
-                    <p className="text-slate-500">Review and verify drop-offs to award credits.</p>
+                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Submission Verification</h1>
+                    <p className="text-slate-500 dark:text-slate-400">Review and verify drop-offs to award credits.</p>
                 </div>
             </div>
 
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                 {/* Tabs */}
-                <div className="flex border-b border-slate-200 overflow-x-auto">
+                <div className="flex border-b border-slate-200 dark:border-slate-800 overflow-x-auto">
                     <button 
                         onClick={() => setFilterStatus('DROPPED')}
-                        className={`px-6 py-4 text-sm font-bold border-b-2 transition-colors whitespace-nowrap ${filterStatus === 'DROPPED' ? 'border-blue-500 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+                        className={`px-6 py-4 text-sm font-bold border-b-2 transition-colors whitespace-nowrap ${filterStatus === 'DROPPED' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
                     >
                         Pending Verification
                     </button>
                     <button 
                         onClick={() => setFilterStatus('COMPLETED')}
-                        className={`px-6 py-4 text-sm font-bold border-b-2 transition-colors whitespace-nowrap ${filterStatus === 'COMPLETED' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+                        className={`px-6 py-4 text-sm font-bold border-b-2 transition-colors whitespace-nowrap ${filterStatus === 'COMPLETED' ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400' : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
                     >
                         Verified History
                     </button>
                     <button 
                         onClick={() => setFilterStatus('REJECTED')}
-                        className={`px-6 py-4 text-sm font-bold border-b-2 transition-colors whitespace-nowrap ${filterStatus === 'REJECTED' ? 'border-red-500 text-red-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+                        className={`px-6 py-4 text-sm font-bold border-b-2 transition-colors whitespace-nowrap ${filterStatus === 'REJECTED' ? 'border-red-500 text-red-600 dark:text-red-400' : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
                     >
                         Rejected
                     </button>
                 </div>
 
                 {/* Toolbar */}
-                <div className="p-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row justify-between gap-4">
+                <div className="p-4 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between gap-4">
                     <div className="relative max-w-sm w-full">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <input 
@@ -141,10 +142,10 @@ const AdminSubmissions = () => {
                             placeholder="Search ID, user, code..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all text-sm"
+                            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all text-sm text-slate-900 dark:text-white"
                         />
                     </div>
-                    <button className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-slate-600 text-sm font-medium hover:bg-slate-50 flex items-center gap-2 justify-center">
+                    <button className="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2 justify-center">
                         <Filter className="w-4 h-4" /> Filter
                     </button>
                 </div>
@@ -152,7 +153,7 @@ const AdminSubmissions = () => {
                 {/* Table */}
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
-                        <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
+                        <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
                             <tr>
                                 <th className="px-6 py-4">Submission ID</th>
                                 <th className="px-6 py-4">User</th>
@@ -163,23 +164,23 @@ const AdminSubmissions = () => {
                                 <th className="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100">
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {filteredSubmissions.length > 0 ? (
                                 filteredSubmissions.map((sub) => (
-                                    <tr key={sub.id} className="hover:bg-slate-50 transition-colors">
-                                        <td className="px-6 py-4 font-mono text-slate-500">{sub.id}</td>
-                                        <td className="px-6 py-4 font-medium text-slate-900">{sub.userName || 'Unknown'}</td>
+                                    <tr key={sub.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                        <td className="px-6 py-4 font-mono text-slate-500 dark:text-slate-400">{sub.id}</td>
+                                        <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">{sub.userName || 'Unknown'}</td>
                                         <td className="px-6 py-4">
-                                            <span className="bg-slate-100 text-slate-600 px-2 py-1 rounded text-xs whitespace-nowrap">{sub.category}</span>
+                                            <span className="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-1 rounded text-xs whitespace-nowrap">{sub.category}</span>
                                         </td>
-                                        <td className="px-6 py-4 font-mono font-bold">{sub.dropOffCode}</td>
+                                        <td className="px-6 py-4 font-mono font-bold text-slate-900 dark:text-white">{sub.dropOffCode}</td>
                                         <td className="px-6 py-4">
-                                            {sub.status === 'PENDING' && <span className="bg-amber-100 text-amber-700 px-2 py-1 rounded-full text-xs font-bold flex w-fit items-center gap-1"><Clock className="w-3 h-3"/> Pending</span>}
-                                            {sub.status === 'DROPPED' && <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-bold flex w-fit items-center gap-1"><AlertCircle className="w-3 h-3"/> Dropped</span>}
-                                            {sub.status === 'COMPLETED' && <span className="bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full text-xs font-bold flex w-fit items-center gap-1"><CheckCircle2 className="w-3 h-3"/> Verified</span>}
-                                            {sub.status === 'REJECTED' && <span className="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-bold flex w-fit items-center gap-1"><XCircle className="w-3 h-3"/> Rejected</span>}
+                                            {sub.status === 'PENDING' && <span className="bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-2 py-1 rounded-full text-xs font-bold flex w-fit items-center gap-1"><Clock className="w-3 h-3"/> Pending</span>}
+                                            {sub.status === 'DROPPED' && <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-2 py-1 rounded-full text-xs font-bold flex w-fit items-center gap-1"><AlertCircle className="w-3 h-3"/> Dropped</span>}
+                                            {sub.status === 'COMPLETED' && <span className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 px-2 py-1 rounded-full text-xs font-bold flex w-fit items-center gap-1"><CheckCircle2 className="w-3 h-3"/> Verified</span>}
+                                            {sub.status === 'REJECTED' && <span className="bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 px-2 py-1 rounded-full text-xs font-bold flex w-fit items-center gap-1"><XCircle className="w-3 h-3"/> Rejected</span>}
                                         </td>
-                                        <td className="px-6 py-4 text-right font-bold text-slate-900">
+                                        <td className="px-6 py-4 text-right font-bold text-slate-900 dark:text-white">
                                             {sub.status === 'COMPLETED' ? sub.creditsAwarded : sub.creditsPending}
                                         </td>
                                         <td className="px-6 py-4 text-right">
@@ -188,21 +189,21 @@ const AdminSubmissions = () => {
                                                     <>
                                                         <button 
                                                             onClick={() => handleVerify(sub.id)}
-                                                            className="p-2 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-colors"
+                                                            className="p-2 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-lg hover:bg-emerald-200 dark:hover:bg-emerald-900/50 transition-colors"
                                                             title="Verify & Award"
                                                         >
                                                             <CheckCircle2 className="w-4 h-4" />
                                                         </button>
                                                         <button 
                                                             onClick={() => handleReject(sub.id)}
-                                                            className="p-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
+                                                            className="p-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
                                                             title="Reject"
                                                         >
                                                             <XCircle className="w-4 h-4" />
                                                         </button>
                                                     </>
                                                 )}
-                                                <button className="p-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 transition-colors" title="View Details">
+                                                <button className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" title="View Details">
                                                     <Eye className="w-4 h-4" />
                                                 </button>
                                             </div>
@@ -211,7 +212,7 @@ const AdminSubmissions = () => {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={7} className="px-6 py-12 text-center text-slate-500">
+                                    <td colSpan={7} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
                                         No submissions found for this filter.
                                     </td>
                                 </tr>

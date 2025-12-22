@@ -81,18 +81,18 @@ const Auth = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 relative overflow-hidden px-4">
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 relative overflow-hidden px-4">
             {/* Abstract Background */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute top-[-10%] right-[-5%] w-[50vh] h-[50vh] bg-emerald-100 rounded-full blur-[100px] opacity-60"></div>
-                <div className="absolute bottom-[-10%] left-[-5%] w-[50vh] h-[50vh] bg-blue-100 rounded-full blur-[100px] opacity-60"></div>
+                <div className="absolute top-[-10%] right-[-5%] w-[50vh] h-[50vh] bg-emerald-100 dark:bg-emerald-900/20 rounded-full blur-[100px] opacity-60"></div>
+                <div className="absolute bottom-[-10%] left-[-5%] w-[50vh] h-[50vh] bg-blue-100 dark:bg-blue-900/20 rounded-full blur-[100px] opacity-60"></div>
             </div>
 
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
-                className="w-full max-w-md bg-white p-6 sm:p-10 rounded-[2rem] shadow-2xl shadow-slate-200 border border-slate-100 relative z-10"
+                className="w-full max-w-md bg-white dark:bg-slate-900 p-6 sm:p-10 rounded-[2rem] shadow-2xl shadow-slate-200 dark:shadow-black/50 border border-slate-100 dark:border-slate-800 relative z-10"
             >
                 <div className="flex justify-center mb-8">
                     <div className="w-16 h-16 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
@@ -109,15 +109,15 @@ const Auth = () => {
                             exit={{ opacity: 0, x: 20 }}
                         >
                             <div className="text-center mb-10">
-                                <h2 className="text-3xl font-bold text-slate-900 mb-3">Welcome Back</h2>
-                                <p className="text-slate-500">Log in to track your impact and earn credits.</p>
+                                <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-3">Welcome Back</h2>
+                                <p className="text-slate-500 dark:text-slate-400">Log in to track your impact and earn credits.</p>
                             </div>
                             
                             <div className="space-y-4">
                                 <button
                                     onClick={handleGoogleLogin}
                                     disabled={isLoading}
-                                    className="w-full flex items-center justify-center gap-3 py-3.5 px-4 bg-white border border-slate-200 rounded-xl font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+                                    className="w-full flex items-center justify-center gap-3 py-3.5 px-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
                                 >
                                     {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <GoogleLogo />}
                                     <span>Continue with Google</span>
@@ -125,16 +125,16 @@ const Auth = () => {
 
                                 <div className="relative py-2">
                                     <div className="absolute inset-0 flex items-center">
-                                        <span className="w-full border-t border-slate-100"></span>
+                                        <span className="w-full border-t border-slate-100 dark:border-slate-800"></span>
                                     </div>
                                     <div className="relative flex justify-center text-xs uppercase">
-                                        <span className="bg-white px-2 text-slate-400 font-medium">Or continue with</span>
+                                        <span className="bg-white dark:bg-slate-900 px-2 text-slate-400 font-medium">Or continue with</span>
                                     </div>
                                 </div>
 
                                 <button
                                     onClick={() => setView('login')}
-                                    className="w-full flex items-center justify-center gap-3 py-3.5 px-4 bg-slate-900 text-white rounded-xl font-medium hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/10"
+                                    className="w-full flex items-center justify-center gap-3 py-3.5 px-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-medium hover:bg-slate-800 dark:hover:bg-slate-200 transition-all shadow-lg shadow-slate-900/10"
                                 >
                                     <Mail className="w-5 h-5" />
                                     <span>Sign in with Email</span>
@@ -152,34 +152,34 @@ const Auth = () => {
                         >
                             <button 
                                 onClick={goBack}
-                                className="mb-6 flex items-center text-sm text-slate-500 hover:text-slate-900 transition-colors"
+                                className="mb-6 flex items-center text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                             >
                                 <ArrowLeft className="w-4 h-4 mr-1" /> Back
                             </button>
 
                             <div className="mb-8">
-                                <h2 className="text-2xl font-bold text-slate-900 mb-2">Sign In</h2>
-                                <p className="text-slate-500 text-sm">Enter your credentials to access your account.</p>
+                                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Sign In</h2>
+                                <p className="text-slate-500 dark:text-slate-400 text-sm">Enter your credentials to access your account.</p>
                             </div>
 
                             <form onSubmit={handleEmailLogin} className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-1.5">Email Address</label>
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Email Address</label>
                                     <input 
                                         type="email" 
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-slate-900 font-medium placeholder:text-slate-400"
+                                        className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-slate-900 dark:text-white font-medium placeholder:text-slate-400 dark:placeholder:text-slate-500"
                                         placeholder="you@campus.edu"
                                     />
                                 </div>
                                 <div>
                                     <div className="flex justify-between items-center mb-1.5">
-                                        <label className="block text-sm font-medium text-slate-700">Password</label>
+                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
                                         <button 
                                             type="button"
                                             onClick={() => setView('forgot-password')}
-                                            className="text-xs font-medium text-emerald-600 hover:text-emerald-700 hover:underline"
+                                            className="text-xs font-medium text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300 hover:underline"
                                         >
                                             Forgot password?
                                         </button>
@@ -188,13 +188,13 @@ const Auth = () => {
                                         type="password" 
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-slate-900 font-medium placeholder:text-slate-400"
+                                        className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-slate-900 dark:text-white font-medium placeholder:text-slate-400 dark:placeholder:text-slate-500"
                                         placeholder="••••••••"
                                     />
                                 </div>
 
                                 {error && (
-                                    <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg flex items-center gap-2">
+                                    <div className="p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm rounded-lg flex items-center gap-2">
                                         <AlertCircle className="w-4 h-4 shrink-0" />
                                         {error}
                                     </div>
@@ -203,7 +203,7 @@ const Auth = () => {
                                 <button
                                     type="submit"
                                     disabled={isLoading}
-                                    className="w-full flex items-center justify-center gap-2 py-3.5 px-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/10 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
+                                    className="w-full flex items-center justify-center gap-2 py-3.5 px-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold hover:bg-slate-800 dark:hover:bg-slate-200 transition-all shadow-lg shadow-slate-900/10 dark:shadow-white/10 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
                                 >
                                     {isLoading ? (
                                         <Loader2 className="w-5 h-5 animate-spin" />
@@ -226,14 +226,14 @@ const Auth = () => {
                         >
                             <button 
                                 onClick={goBack}
-                                className="mb-6 flex items-center text-sm text-slate-500 hover:text-slate-900 transition-colors"
+                                className="mb-6 flex items-center text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                             >
                                 <ArrowLeft className="w-4 h-4 mr-1" /> Back to Login
                             </button>
 
                             <div className="mb-8">
-                                <h2 className="text-2xl font-bold text-slate-900 mb-2">Reset Password</h2>
-                                <p className="text-slate-500 text-sm">Enter your email and we'll send you a link to reset your password.</p>
+                                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Reset Password</h2>
+                                <p className="text-slate-500 dark:text-slate-400 text-sm">Enter your email and we'll send you a link to reset your password.</p>
                             </div>
 
                             {successMsg ? (
@@ -242,14 +242,14 @@ const Auth = () => {
                                     animate={{ opacity: 1, scale: 1 }}
                                     className="text-center py-8"
                                 >
-                                    <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mx-auto mb-4">
+                                    <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center text-emerald-600 dark:text-emerald-400 mx-auto mb-4">
                                         <CheckCircle2 className="w-8 h-8" />
                                     </div>
-                                    <h3 className="text-lg font-bold text-slate-900 mb-2">Check your email</h3>
-                                    <p className="text-slate-500 text-sm mb-6">{successMsg}</p>
+                                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Check your email</h3>
+                                    <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">{successMsg}</p>
                                     <button 
                                         onClick={() => setView('login')}
-                                        className="text-emerald-600 font-bold hover:underline"
+                                        className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline"
                                     >
                                         Return to Sign In
                                     </button>
@@ -257,18 +257,18 @@ const Auth = () => {
                             ) : (
                                 <form onSubmit={handleResetPassword} className="space-y-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 mb-1.5">Email Address</label>
+                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Email Address</label>
                                         <input 
                                             type="email" 
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
-                                            className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-slate-900 font-medium placeholder:text-slate-400"
+                                            className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-slate-900 dark:text-white font-medium placeholder:text-slate-400 dark:placeholder:text-slate-500"
                                             placeholder="you@campus.edu"
                                         />
                                     </div>
 
                                     {error && (
-                                        <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg flex items-center gap-2">
+                                        <div className="p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm rounded-lg flex items-center gap-2">
                                             <AlertCircle className="w-4 h-4 shrink-0" />
                                             {error}
                                         </div>

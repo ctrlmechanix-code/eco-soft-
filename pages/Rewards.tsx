@@ -156,22 +156,22 @@ const Rewards = () => {
         <PageWrapper>
             <div className="flex flex-col md:flex-row items-end justify-between mb-10 gap-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-900">Rewards Marketplace</h1>
-                    <p className="text-slate-500 mt-1">Spend your Green Credits on exclusive perks and items.</p>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Rewards Marketplace</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1">Spend your Green Credits on exclusive perks and items.</p>
                 </div>
                 
                 {user && (
-                    <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+                    <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
                         <div className="text-right">
                             <p className="text-xs font-bold text-slate-400 uppercase">Available Credits</p>
                             <p className="text-2xl font-black text-emerald-600"><AnimatedCounter to={user.points} /></p>
                         </div>
-                        <div className="w-px h-10 bg-slate-100"></div>
+                        <div className="w-px h-10 bg-slate-100 dark:bg-slate-700"></div>
                         <div className="text-left">
                             <p className="text-xs font-bold text-slate-400 uppercase">Current Tier</p>
                             <div className="flex items-center gap-1">
                                 <span className={`w-2 h-2 rounded-full ${tierColors[currentTier]}`}></span>
-                                <p className="text-sm font-bold text-slate-900 capitalize">{currentTier}</p>
+                                <p className="text-sm font-bold text-slate-900 dark:text-white capitalize">{currentTier}</p>
                             </div>
                         </div>
                     </div>
@@ -179,11 +179,11 @@ const Rewards = () => {
             </div>
 
             {/* Filters */}
-            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-8 flex flex-col md:flex-row gap-4 justify-between items-center">
+            <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm mb-8 flex flex-col md:flex-row gap-4 justify-between items-center">
                 <div className="flex overflow-x-auto pb-2 md:pb-0 gap-2 w-full md:w-auto scrollbar-hide">
                     <button 
                         onClick={() => setFilterCategory('all')}
-                        className={`px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-all ${filterCategory === 'all' ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}
+                        className={`px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-all ${filterCategory === 'all' ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900' : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'}`}
                     >
                         All Rewards
                     </button>
@@ -191,7 +191,7 @@ const Rewards = () => {
                         <button 
                             key={cat}
                             onClick={() => setFilterCategory(cat)}
-                            className={`px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-all capitalize ${filterCategory === cat ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}
+                            className={`px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-all capitalize ${filterCategory === cat ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900' : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'}`}
                         >
                             {cat.replace('_', ' ')}
                         </button>
@@ -202,7 +202,7 @@ const Rewards = () => {
                     <select 
                         value={filterTier}
                         onChange={(e) => setFilterTier(e.target.value)}
-                        className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 outline-none focus:border-emerald-500"
+                        className="px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-emerald-500"
                     >
                         <option value="all">All Tiers</option>
                         <option value="bronze">Bronze</option>
@@ -211,7 +211,7 @@ const Rewards = () => {
                         <option value="platinum">Platinum</option>
                     </select>
                     
-                    <label className="flex items-center gap-2 text-sm font-bold text-slate-600 cursor-pointer select-none">
+                    <label className="flex items-center gap-2 text-sm font-bold text-slate-600 dark:text-slate-300 cursor-pointer select-none">
                         <input 
                             type="checkbox" 
                             checked={showAffordable}
@@ -237,24 +237,24 @@ const Rewards = () => {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             whileHover={{ y: -5 }}
-                            className={`bg-white rounded-3xl border ${isUnlocked ? 'border-slate-200' : 'border-slate-100 opacity-80'} shadow-sm overflow-hidden flex flex-col relative group`}
+                            className={`bg-white dark:bg-slate-900 rounded-3xl border ${isUnlocked ? 'border-slate-200 dark:border-slate-800' : 'border-slate-100 dark:border-slate-800 opacity-80'} shadow-sm overflow-hidden flex flex-col relative group`}
                         >
                             {!isUnlocked && (
-                                <div className="absolute inset-0 bg-slate-100/50 backdrop-blur-[1px] z-10 flex flex-col items-center justify-center text-center p-6">
-                                    <div className="w-12 h-12 bg-slate-200 rounded-full flex items-center justify-center text-slate-500 mb-2">
+                                <div className="absolute inset-0 bg-slate-100/50 dark:bg-slate-900/50 backdrop-blur-[1px] z-10 flex flex-col items-center justify-center text-center p-6">
+                                    <div className="w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center text-slate-500 dark:text-slate-400 mb-2">
                                         <Lock className="w-6 h-6" />
                                     </div>
-                                    <p className="text-sm font-bold text-slate-600">Unlocks at <span className="capitalize">{reward.minTier}</span></p>
+                                    <p className="text-sm font-bold text-slate-600 dark:text-slate-300">Unlocks at <span className="capitalize">{reward.minTier}</span></p>
                                 </div>
                             )}
 
-                            <div className="h-40 bg-slate-50 relative overflow-hidden">
+                            <div className="h-40 bg-slate-50 dark:bg-slate-800 relative overflow-hidden">
                                 <img src={reward.imageUrl} alt={reward.name} className="w-full h-full object-cover" />
                                 <div className={`absolute top-3 left-3 px-2 py-1 rounded-lg text-[10px] font-bold uppercase text-white flex items-center gap-1 ${tierColors[reward.minTier]}`}>
                                     {reward.minTier}
                                 </div>
                                 {!hasStock && (
-                                    <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
+                                    <div className="absolute inset-0 bg-white/70 dark:bg-black/70 flex items-center justify-center">
                                         <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold uppercase">Out of Stock</span>
                                     </div>
                                 )}
@@ -262,13 +262,13 @@ const Rewards = () => {
 
                             <div className="p-5 flex flex-col flex-grow">
                                 <div className="flex justify-between items-start mb-2">
-                                    <h3 className="font-bold text-slate-900 line-clamp-1">{reward.name}</h3>
+                                    <h3 className="font-bold text-slate-900 dark:text-white line-clamp-1">{reward.name}</h3>
                                     <Icon className="w-4 h-4 text-slate-400 shrink-0" />
                                 </div>
-                                <p className="text-xs text-slate-500 line-clamp-2 mb-4 flex-grow">{reward.description}</p>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mb-4 flex-grow">{reward.description}</p>
                                 
                                 <div className="flex items-center justify-between mt-auto">
-                                    <div className="flex items-center gap-1 text-slate-900 font-black">
+                                    <div className="flex items-center gap-1 text-slate-900 dark:text-white font-black">
                                         <Coins className="w-4 h-4 text-amber-500" />
                                         {reward.creditCost}
                                     </div>
@@ -277,8 +277,8 @@ const Rewards = () => {
                                         disabled={!isUnlocked || !canAfford || !hasStock}
                                         className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                                             isUnlocked && canAfford && hasStock
-                                            ? 'bg-slate-900 text-white hover:bg-emerald-600 shadow-md' 
-                                            : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                                            ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-emerald-600 dark:hover:bg-emerald-400 shadow-md' 
+                                            : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed'
                                         }`}
                                     >
                                         Redeem
@@ -305,39 +305,39 @@ const Rewards = () => {
                             initial={{ opacity: 0, scale: 0.95 }} 
                             animate={{ opacity: 1, scale: 1 }} 
                             exit={{ opacity: 0, scale: 0.95 }}
-                            className="relative w-full max-w-md bg-white rounded-[2rem] shadow-2xl p-8 overflow-hidden"
+                            className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl p-8 overflow-hidden"
                         >
                             {!isRedeeming && (
                                 <button 
                                     onClick={() => setSelectedReward(null)}
-                                    className="absolute top-4 right-4 p-2 bg-slate-100 rounded-full text-slate-500 hover:bg-slate-200 transition-colors"
+                                    className="absolute top-4 right-4 p-2 bg-slate-100 dark:bg-slate-800 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                                 >
                                     <X className="w-4 h-4" />
                                 </button>
                             )}
 
                             <div className="text-center">
-                                <div className="w-20 h-20 bg-slate-50 rounded-2xl mx-auto mb-6 overflow-hidden border-4 border-white shadow-lg">
+                                <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-2xl mx-auto mb-6 overflow-hidden border-4 border-white dark:border-slate-800 shadow-lg">
                                     <img src={selectedReward.imageUrl} alt={selectedReward.name} className="w-full h-full object-cover" />
                                 </div>
-                                <h2 className="text-2xl font-bold text-slate-900 mb-2">Redeem Reward?</h2>
-                                <p className="text-slate-500 mb-6">
-                                    You are about to spend <span className="font-bold text-slate-900">{selectedReward.creditCost} credits</span> for <span className="font-bold text-slate-900">{selectedReward.name}</span>.
+                                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Redeem Reward?</h2>
+                                <p className="text-slate-500 dark:text-slate-400 mb-6">
+                                    You are about to spend <span className="font-bold text-slate-900 dark:text-white">{selectedReward.creditCost} credits</span> for <span className="font-bold text-slate-900 dark:text-white">{selectedReward.name}</span>.
                                 </p>
 
-                                <div className="bg-slate-50 p-4 rounded-xl mb-8 text-left">
+                                <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-xl mb-8 text-left">
                                     <div className="flex justify-between text-sm mb-2">
-                                        <span className="text-slate-500">Current Balance</span>
-                                        <span className="font-bold text-slate-900">{user.points}</span>
+                                        <span className="text-slate-500 dark:text-slate-400">Current Balance</span>
+                                        <span className="font-bold text-slate-900 dark:text-white">{user.points}</span>
                                     </div>
                                     <div className="flex justify-between text-sm mb-2">
-                                        <span className="text-slate-500">Cost</span>
+                                        <span className="text-slate-500 dark:text-slate-400">Cost</span>
                                         <span className="font-bold text-red-500">-{selectedReward.creditCost}</span>
                                     </div>
-                                    <div className="border-t border-slate-200 my-2"></div>
+                                    <div className="border-t border-slate-200 dark:border-slate-700 my-2"></div>
                                     <div className="flex justify-between text-sm">
-                                        <span className="font-bold text-slate-700">New Balance</span>
-                                        <span className="font-bold text-emerald-600">{user.points - selectedReward.creditCost}</span>
+                                        <span className="font-bold text-slate-700 dark:text-slate-300">New Balance</span>
+                                        <span className="font-bold text-emerald-600 dark:text-emerald-400">{user.points - selectedReward.creditCost}</span>
                                     </div>
                                 </div>
 

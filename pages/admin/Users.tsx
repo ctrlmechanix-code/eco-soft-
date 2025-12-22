@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { leaderboard } from '../../data/mockData';
 import { Search, MoreHorizontal, Shield, Mail, Trash2, Edit2, Plus, X, Save } from 'lucide-react';
@@ -73,14 +74,14 @@ const AdminUsers = () => {
         (u.email || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const inputClasses = "w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-slate-700";
+    const inputClasses = "w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:bg-white dark:focus:bg-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-slate-700 dark:text-white";
 
     return (
         <div>
             <div className="flex justify-between items-center mb-8">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-900">User Management</h1>
-                    <p className="text-slate-500">Manage user accounts, roles, and credits.</p>
+                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">User Management</h1>
+                    <p className="text-slate-500 dark:text-slate-400">Manage user accounts, roles, and credits.</p>
                 </div>
                 <button 
                     onClick={handleAddUser}
@@ -90,8 +91,8 @@ const AdminUsers = () => {
                 </button>
             </div>
 
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between gap-4">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                <div className="p-4 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 flex justify-between gap-4">
                     <div className="relative max-w-sm w-full">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <input 
@@ -99,14 +100,14 @@ const AdminUsers = () => {
                             placeholder="Search users..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all text-sm"
+                            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all text-sm text-slate-900 dark:text-white"
                         />
                     </div>
                 </div>
 
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
-                        <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
+                        <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
                             <tr>
                                 <th className="px-6 py-4">User</th>
                                 <th className="px-6 py-4">Role</th>
@@ -115,45 +116,45 @@ const AdminUsers = () => {
                                 <th className="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100">
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {filteredUsers.map((user) => (
-                                <tr key={user.id || user.name} className="hover:bg-slate-50 transition-colors">
+                                <tr key={user.id || user.name} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-slate-100 overflow-hidden">
+                                            <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
                                                 <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
                                             </div>
                                             <div>
-                                                <p className="font-medium text-slate-900">{user.name}</p>
-                                                <p className="text-xs text-slate-500">{user.email || 'No email'}</p>
+                                                <p className="font-medium text-slate-900 dark:text-white">{user.name}</p>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400">{user.email || 'No email'}</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border ${user.role === 'admin' ? 'bg-purple-100 text-purple-700 border-purple-200' : 'bg-slate-100 text-slate-600 border-slate-200'}`}>
+                                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border ${user.role === 'admin' ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700'}`}>
                                             {user.role === 'admin' && <Shield className="w-3 h-3" />}
                                             {user.role === 'admin' ? 'Admin' : 'Student'}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium border ${user.status === 'Active' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-red-100 text-red-700 border-red-200'}`}>
+                                        <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium border ${user.status === 'Active' ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800'}`}>
                                             {user.status || 'Active'}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 text-right font-bold text-slate-900">
+                                    <td className="px-6 py-4 text-right font-bold text-slate-900 dark:text-white">
                                         {user.points}
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <div className="flex justify-end gap-2">
                                             <button 
                                                 onClick={() => handleEditUser(user)}
-                                                className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                                className="p-2 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
                                             >
                                                 <Edit2 className="w-4 h-4" />
                                             </button>
                                             <button 
                                                 onClick={() => handleDeleteUser(user.id || '')}
-                                                className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                className="p-2 text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </button>
@@ -169,16 +170,16 @@ const AdminUsers = () => {
             {/* User Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
-                        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                            <h3 className="text-lg font-bold text-slate-900">{editingUser ? 'Edit User' : 'Add New User'}</h3>
-                            <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl w-full max-w-md overflow-hidden border border-slate-100 dark:border-slate-800">
+                        <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
+                            <h3 className="text-lg font-bold text-slate-900 dark:text-white">{editingUser ? 'Edit User' : 'Add New User'}</h3>
+                            <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
                         <form onSubmit={handleSubmit} className="p-6 space-y-5">
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Full Name</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Full Name</label>
                                 <input 
                                     type="text" 
                                     required
@@ -189,7 +190,7 @@ const AdminUsers = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Email Address</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Email Address</label>
                                 <input 
                                     type="email" 
                                     required
@@ -201,7 +202,7 @@ const AdminUsers = () => {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-1.5">Role</label>
+                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Role</label>
                                     <select 
                                         value={formData.role || 'user'}
                                         onChange={e => setFormData({...formData, role: e.target.value as any})}
@@ -212,7 +213,7 @@ const AdminUsers = () => {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-1.5">Status</label>
+                                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Status</label>
                                     <select 
                                         value={formData.status || 'Active'}
                                         onChange={e => setFormData({...formData, status: e.target.value as any})}
@@ -224,7 +225,7 @@ const AdminUsers = () => {
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Points Balance</label>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Points Balance</label>
                                 <input 
                                     type="number" 
                                     value={formData.points || 0}

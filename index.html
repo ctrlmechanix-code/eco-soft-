@@ -7,6 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ECO-SORT | Premium E-Waste Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -34,6 +46,13 @@
       ::-webkit-scrollbar-thumb:hover {
         background: #94a3b8;
       }
+      
+      .dark ::-webkit-scrollbar-thumb {
+        background: #334155;
+      }
+      .dark ::-webkit-scrollbar-thumb:hover {
+        background: #475569;
+      }
 
       ::selection {
         background: #10b981; /* Emerald 500 */
@@ -46,7 +65,21 @@
         background-image: radial-gradient(at 0% 0%, hsla(150,50%,96%,1) 0, transparent 50%), 
                           radial-gradient(at 100% 0%, hsla(210,50%,96%,1) 0, transparent 50%);
       }
+      
+      .dark .mesh-gradient {
+        background-color: #020617;
+        background-image: radial-gradient(at 0% 0%, hsla(150,50%,5%,1) 0, transparent 50%), 
+                          radial-gradient(at 100% 0%, hsla(210,50%,8%,1) 0, transparent 50%);
+      }
     </style>
+    <script>
+      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    </script>
   <script type="importmap">
 {
   "imports": {
@@ -62,7 +95,7 @@
 }
 </script>
 </head>
-  <body class="bg-slate-50 text-slate-900 mesh-gradient">
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 mesh-gradient transition-colors duration-300">
     <div id="root"></div>
     <script type="module" src="index.tsx"></script>
   </body>

@@ -110,13 +110,13 @@ const QuestionFlow = () => {
                 <div className="mb-12 flex items-center justify-between">
                     <button 
                         onClick={handleBack}
-                        className="flex items-center text-slate-400 hover:text-slate-900 transition-colors text-sm font-medium"
+                        className="flex items-center text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors text-sm font-medium"
                     >
                         <ArrowLeft className="w-4 h-4 mr-2" /> Back
                     </button>
                     <div className="flex flex-col items-end">
-                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Step {step + 1} of {totalSteps}</span>
-                        <div className="w-32 h-1 bg-slate-100 rounded-full overflow-hidden">
+                        <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Step {step + 1} of {totalSteps}</span>
+                        <div className="w-32 h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                             <motion.div 
                                 className="h-full bg-emerald-500"
                                 initial={{ width: 0 }}
@@ -136,7 +136,7 @@ const QuestionFlow = () => {
                         exit="exit"
                         transition={{ duration: 0.3, ease: "easeOut" }}
                     >
-                        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-8">{currentQuestion.question}</h2>
+                        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-8">{currentQuestion.question}</h2>
                         
                         <div className="space-y-3">
                             {currentQuestion.options.map((option, idx) => {
@@ -150,13 +150,13 @@ const QuestionFlow = () => {
                                         onClick={() => handleSelect(option)}
                                         className={`w-full group text-left px-6 py-5 rounded-xl border-2 transition-all duration-200 flex items-center justify-between
                                             ${isSelected 
-                                                ? 'border-emerald-500 bg-emerald-50/50 shadow-sm' 
-                                                : 'border-slate-100 bg-white hover:border-emerald-200 hover:shadow-md'
+                                                ? 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/20 shadow-sm' 
+                                                : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-emerald-200 dark:hover:border-emerald-800 hover:shadow-md'
                                             }`}
                                     >
-                                        <span className={`text-lg font-medium ${isSelected ? 'text-emerald-900' : 'text-slate-700'}`}>{option}</span>
+                                        <span className={`text-lg font-medium ${isSelected ? 'text-emerald-900 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300'}`}>{option}</span>
                                         <div className={`w-6 h-6 rounded-full border flex items-center justify-center transition-colors
-                                            ${isSelected ? 'bg-emerald-500 border-emerald-500' : 'border-slate-300 group-hover:border-emerald-400'}`}>
+                                            ${isSelected ? 'bg-emerald-500 border-emerald-500' : 'border-slate-300 dark:border-slate-600 group-hover:border-emerald-400'}`}>
                                             {isSelected && <Check className="w-4 h-4 text-white" />}
                                         </div>
                                     </motion.button>
