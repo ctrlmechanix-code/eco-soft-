@@ -29,6 +29,17 @@ export interface CollectionPoint {
   location: string;
   hours: string;
   coordinates: { lat: number; lng: number };
+  phone: string;
+  email: string;
+  mapUrl: string;
+}
+
+export interface CollectionPointMessage {
+    id: string;
+    pointId: number;
+    pointName: string;
+    text: string;
+    date: string;
 }
 
 export interface QuestionFlowAnswers {
@@ -68,4 +79,18 @@ export interface UserRequest {
     date: string;
     status: 'Open' | 'In Progress' | 'Resolved' | 'Closed';
     response?: string;
+}
+
+export interface Submission {
+  id: string;
+  category: string;
+  condition: string;
+  intent: string;
+  recommendation: string;
+  status: 'PENDING' | 'DROPPED' | 'COMPLETED';
+  creditsPending: number;
+  creditsAwarded: number;
+  dropOffCode: string;
+  createdAt: string;
+  droppedAt?: string;
 }

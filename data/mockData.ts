@@ -1,5 +1,5 @@
 
-import type { Category, LeaderboardUser, ImpactStats, CollectionPoint, UserActivity, BlogPost, UserRequest } from '../types';
+import type { Category, LeaderboardUser, ImpactStats, CollectionPoint, UserActivity, BlogPost, UserRequest, Submission } from '../types';
 
 export const categories: Category[] = [
   {
@@ -70,10 +70,46 @@ export const impactStats: ImpactStats = {
 };
 
 export const collectionPoints: CollectionPoint[] = [
-  { id: 1, name: "Student Center Hub", location: "Building A, Ground Floor", hours: "9 AM - 6 PM", coordinates: { lat: 0, lng: 0 } },
-  { id: 2, name: "Engineering Lab Drop-off", location: "Tech Block B, Room 102", hours: "8 AM - 8 PM", coordinates: { lat: 0, lng: 0 } },
-  { id: 3, name: "Hostel 4 Recycling Zone", location: "North Campus Hostel Area", hours: "24/7", coordinates: { lat: 0, lng: 0 } },
-  { id: 4, name: "Library E-Waste Bin", location: "Main Library Entrance", hours: "8 AM - 10 PM", coordinates: { lat: 0, lng: 0 } },
+  { 
+    id: 1, 
+    name: "Student Center Hub", 
+    location: "Building A, Ground Floor", 
+    hours: "9 AM - 6 PM", 
+    coordinates: { lat: 12.9716, lng: 77.5946 },
+    phone: "+91 80-2211-3344",
+    email: "studenthub@ecosort.edu",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Student+Center+Hub"
+  },
+  { 
+    id: 2, 
+    name: "Engineering Lab Drop-off", 
+    location: "Tech Block B, Room 102", 
+    hours: "8 AM - 8 PM", 
+    coordinates: { lat: 12.9720, lng: 77.5950 },
+    phone: "+91 80-2211-5566",
+    email: "engglab@ecosort.edu",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Engineering+Lab"
+  },
+  { 
+    id: 3, 
+    name: "Hostel 4 Recycling Zone", 
+    location: "North Campus Hostel Area", 
+    hours: "24/7", 
+    coordinates: { lat: 12.9730, lng: 77.5960 },
+    phone: "+91 80-2211-7788",
+    email: "hostel4@ecosort.edu",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=North+Campus+Hostel"
+  },
+  { 
+    id: 4, 
+    name: "Library E-Waste Bin", 
+    location: "Main Library Entrance", 
+    hours: "8 AM - 10 PM", 
+    coordinates: { lat: 12.9700, lng: 77.5930 },
+    phone: "+91 80-2211-9900",
+    email: "library@ecosort.edu",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Main+Library"
+  },
 ];
 
 export const dashboardStats = [
@@ -135,6 +171,47 @@ export const mockRequests: UserRequest[] = [
         date: "2023-11-25",
         status: "In Progress"
     }
+];
+
+export const mockSubmissions: Submission[] = [
+  {
+    id: "SUB-001",
+    category: "Mobile Phones",
+    condition: "Yes, perfectly",
+    intent: "Donate",
+    recommendation: "Donate",
+    status: "PENDING",
+    creditsPending: 50,
+    creditsAwarded: 0,
+    dropOffCode: "DRP-45678",
+    createdAt: new Date(Date.now() - 86400000).toISOString()
+  },
+  {
+    id: "SUB-002",
+    category: "Laptops",
+    condition: "No, won't turn on",
+    intent: "Recycle it safely",
+    recommendation: "Recycle",
+    status: "DROPPED",
+    creditsPending: 100,
+    creditsAwarded: 0,
+    dropOffCode: "DRP-12345",
+    createdAt: new Date(Date.now() - 172800000).toISOString(),
+    droppedAt: new Date(Date.now() - 86400000).toISOString()
+  },
+  {
+    id: "SUB-003",
+    category: "Batteries",
+    condition: "Not sure",
+    intent: "Recycle it safely",
+    recommendation: "Recycle",
+    status: "COMPLETED",
+    creditsPending: 0,
+    creditsAwarded: 30,
+    dropOffCode: "DRP-99999",
+    createdAt: new Date(Date.now() - 259200000).toISOString(),
+    droppedAt: new Date(Date.now() - 172800000).toISOString()
+  }
 ];
 
 export const blogPosts: BlogPost[] = [

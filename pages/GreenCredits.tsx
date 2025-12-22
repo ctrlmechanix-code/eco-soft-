@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { leaderboard, achievements } from '../data/mockData';
+import { leaderboard, achievements, mockSubmissions } from '../data/mockData';
 import AnimatedCounter from '../components/ui/AnimatedCounter';
-import { Trophy, Award, Zap, Crown } from 'lucide-react';
+import { Trophy, Award, Zap, Crown, Clock } from 'lucide-react';
 import Icon from '../components/ui/Icon';
+import type { Submission } from '../types';
 
 const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
     <motion.div
@@ -19,7 +20,29 @@ const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
 );
 
 const GreenCredits = () => {
+    const [pendingTotal, setPendingTotal] = useState(0);
+    const [awardedTotal, setAwardedTotal] = useState(0);
+
+    useEffect(() => {
+      const localSubmissions = JSON.parse(localStorage.getItem('user_submissions') || '[]');
+      const allSubmissions = [...mockSubmissions, ...localSubmissions];
+      
+      const pending = allSubmissions.reduce((acc: number, sub: Submission) => {
+        return (sub.status === 'PENDING' || sub.status === 'DROPPED') ? acc + sub.creditsPending : acc;
+      }, 0);
+
+      const awarded = allSubmissions.reduce((acc: number, sub: Submission) => {
+        return (sub.status === 'COMPLETED') ? acc + sub.creditsAwarded : acc;
+      }, 0);
+
+      setPendingTotal(pending);
+      setAwardedTotal(awarded);
+    }, []);
+
     const user = leaderboard.find(u => u.isUser) || { points: 0, name: 'Guest', rank: 0, avatar: '' };
+    // In a real app we'd combine awardedTotal with user.points, 
+    // but for now we'll just show the awardedTotal if it's non-zero, otherwise fallback to mock user points.
+    const displayPoints = awardedTotal > 0 ? awardedTotal : user.points;
 
     return (
         <PageWrapper>
@@ -28,11 +51,24 @@ const GreenCredits = () => {
                 <div className="md:col-span-2 bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                     <div className="relative z-10 flex flex-col justify-between h-full">
-                        <div>
-                            <p className="text-slate-400 font-medium mb-1">Total Balance</p>
-                            <h2 className="text-6xl font-black mb-2"><AnimatedCounter to={user.points} /></h2>
-                            <p className="text-emerald-400 text-sm font-semibold">Green Credits Available</p>
+                        <div className="flex flex-col md:flex-row md:items-end gap-8">
+                          <div>
+                              <p className="text-slate-400 font-medium mb-1">Total Balance</p>
+                              <h2 className="text-6xl font-black mb-2"><AnimatedCounter to={displayPoints} /></h2>
+                              <p className="text-emerald-400 text-sm font-semibold">Green Credits Available</p>
+                          </div>
+                          
+                          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/10 flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
+                              <Clock className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Pending Verification</p>
+                              <p className="text-2xl font-black text-white"><AnimatedCounter to={pendingTotal} /></p>
+                            </div>
+                          </div>
                         </div>
+                        
                         <div className="mt-8">
                              <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-xs font-medium border border-white/10">
                                 <Zap className="w-3 h-3 text-yellow-400" /> Top 5% Contributor

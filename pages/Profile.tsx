@@ -1,9 +1,13 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+// Added useNavigate import to fix navigation error
+import { useNavigate } from 'react-router-dom';
 import { leaderboard, achievements, userActivity } from '../data/mockData';
-import { User, MapPin, Calendar, Award, Zap, Clock, CheckCircle2, Package, Leaf } from 'lucide-react';
+import { User, MapPin, Calendar, Award, Zap, Clock, Package, Leaf, MessageSquare, ExternalLink, Send, ArrowRight, X, ChevronRight } from 'lucide-react';
 import Icon from '../components/ui/Icon';
 import AnimatedCounter from '../components/ui/AnimatedCounter';
+import { CollectionPointMessage } from '../types';
 
 const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
     <motion.div
@@ -18,13 +22,84 @@ const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
 );
 
 const Profile = () => {
-    // Mock user data derived from leaderboard
+    // Initialized navigate hook
+    const navigate = useNavigate();
+    const [messages, setMessages] = useState<(CollectionPointMessage & { isReply?: boolean, unread?: boolean })[]>([]);
+    const [activeChatId, setActiveChatId] = useState<number | null>(null);
+    const [replyText, setReplyText] = useState('');
+    const [isSending, setIsSending] = useState(false);
+    const chatEndRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        loadMessages();
+        // Clear unread flag when viewing profile
+        localStorage.removeItem('unread_messages');
+    }, []);
+
+    useEffect(() => {
+        if (chatEndRef.current) {
+            chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [activeChatId, messages]);
+
+    const loadMessages = () => {
+        const stored = JSON.parse(localStorage.getItem('cp_messages') || '[]');
+        setMessages(stored);
+    };
+
+    const handleSendReply = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!replyText.trim() || activeChatId === null) return;
+
+        setIsSending(true);
+        const activePoint = messages.find(m => m.pointId === activeChatId);
+        if (!activePoint) return;
+
+        const newUserMessage: CollectionPointMessage & { isReply: boolean } = {
+            id: `MSG-${Date.now()}`,
+            pointId: activeChatId,
+            pointName: activePoint.pointName,
+            text: replyText,
+            date: new Date().toISOString(),
+            isReply: false
+        };
+
+        const updated = [newUserMessage, ...messages];
+        setMessages(updated);
+        localStorage.setItem('cp_messages', JSON.stringify(updated));
+        setReplyText('');
+        setIsSending(false);
+
+        // Simulate Admin Reply
+        setTimeout(() => {
+            const adminReply: CollectionPointMessage & { isReply: boolean, unread: boolean } = {
+                id: `REPLY-${Date.now()}`,
+                pointId: activeChatId,
+                pointName: activePoint.pointName,
+                text: "Thank you for the update! An agent has been assigned to your query. We will get back to you within 2-4 business hours.",
+                date: new Date().toISOString(),
+                isReply: true,
+                unread: true
+            };
+            const withReply = [adminReply, ...JSON.parse(localStorage.getItem('cp_messages') || '[]')];
+            setMessages(withReply);
+            localStorage.setItem('cp_messages', JSON.stringify(withReply));
+            localStorage.setItem('unread_messages', 'true');
+        }, 3000);
+    };
+
     const user = leaderboard.find(u => u.isUser) || { 
         points: 0, 
         name: 'Alex Morgan', 
         rank: 0, 
-        avatar: 'https://api.dicebear.com/8.x/avataaars/svg?seed=Alex' 
+        avatar: 'https://api.dicebear.com/8.x/avataaars/svg?seed=You' 
     };
+
+    // Group messages by PointId for the list
+    const threads = Array.from(new Map(messages.map(m => [m.pointId, m])).values());
+    const activeChatMessages = messages
+        .filter(m => m.pointId === activeChatId)
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
     return (
         <PageWrapper>
@@ -69,130 +144,204 @@ const Profile = () => {
                 </div>
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-8">
-                {/* Left Column: Stats & Achievements */}
-                <div className="space-y-8">
-                    {/* Impact Stats */}
-                    <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm">
-                        <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
-                            <Leaf className="w-5 h-5 text-emerald-500" /> Lifetime Impact
-                        </h3>
-                        <div className="space-y-6">
-                            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center">
-                                        <Package className="w-5 h-5" />
-                                    </div>
-                                    <span className="font-medium text-slate-600">Items Recycled</span>
-                                </div>
-                                <span className="text-xl font-bold text-slate-900">14</span>
+            <div className="grid lg:grid-cols-2 gap-8 mb-8">
+                <div className="bg-white rounded-[2rem] p-8 border border-slate-200 shadow-sm">
+                    <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+                        <Leaf className="w-5 h-5 text-emerald-500" /> Lifetime Impact
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="p-5 bg-emerald-50/50 border border-emerald-100 rounded-2xl">
+                            <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center mb-3">
+                                <Package className="w-5 h-5" />
                             </div>
-                            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center">
-                                        <Zap className="w-5 h-5" />
-                                    </div>
-                                    <span className="font-medium text-slate-600">CO₂ Saved</span>
-                                </div>
-                                <span className="text-xl font-bold text-slate-900">45kg</span>
-                            </div>
+                            <p className="text-2xl font-black text-slate-900">14</p>
+                            <p className="text-xs font-bold text-slate-500 uppercase mt-1">Items Recycled</p>
                         </div>
-                    </div>
-
-                    {/* Achievements */}
-                    <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm">
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                                <Award className="w-5 h-5 text-amber-500" /> Badges
-                            </h3>
-                            <span className="text-xs font-medium text-emerald-600 cursor-pointer hover:underline">View All</span>
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-4">
-                            {achievements.map((ach, i) => (
-                                <div key={i} className="flex flex-col items-center text-center p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                                    <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-amber-500 mb-3">
-                                        <Icon name={ach.icon as any} className="w-6 h-6" />
-                                    </div>
-                                    <p className="text-sm font-bold text-slate-900 leading-tight mb-1">{ach.title}</p>
-                                    <p className="text-[10px] text-slate-500">{ach.description}</p>
-                                </div>
-                            ))}
-                            {/* Placeholder for locked achievement */}
-                            <div className="flex flex-col items-center text-center p-4 rounded-2xl border-2 border-dashed border-slate-200 opacity-60">
-                                <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-3">
-                                    <Award className="w-6 h-6" />
-                                </div>
-                                <p className="text-xs font-semibold text-slate-400">Locked</p>
+                        <div className="p-5 bg-blue-50/50 border border-blue-100 rounded-2xl">
+                            <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-3">
+                                <Zap className="w-5 h-5" />
                             </div>
+                            <p className="text-2xl font-black text-slate-900">45kg</p>
+                            <p className="text-xs font-bold text-slate-500 uppercase mt-1">CO₂ Saved</p>
                         </div>
                     </div>
                 </div>
 
-                {/* Right Column: Activity History */}
-                <div className="lg:col-span-2">
-                    <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden h-full">
-                        <div className="p-8 border-b border-slate-100">
-                            <h3 className="text-xl font-bold text-slate-900">Recent Activity</h3>
-                        </div>
-                        <div className="p-2">
-                            {userActivity.map((activity, index) => (
-                                <motion.div 
-                                    key={activity.id}
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: index * 0.1 }}
-                                    className="group flex flex-col sm:flex-row items-center gap-4 p-4 hover:bg-slate-50 rounded-2xl transition-colors border border-transparent hover:border-slate-100"
-                                >
-                                    <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xs shrink-0">
-                                        {new Date(activity.date).getDate()}
-                                        <span className="text-[10px] font-normal uppercase ml-0.5">
-                                            {new Date(activity.date).toLocaleString('default', { month: 'short' })}
-                                        </span>
-                                    </div>
-                                    
-                                    <div className="flex-grow text-center sm:text-left">
-                                        <h4 className="font-bold text-slate-900">{activity.item}</h4>
-                                        <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-1">
-                                            <span className="text-xs text-slate-500 flex items-center gap-1">
-                                                <Package className="w-3 h-3" /> {activity.category}
-                                            </span>
-                                            <span className="text-xs text-slate-500 px-2 py-0.5 bg-slate-100 rounded-md">
-                                                {activity.action}
-                                            </span>
-                                        </div>
-                                    </div>
+                <div className="bg-white rounded-[2rem] p-8 border border-slate-200 shadow-sm">
+                    <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                            <Award className="w-5 h-5 text-amber-500" /> Badges & Achievements
+                        </h3>
+                    </div>
+                    <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+                        {achievements.map((ach, i) => (
+                            <div key={i} className="flex-shrink-0 flex flex-col items-center text-center p-4 rounded-2xl bg-slate-50 border border-slate-100 w-32">
+                                <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-amber-500 mb-3">
+                                    <Icon name={ach.icon as any} className="w-6 h-6" />
+                                </div>
+                                <p className="text-xs font-bold text-slate-900 leading-tight truncate w-full">{ach.title}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
 
-                                    <div className="flex items-center gap-6">
-                                        <div className="text-right">
-                                            {activity.credits > 0 ? (
-                                                <span className="text-sm font-bold text-emerald-600">+{activity.credits} pts</span>
-                                            ) : (
-                                                <span className="text-sm font-medium text-slate-400">-</span>
-                                            )}
-                                        </div>
-                                        <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1.5
-                                            ${activity.status === 'Verified' ? 'bg-emerald-100 text-emerald-700' : 
-                                              activity.status === 'Completed' ? 'bg-blue-50 text-blue-700' : 
-                                              'bg-amber-50 text-amber-700'
-                                            }`}
-                                        >
-                                            {activity.status === 'Verified' && <CheckCircle2 className="w-3 h-3" />}
-                                            {activity.status === 'Processing' && <Clock className="w-3 h-3" />}
-                                            {activity.status === 'Completed' && <CheckCircle2 className="w-3 h-3" />}
-                                            {activity.status}
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ))}
+            <div className="grid lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-1">
+                    <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm overflow-hidden h-full min-h-[500px] flex flex-col">
+                        <div className="p-8 border-b border-slate-100">
+                            <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                                <MessageSquare className="w-5 h-5 text-blue-500" /> Messaging Portal
+                            </h3>
                         </div>
-                         {/* Empty State / Load More */}
-                        <div className="p-8 text-center border-t border-slate-50 mt-4">
-                            <button className="text-sm font-semibold text-slate-500 hover:text-emerald-600 transition-colors">
-                                View Full History
-                            </button>
+                        
+                        <div className="flex-grow overflow-y-auto p-4 space-y-3">
+                            {threads.length > 0 ? (
+                                threads.map((thread) => (
+                                    <button 
+                                        key={thread.pointId}
+                                        onClick={() => setActiveChatId(thread.pointId)}
+                                        className={`w-full text-left p-4 rounded-2xl border transition-all flex items-center justify-between group ${
+                                            activeChatId === thread.pointId 
+                                            ? 'bg-blue-50 border-blue-200 shadow-sm' 
+                                            : 'bg-white border-slate-100 hover:border-slate-200 hover:bg-slate-50'
+                                        }`}
+                                    >
+                                        <div className="flex-grow pr-4">
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <p className={`text-sm font-bold ${activeChatId === thread.pointId ? 'text-blue-700' : 'text-slate-900'}`}>{thread.pointName}</p>
+                                                {messages.some(m => m.pointId === thread.pointId && m.unread) && (
+                                                    <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                                                )}
+                                            </div>
+                                            <p className="text-xs text-slate-500 line-clamp-1">{thread.text}</p>
+                                        </div>
+                                        <ChevronRight className={`w-4 h-4 transition-colors ${activeChatId === thread.pointId ? 'text-blue-500' : 'text-slate-300'}`} />
+                                    </button>
+                                ))
+                            ) : (
+                                <div className="text-center py-20">
+                                    <MessageSquare className="w-12 h-12 text-slate-100 mx-auto mb-4" />
+                                    <p className="text-slate-400 text-sm">No messages yet.</p>
+                                </div>
+                            )}
                         </div>
                     </div>
+                </div>
+
+                <div className="lg:col-span-2">
+                    <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm overflow-hidden h-full min-h-[500px] flex flex-col">
+                        {activeChatId ? (
+                            <>
+                                <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/30">
+                                    <div>
+                                        <h3 className="font-bold text-slate-900">{messages.find(m => m.pointId === activeChatId)?.pointName}</h3>
+                                        <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-widest">Active Chat</p>
+                                    </div>
+                                    <button 
+                                        onClick={() => setActiveChatId(null)}
+                                        className="p-2 hover:bg-slate-100 rounded-full text-slate-400 transition-colors"
+                                    >
+                                        <X className="w-5 h-5" />
+                                    </button>
+                                </div>
+
+                                <div className="flex-grow p-6 overflow-y-auto space-y-4 max-h-[400px]">
+                                    {activeChatMessages.map((msg) => (
+                                        <motion.div 
+                                            key={msg.id}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className={`flex ${msg.isReply ? 'justify-start' : 'justify-end'}`}
+                                        >
+                                            <div className={`max-w-[80%] p-4 rounded-2xl text-sm ${
+                                                msg.isReply 
+                                                ? 'bg-slate-100 text-slate-700 rounded-tl-none border border-slate-200' 
+                                                : 'bg-slate-900 text-white rounded-tr-none'
+                                            }`}>
+                                                <p>{msg.text}</p>
+                                                <p className={`text-[10px] mt-2 ${msg.isReply ? 'text-slate-400' : 'text-slate-400'}`}>
+                                                    {new Date(msg.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                </p>
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                    <div ref={chatEndRef} />
+                                </div>
+
+                                <form onSubmit={handleSendReply} className="p-6 border-t border-slate-100 bg-slate-50/30">
+                                    <div className="relative">
+                                        <input 
+                                            type="text"
+                                            value={replyText}
+                                            onChange={(e) => setReplyText(e.target.value)}
+                                            placeholder="Type your message..."
+                                            className="w-full pl-6 pr-14 py-4 rounded-2xl bg-white border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all text-sm"
+                                        />
+                                        <button 
+                                            type="submit"
+                                            disabled={!replyText.trim() || isSending}
+                                            className="absolute right-2 top-2 p-2.5 bg-slate-900 text-white rounded-xl hover:bg-blue-600 disabled:bg-slate-200 transition-all active:scale-95"
+                                        >
+                                            <Send className="w-5 h-5" />
+                                        </button>
+                                    </div>
+                                </form>
+                            </>
+                        ) : (
+                            <div className="flex-grow flex flex-col items-center justify-center p-12 text-center">
+                                <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
+                                    <MessageSquare className="w-10 h-10 text-slate-200" />
+                                </div>
+                                <h3 className="text-xl font-bold text-slate-900 mb-2">Your Conversations</h3>
+                                <p className="text-slate-500 max-w-xs mx-auto mb-8">
+                                    Select a collection center from the left to view message history or send a new inquiry.
+                                </p>
+                                <button 
+                                    onClick={() => navigate('/collection-points')}
+                                    className="px-6 py-3 bg-slate-900 text-white rounded-xl font-bold flex items-center gap-2 hover:bg-slate-800 transition-all shadow-lg"
+                                >
+                                    Find Locations <ArrowRight className="w-4 h-4" />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* Contribution History Table */}
+            <div className="mt-12 bg-white rounded-[2.5rem] border border-slate-200 shadow-sm overflow-hidden">
+                <div className="p-8 border-b border-slate-100">
+                    <h3 className="text-xl font-bold text-slate-900">Recent Contribution History</h3>
+                </div>
+                <div className="p-4 space-y-2">
+                    {userActivity.map((activity, index) => (
+                        <motion.div 
+                            key={activity.id}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                            className="group flex flex-col sm:flex-row items-center gap-4 p-4 hover:bg-slate-50 rounded-2xl transition-colors border border-transparent hover:border-slate-100"
+                        >
+                            <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xs shrink-0">
+                                {new Date(activity.date).getDate()}
+                                <span className="text-[10px] font-normal uppercase ml-0.5">
+                                    {new Date(activity.date).toLocaleString('default', { month: 'short' })}
+                                </span>
+                            </div>
+                            <div className="flex-grow text-center sm:text-left">
+                                <h4 className="font-bold text-slate-900">{activity.item}</h4>
+                                <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-1">
+                                    <span className="text-xs text-slate-500 px-2 py-0.5 bg-slate-100 rounded-md">
+                                        {activity.category}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1.5 ${activity.status === 'Verified' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700'}`}>
+                                {activity.status}
+                            </div>
+                        </motion.div>
+                    ))}
                 </div>
             </div>
         </PageWrapper>

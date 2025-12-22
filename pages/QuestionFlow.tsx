@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { questionFlowData } from '../data/mockData';
-import type { QuestionFlowAnswers } from '../types';
+import type { QuestionFlowAnswers, Submission } from '../types';
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
 
 const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
@@ -36,6 +36,18 @@ const QuestionFlow = () => {
     const totalSteps = questionFlowData.length;
     const currentQuestion = questionFlowData[step];
 
+    const calculateCredits = (ans: QuestionFlowAnswers) => {
+      if (ans.intent === "Repair") return 70;
+      if (ans.deviceCondition === "Yes, perfectly" || ans.intent === "Donate it") return 50;
+      return 30;
+    };
+
+    const getRecommendation = (ans: QuestionFlowAnswers) => {
+      if (ans.intent === "Repair it") return "Repair";
+      if (ans.deviceCondition === "Yes, perfectly" || ans.intent === "Donate it") return "Donate";
+      return "Recycle";
+    };
+
     const handleSelect = (option: string) => {
         const newAnswers = { ...answers, [currentQuestion.key]: option };
         setAnswers(newAnswers);
@@ -44,7 +56,26 @@ const QuestionFlow = () => {
             setDirection(1);
             setStep(step + 1);
         } else {
-            navigate('/result', { state: newAnswers });
+            // Create submission
+            const recommendation = getRecommendation(newAnswers);
+            const submission: Submission = {
+              id: `SUB-2024-${Math.floor(1000 + Math.random() * 9000)}`,
+              category: newAnswers.category || "Unknown",
+              condition: newAnswers.deviceCondition || "Unknown",
+              intent: newAnswers.intent || "Unknown",
+              recommendation: recommendation,
+              status: "PENDING",
+              creditsPending: calculateCredits(newAnswers),
+              creditsAwarded: 0,
+              dropOffCode: `DRP-${Math.floor(10000 + Math.random() * 89999)}`,
+              createdAt: new Date().toISOString()
+            };
+
+            // Save to local storage
+            const localSubmissions = JSON.parse(localStorage.getItem('user_submissions') || '[]');
+            localStorage.setItem('user_submissions', JSON.stringify([submission, ...localSubmissions]));
+
+            navigate('/result', { state: { answers: newAnswers, submission } });
         }
     };
 

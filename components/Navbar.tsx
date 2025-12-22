@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Recycle, Menu, X, Home, Trash2, BarChart3, Medal, LogOut, User, ChevronDown, MapPin, TrendingUp, MessageSquare } from 'lucide-react';
+import { Recycle, Menu, X, Home, Trash2, BarChart3, Medal, LogOut, User, ChevronDown, MapPin, TrendingUp, MessageSquare, ListTodo } from 'lucide-react';
 
 const NavItem = ({ to, children, Icon, onClick }: { to: string; children?: React.ReactNode; Icon: React.ElementType; onClick?: () => void }) => (
     <NavLink
@@ -30,35 +30,44 @@ const Navbar = () => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [hasUnread, setHasUnread] = useState(false);
     
     const location = useLocation();
     const navigate = useNavigate();
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // Check login state on mount and location change
+    // Check login state and notifications
     useEffect(() => {
         const auth = localStorage.getItem('isAuthenticated');
         setIsLoggedIn(!!auth);
-        setIsProfileOpen(false); // Close dropdown on navigation
-        setIsOpen(false); // Close mobile menu
-    }, [location]);
+        setIsProfileOpen(false); 
+        setIsOpen(false);
 
-    // Handle Scroll for sticky effect
-    useEffect(() => {
-        const handleScroll = () => {
-            const offset = window.scrollY;
-            if (offset > 10) {
-                setScrolled(true);
-            } else {
-                setScrolled(false);
-            }
+        const checkNotifications = () => {
+            const unread = localStorage.getItem('unread_messages');
+            setHasUnread(unread === 'true');
         };
 
+        checkNotifications();
+        // Listen for storage changes across tabs
+        window.addEventListener('storage', checkNotifications);
+        // Local poll for single-tab updates
+        const interval = setInterval(checkNotifications, 2000);
+
+        return () => {
+            window.removeEventListener('storage', checkNotifications);
+            clearInterval(interval);
+        };
+    }, [location]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 10);
+        };
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -85,7 +94,6 @@ const Navbar = () => {
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16 md:h-20">
-                    {/* Logo */}
                     <Link to="/" className="flex items-center gap-2 group">
                         <div className="relative w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-900/20 group-hover:shadow-emerald-500/30 group-hover:scale-105 transition-all duration-300">
                             <Recycle className="h-5 w-5 text-white" />
@@ -93,22 +101,21 @@ const Navbar = () => {
                         <span className="text-xl font-bold text-slate-900 tracking-tight">ECO-SORT</span>
                     </Link>
 
-                    {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center p-1.5 bg-white/60 backdrop-blur-md rounded-full border border-slate-200/60 shadow-sm ring-1 ring-white/50">
                         <NavItem to="/" Icon={Home}>Home</NavItem>
                         <NavItem to="/categories" Icon={Trash2}>Report</NavItem>
+                        <NavItem to="/submissions" Icon={ListTodo}>My Submissions</NavItem>
                         <NavItem to="/dashboard" Icon={BarChart3}>Dashboard</NavItem>
                         <NavItem to="/credits" Icon={Medal}>Credits</NavItem>
                         <NavItem to="/collection-points" Icon={MapPin}>Locations</NavItem>
                     </div>
 
-                    {/* Desktop User Actions */}
                     <div className="hidden md:flex items-center gap-4">
                         {isLoggedIn ? (
                             <div className="relative" ref={dropdownRef}>
                                 <button 
                                     onClick={() => setIsProfileOpen(!isProfileOpen)}
-                                    className={`flex items-center gap-2 pl-2 pr-1 py-1 rounded-full border transition-all duration-200 ${
+                                    className={`flex items-center gap-2 pl-2 pr-1 py-1 rounded-full border transition-all duration-200 relative ${
                                         isProfileOpen 
                                         ? 'bg-emerald-50 border-emerald-200 ring-2 ring-emerald-100 shadow-inner' 
                                         : 'bg-white border-slate-200 hover:border-emerald-300 hover:shadow-md'
@@ -118,6 +125,13 @@ const Navbar = () => {
                                          <img src="https://api.dicebear.com/8.x/avataaars/svg?seed=You" alt="User" className="w-full h-full" />
                                     </div>
                                     <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isProfileOpen ? 'rotate-180 text-emerald-600' : ''}`} />
+                                    
+                                    {hasUnread && (
+                                        <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 border-2 border-white"></span>
+                                        </span>
+                                    )}
                                 </button>
 
                                 <AnimatePresence>
@@ -142,8 +156,11 @@ const Navbar = () => {
                                             </div>
                                             
                                             <div className="px-2">
-                                                <Link to="/profile" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition-colors">
-                                                    <User className="w-4 h-4" /> My Profile
+                                                <Link to="/profile" className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition-colors">
+                                                    <div className="flex items-center gap-3">
+                                                        <User className="w-4 h-4" /> My Profile
+                                                    </div>
+                                                    {hasUnread && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
                                                 </Link>
                                                 <Link to="/analysis" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition-colors">
                                                     <TrendingUp className="w-4 h-4" /> Analyse
@@ -176,19 +193,18 @@ const Navbar = () => {
                         )}
                     </div>
 
-                    {/* Mobile Menu Button */}
                     <div className="md:hidden flex items-center">
                         <button 
                             onClick={() => setIsOpen(!isOpen)}
-                            className="p-2.5 rounded-xl text-slate-600 hover:bg-slate-100 active:scale-95 transition-all"
+                            className="p-2.5 rounded-xl text-slate-600 hover:bg-slate-100 active:scale-95 transition-all relative"
                         >
                             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                            {!isOpen && hasUnread && <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>}
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* Mobile Navigation */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
@@ -200,6 +216,7 @@ const Navbar = () => {
                         <div className="px-4 py-6 space-y-2">
                             <NavItem to="/" Icon={Home}>Home</NavItem>
                             <NavItem to="/categories" Icon={Trash2}>Report Waste</NavItem>
+                            <NavItem to="/submissions" Icon={ListTodo}>My Submissions</NavItem>
                             <NavItem to="/dashboard" Icon={BarChart3}>Dashboard</NavItem>
                             <NavItem to="/credits" Icon={Medal}>Green Credits</NavItem>
                             <NavItem to="/collection-points" Icon={MapPin}>Find Locations</NavItem>
@@ -216,8 +233,11 @@ const Navbar = () => {
                                                 <p className="text-xs text-slate-500">student@university.edu</p>
                                             </div>
                                         </div>
-                                        <Link to="/profile" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50">
-                                            <User className="w-4 h-4" /> My Profile
+                                        <Link to="/profile" className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50">
+                                            <div className="flex items-center gap-3">
+                                                <User className="w-4 h-4" /> My Profile
+                                            </div>
+                                            {hasUnread && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
                                         </Link>
                                         <Link to="/analysis" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50">
                                             <TrendingUp className="w-4 h-4" /> Analyse

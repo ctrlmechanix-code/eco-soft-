@@ -21,6 +21,7 @@ import Profile from './pages/Profile';
 import UserAnalysis from './pages/UserAnalysis';
 import Feedback from './pages/Feedback';
 import UserRequests from './pages/UserRequests';
+import Submissions from './pages/Submissions';
 
 const AppLayout = () => {
     const location = useLocation();
@@ -55,6 +56,7 @@ function App() {
           <Route path="/analysis" element={<UserAnalysis />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/requests" element={<UserRequests />} />
+          <Route path="/submissions" element={<Submissions />} />
           
           {/* Company Pages */}
           <Route path="/about" element={<AboutUs />} />

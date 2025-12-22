@@ -2,90 +2,124 @@
 # ECO-SORT Developer Blueprint
 
 ## 🏗️ Project Overview
-ECO-SORT is a modern, single-page application (SPA) designed to streamline e-waste management on university campuses. It utilizes a component-based architecture with client-side routing and mock data simulation to demonstrate a complete user flow from reporting waste to tracking environmental impact.
+ECO-SORT is a comprehensive, single-page application (SPA) designed to revolutionize e-waste management on university campuses. It provides a seamless user experience for identifying e-waste, determining the best disposal method (Repair, Donate, Recycle), finding collection points, and tracking environmental impact through a gamified credit system.
 
 ## 🛠️ Technology Stack
 
 ### Core Framework
-- **React 18**: UI Library using Functional Components and Hooks.
-- **TypeScript**: Static typing for data reliability (Interfaces defined in `types/index.ts`).
-- **Vite**: Build tool and development server.
+- **React 18**: UI Library utilizing Functional Components and Hooks.
+- **TypeScript**: Ensures type safety and code reliability across the application.
+- **Vite**: Ultra-fast build tool and development server.
 
 ### Styling & Design System
-- **Tailwind CSS**: Utility-first CSS framework.
+- **Tailwind CSS**: Utility-first framework for rapid, responsive UI development.
 - **Design Language**: 
-  - **Glassmorphism**: Extensive use of `backdrop-blur`, semi-transparent whites, and borders.
-  - **Gradients**: Custom linear and radial gradients defined in Tailwind classes.
-  - **Typography**: Inter font family (via Google Fonts).
-- **Icons**: `lucide-react` for consistent, lightweight SVG icons.
+  - **Glassmorphism**: Premium aesthetic using backdrop-blur, translucent layers, and subtle borders.
+  - **Gradients**: Custom `mesh-gradient` backgrounds and dynamic text gradients.
+  - **Typography**: 'Inter' font family for clean, modern readability.
+- **Icons**: `lucide-react` for consistent, lightweight SVG iconography.
 
 ### Animation & Interaction
-- **Framer Motion**:
-  - `AnimatePresence` for smooth page transitions (`App.tsx`).
-  - Complex micro-interactions (hover states, staggering lists).
-  - `AnimatedCounter` component for statistical visualization.
+- **Framer Motion**: 
+  - Page transition animations (`AnimatePresence`).
+  - Complex micro-interactions (hover effects, list staggering).
+  - Layout animations (`layoutId`) for smooth state changes.
+  - `AnimatedCounter` for engaging statistical visualization.
 
-### Routing
+### Routing & Navigation
 - **React Router v6**:
-  - Uses `HashRouter` for easy static deployment compatibility.
-  - Layout pattern (`AppLayout`) wrapping nested routes.
-  - State passing via `useLocation` (e.g., passing answers from `QuestionFlow` to `Result`).
+  - Client-side routing with `MemoryRouter` (for demo resilience) or `BrowserRouter`.
+  - Nested routes with shared `AppLayout`.
+  - Dynamic navigation states (Active tabs, history stack).
 
 ### Data Visualization & AI
-- **Recharts**: Responsive bar charts for dashboard analytics.
-- **Google GenAI SDK**: Integration with Gemini models for the Image Generator feature.
+- **Recharts**: Responsive, composable charts for the Dashboard and User Analysis pages.
+- **Google GenAI SDK (`@google/genai`)**: Integration with Gemini models (specifically `gemini-3-pro-image-preview`) for the AI Image Generator feature.
 
 ---
 
-## 📂 Project Structure
+## 📂 Complete File Structure
 
 ```
 /
-├── components/          # Reusable UI components
-│   ├── ui/              # Atom components (Icon, AnimatedCounter)
-│   ├── Navbar.tsx       # Global navigation with mobile menu
-│   └── Footer.tsx       # Global footer
+├── components/          
+│   ├── ui/              
+│   │   ├── AnimatedCounter.tsx  # Counter animation component
+│   │   └── Icon.tsx             # Dynamic Lucide icon wrapper
+│   ├── Footer.tsx               # Global footer with links
+│   └── Navbar.tsx               # Global nav with mobile menu & notification logic
 ├── data/
-│   └── mockData.ts      # Static data simulating a backend DB
-├── pages/               # Route-level components
-│   ├── Landing.tsx      # Hero and feature overview
-│   ├── QuestionFlow.tsx # Multi-step wizard form
-│   ├── Dashboard.tsx    # Analytics view
-│   └── ...              # Other pages
+│   └── mockData.ts      # Static data (Categories, Leaderboard, Points) & mock DB
+├── pages/               
+│   ├── AboutUs.tsx      # Mission statement page
+│   ├── Auth.tsx         # Login/Signup simulation
+│   ├── Blog.tsx         # News feed listing
+│   ├── BlogPost.tsx     # Individual article view
+│   ├── Careers.tsx      # Job listings page
+│   ├── Categories.tsx   # Step 1: E-waste category selection
+│   ├── CollectionPoints.tsx # Location finder with Detail View & Chat
+│   ├── Dashboard.tsx    # Campus-wide analytics
+│   ├── Feedback.tsx     # User support form
+│   ├── GreenCredits.tsx # Gamification & Leaderboard
+│   ├── ImageGenerator.tsx # AI-powered image creation tool
+│   ├── Landing.tsx      # Home page / Hero section
+│   ├── Profile.tsx      # User profile, history, and messaging center
+│   ├── QuestionFlow.tsx # Step 2: Diagnostic wizard logic
+│   ├── Result.tsx       # Step 3: Recommendation engine
+│   ├── Submissions.tsx  # Track pending/dropped/completed items
+│   ├── Sustainability.tsx # Environmental impact report
+│   ├── UserAnalysis.tsx # Personal contribution analytics
+│   └── UserRequests.tsx # Support ticket tracking
 ├── types/
-│   └── index.ts         # TypeScript interfaces (Category, User, etc.)
-├── App.tsx              # Main entry, Routing logic, Layout wrapper
-└── main.tsx             # React DOM root rendering
+│   └── index.ts         # TypeScript interfaces (Submission, UserRequest, etc.)
+├── vibeinfo/            # Project documentation
+│   ├── blueprint.md     # This file
+│   ├── LICENSE.md       # Apache 2.0 License
+│   └── README.md        # Quick start guide
+├── App.tsx              # Main entry, Route definitions
+├── index.tsx            # React root mount
+├── index.html           # HTML entry point
+└── metadata.json        # Project metadata
 ```
 
-## 🧩 Key Design Patterns
+## 🧩 Implemented Features & Logic
 
-### 1. The Layout Pattern
-The `App.tsx` file defines an `AppLayout` component that conditionally renders the `Navbar` and `Footer` based on the current route (hiding them on the `/auth` page).
+### 1. Smart Reporting Flow (`Categories` -> `QuestionFlow` -> `Result`)
+- Users select a device category.
+- A dynamic questionnaire assesses the device condition.
+- **Logic**: Determines if the item should be Repaired (high value), Donated (working), or Recycled (broken).
+- Generates a `Submission` object with a unique **Drop-off Code**.
 
-### 2. Mock Data Strategy
-Instead of a backend, `data/mockData.ts` exports typed arrays and objects. This allows the frontend to be fully interactive without API dependencies.
-- **Future Dev Note**: Replace imports from `mockData.ts` with `fetch` or `axios` calls to a real API.
+### 2. Submission Tracking System (`Submissions.tsx`)
+- **State Management**: Uses `localStorage` to persist submissions between sessions.
+- **Status Workflow**: 
+  1. `PENDING`: User has reported the item.
+  2. `DROPPED`: User has marked the item as dropped off (waiting verification).
+  3. `COMPLETED`: Admin verified (mocked), credits awarded.
+- **Visuals**: Status badges (Amber/Blue/Green) and filterable tabs.
 
-### 3. State Management
-- **Local State**: `useState` is used for component-level interaction (e.g., mobile menu toggle).
-- **Navigation State**: Data is passed between pages using `navigate('/path', { state: data })`.
+### 3. Integrated Messaging System
+- **Collection Points**: Users can open a specific location to see details and start a chat.
+- **Profile Hub**: A dedicated "Messaging Portal" in the user profile aggregates all conversations.
+- **Notifications**: The Navbar displays a red notification dot when unread messages (simulated admin replies) exist.
 
-### 4. Animation Strategy
-Pages are wrapped in a generic `PageWrapper` or similar motion div structure:
-```tsx
-<motion.div
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  exit={{ opacity: 0 }}
->
-```
-This ensures consistent entrance animations across the application.
+### 4. Green Credits & Gamification
+- **Calculation**: Credits are calculated based on the sustainability impact of the action (Repair > Donate > Recycle).
+- **Display**: "Pending Credits" vs. "Total Balance" are tracked separately in `GreenCredits.tsx`.
+- **Leaderboard**: Visual ranking of top contributors.
+
+### 5. Mock Backend Strategy
+- **Persistence**: The app mimics a real backend by reading/writing to `localStorage` for:
+  - `user_submissions`
+  - `cp_messages` (Collection Point messages)
+  - `user_requests` (Support tickets)
+  - `isAuthenticated` (Session state)
+- **Simulation**: `setTimeout` is used to simulate API latency and async admin responses.
 
 ---
 
-## 🚀 Future Development Roadmap
-
-1.  **Backend Integration**: Connect to Firebase/Supabase for real authentication and data persistence.
-2.  **State Management**: Introduce Context API or Redux if global state complexity increases (e.g., user session management).
-3.  **PWA Support**: Update `vite.config.ts` to support offline capabilities.
+## 🚀 Recent Updates
+- **New Page**: Added `/submissions` for granular tracking of reported items.
+- **Navigation Update**: Added "My Submissions" to the main navigation bar.
+- **Logic Enhancement**: Updated `QuestionFlow` to auto-generate submission records upon completion.
+- **UI Refinement**: Enhanced `Result.tsx` to show Pending Credits and Next Steps clearly.

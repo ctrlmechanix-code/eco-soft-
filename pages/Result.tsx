@@ -2,10 +2,9 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
-import type { QuestionFlowAnswers } from '../types';
-import { MapPin, Gift, Wrench, Recycle, ArrowRight, Share2, Leaf, AlertCircle, Info, ArrowLeft } from 'lucide-react';
+import type { QuestionFlowAnswers, Submission } from '../types';
+import { MapPin, Gift, Wrench, Recycle, ArrowRight, Share2, Leaf, AlertCircle, Info, ArrowLeft, Ticket, Clock, CheckCircle2 } from 'lucide-react';
 
-// Refined themes for a more premium look
 const THEMES = {
     Repair: {
         gradient: "from-amber-400/20 via-orange-100/20 to-amber-50/10",
@@ -45,21 +44,22 @@ const THEMES = {
 const Result = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const answers = location.state as QuestionFlowAnswers;
+    const state = location.state as { answers: QuestionFlowAnswers, submission: Submission } | null;
 
     const recommendation = useMemo(() => {
-        if (!answers) return { action: "Recycle", explanation: "Based on your inputs, safe recycling is the best option to recover valuable materials.", credits: 30 };
+        if (!state?.answers) return { action: "Recycle", explanation: "Based on your inputs, safe recycling is the best option to recover valuable materials.", credits: 30 };
         
-        if (answers.intent === "Repair") return { action: "Repair", explanation: "Repairing extends device life and conserves valuable resources.", credits: 70 };
-        if (answers.deviceCondition === "Working" || answers.intent === "Donate") return { action: "Donate", explanation: "Donating gives devices a second life, helping those in need while reducing waste.", credits: 50 };
+        const ans = state.answers;
+        if (ans.intent === "Repair it") return { action: "Repair", explanation: "Repairing extends device life and conserves valuable resources.", credits: 70 };
+        if (ans.deviceCondition === "Yes, perfectly" || ans.intent === "Donate it") return { action: "Donate", explanation: "Donating gives devices a second life, helping those in need while reducing waste.", credits: 50 };
 
         return { action: "Recycle", explanation: "Recycling recovers valuable materials like gold and copper while preventing toxic pollution.", credits: 30 };
-    }, [answers]);
+    }, [state?.answers]);
     
     const theme = THEMES[recommendation.action as keyof typeof THEMES] || THEMES.Recycle;
     const Icon = theme.icon;
 
-    if (!answers) {
+    if (!state?.answers) {
         return (
              <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-6 bg-slate-50">
                 <motion.div 
@@ -82,6 +82,8 @@ const Result = () => {
             </div>
         );
     }
+
+    const submission = state.submission;
 
     return (
         <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-4 lg:p-8 relative overflow-hidden bg-slate-50/50">
@@ -127,6 +129,17 @@ const Result = () => {
                         <p className={`text-lg font-medium ${theme.subtext} leading-relaxed`}>
                             {theme.label}
                         </p>
+
+                        {submission?.dropOffCode && (
+                          <div className="mt-10 p-6 bg-white/60 backdrop-blur-md rounded-2xl border border-white/40 shadow-sm">
+                            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-2">
+                              <Ticket className="w-3.5 h-3.5" /> Drop-off Code
+                            </p>
+                            <p className="text-3xl font-black text-slate-900 tracking-tighter">
+                              {submission.dropOffCode}
+                            </p>
+                          </div>
+                        )}
                     </div>
 
                     <div className="relative z-10 mt-auto flex justify-center md:justify-start pt-10">
@@ -163,12 +176,12 @@ const Result = () => {
                                 transition={{ delay: 0.6 }}
                                 className="p-5 rounded-2xl bg-white border border-slate-100 flex flex-col items-start gap-3 shadow-sm hover:shadow-md transition-all duration-300"
                             >
-                                <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
-                                    <Leaf className="w-5 h-5" />
+                                <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
+                                    <Clock className="w-5 h-5" />
                                 </div>
                                 <div>
                                     <p className="text-2xl font-bold text-slate-900">+{recommendation.credits}</p>
-                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wide mt-1">Credits Earned</p>
+                                    <p className="text-xs font-bold text-amber-500 uppercase tracking-wide mt-1">Pending Credits</p>
                                 </div>
                             </motion.div>
 
@@ -187,6 +200,30 @@ const Result = () => {
                                 </div>
                             </motion.div>
                         </div>
+
+                        <motion.div 
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.75 }}
+                          className="mb-10 p-6 bg-slate-900/5 rounded-3xl border border-slate-200"
+                        >
+                          <h4 className="text-sm font-bold text-slate-900 mb-4 uppercase tracking-widest">Next Steps</h4>
+                          <ul className="space-y-4">
+                            {[
+                              { icon: MapPin, text: "Visit your nearest collection point" },
+                              { icon: Ticket, text: "Present your drop-off code to the staff" },
+                              { icon: CheckCircle2, text: "Mark item as dropped in 'My Submissions'" },
+                              { icon: Clock, text: "Wait for admin verification & credits" }
+                            ].map((step, i) => (
+                              <li key={i} className="flex items-center gap-3 text-sm text-slate-600 font-medium">
+                                <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-slate-400 shrink-0 shadow-sm border border-slate-100">
+                                  <step.icon className="w-4 h-4" />
+                                </div>
+                                {step.text}
+                              </li>
+                            ))}
+                          </ul>
+                        </motion.div>
                     </div>
 
                     {/* Actions */}
@@ -222,8 +259,11 @@ const Result = () => {
                             transition={{ delay: 0.9 }}
                             className="flex gap-4"
                         >
-                            <button className="flex-1 py-3 bg-white border border-slate-200 text-slate-600 rounded-xl font-semibold hover:bg-slate-50 hover:text-slate-900 transition-colors flex items-center justify-center gap-2 shadow-sm">
-                                <Share2 className="w-4 h-4" /> Share
+                            <button 
+                              onClick={() => navigate('/submissions')}
+                              className="flex-1 py-3 bg-slate-900 text-white rounded-xl font-semibold hover:bg-slate-800 transition-colors flex items-center justify-center gap-2 shadow-sm"
+                            >
+                                My Submissions
                             </button>
                              <button 
                                 onClick={() => navigate('/categories')}
