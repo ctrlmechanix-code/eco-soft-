@@ -8,11 +8,16 @@ export interface Category {
 }
 
 export interface LeaderboardUser {
+  id?: string;
   rank: number;
   name: string;
+  email?: string;
   points: number;
   avatar: string;
   isUser?: boolean;
+  role?: 'user' | 'admin';
+  status?: 'Active' | 'Suspended';
+  joinedDate?: string;
 }
 
 export interface ImpactStats {
@@ -27,11 +32,14 @@ export interface CollectionPoint {
   id: number;
   name: string;
   location: string;
+  address?: string; // Added for admin
   hours: string;
   coordinates: { lat: number; lng: number };
   phone: string;
   email: string;
   mapUrl: string;
+  status?: 'Active' | 'Maintenance' | 'Closed';
+  totalCollected?: number;
 }
 
 export interface CollectionPointMessage {
@@ -69,6 +77,7 @@ export interface BlogPost {
     author: string;
     category: string;
     image: string;
+    status?: 'Published' | 'Draft';
 }
 
 export interface UserRequest {
@@ -79,18 +88,35 @@ export interface UserRequest {
     date: string;
     status: 'Open' | 'In Progress' | 'Resolved' | 'Closed';
     response?: string;
+    userId?: string;
+    userName?: string;
 }
 
 export interface Submission {
   id: string;
+  userId?: string;
+  userName?: string;
   category: string;
   condition: string;
   intent: string;
   recommendation: string;
-  status: 'PENDING' | 'DROPPED' | 'COMPLETED';
+  status: 'PENDING' | 'DROPPED' | 'COMPLETED' | 'REJECTED';
   creditsPending: number;
   creditsAwarded: number;
   dropOffCode: string;
   createdAt: string;
   droppedAt?: string;
+  verifiedAt?: string;
+  rejectedReason?: string;
+  adminId?: string;
+}
+
+export interface ActivityLog {
+    id: string;
+    action: string;
+    adminId: string;
+    adminName: string;
+    targetId?: string;
+    details: string;
+    timestamp: string;
 }

@@ -22,6 +22,20 @@ import UserAnalysis from './pages/UserAnalysis';
 import Feedback from './pages/Feedback';
 import UserRequests from './pages/UserRequests';
 import Submissions from './pages/Submissions';
+import ImageGenerator from './pages/ImageGenerator';
+
+// Admin Imports
+import AdminLayout from './components/admin/AdminLayout';
+import AdminDashboard from './pages/admin/Dashboard';
+import AdminSubmissions from './pages/admin/Submissions';
+import AdminUsers from './pages/admin/Users';
+import AdminCollectionPoints from './pages/admin/CollectionPoints';
+import AdminCredits from './pages/admin/Credits';
+import AdminContent from './pages/admin/Content';
+import AdminRequests from './pages/admin/Requests';
+import AdminActivity from './pages/admin/Activity';
+import AdminReports from './pages/admin/Reports';
+import AdminSettings from './pages/admin/Settings';
 
 const AppLayout = () => {
     const location = useLocation();
@@ -57,6 +71,7 @@ function App() {
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/requests" element={<UserRequests />} />
           <Route path="/submissions" element={<Submissions />} />
+          <Route path="/generate-image" element={<ImageGenerator />} />
           
           {/* Company Pages */}
           <Route path="/about" element={<AboutUs />} />
@@ -65,6 +80,20 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/auth" element={<Auth />} />
+        </Route>
+
+        {/* Admin Routes - Separate Layout */}
+        <Route path="/admin" element={<AdminLayout />}>
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="submissions" element={<AdminSubmissions />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="collection-points" element={<AdminCollectionPoints />} />
+            <Route path="credits" element={<AdminCredits />} />
+            <Route path="content" element={<AdminContent />} />
+            <Route path="requests" element={<AdminRequests />} />
+            <Route path="activity" element={<AdminActivity />} />
+            <Route path="reports" element={<AdminReports />} />
+            <Route path="settings" element={<AdminSettings />} />
         </Route>
       </Routes>
     </MemoryRouter>

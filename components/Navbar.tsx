@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Recycle, Menu, X, Home, Trash2, BarChart3, Medal, LogOut, User, ChevronDown, MapPin, TrendingUp, MessageSquare, ListTodo } from 'lucide-react';
+import { Recycle, Menu, X, Home, Trash2, BarChart3, Medal, LogOut, User, ChevronDown, MapPin, TrendingUp, MessageSquare, ListTodo, Shield } from 'lucide-react';
 
 const NavItem = ({ to, children, Icon, onClick }: { to: string; children?: React.ReactNode; Icon: React.ElementType; onClick?: () => void }) => (
     <NavLink
@@ -162,6 +162,9 @@ const Navbar = () => {
                                                     </div>
                                                     {hasUnread && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
                                                 </Link>
+                                                <Link to="/admin/dashboard" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                                                    <Shield className="w-4 h-4" /> Admin Panel
+                                                </Link>
                                                 <Link to="/analysis" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition-colors">
                                                     <TrendingUp className="w-4 h-4" /> Analyse
                                                 </Link>
@@ -238,6 +241,9 @@ const Navbar = () => {
                                                 <User className="w-4 h-4" /> My Profile
                                             </div>
                                             {hasUnread && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
+                                        </Link>
+                                        <Link to="/admin/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-blue-600 hover:bg-blue-50">
+                                            <Shield className="w-4 h-4" /> Admin Panel
                                         </Link>
                                         <Link to="/analysis" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50">
                                             <TrendingUp className="w-4 h-4" /> Analyse

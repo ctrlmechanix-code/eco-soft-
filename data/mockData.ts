@@ -1,5 +1,5 @@
 
-import type { Category, LeaderboardUser, ImpactStats, CollectionPoint, UserActivity, BlogPost, UserRequest, Submission } from '../types';
+import type { Category, LeaderboardUser, ImpactStats, CollectionPoint, UserActivity, BlogPost, UserRequest, Submission, ActivityLog } from '../types';
 
 export const categories: Category[] = [
   {
@@ -54,11 +54,11 @@ export const categories: Category[] = [
 ];
 
 export const leaderboard: LeaderboardUser[] = [
-  { rank: 1, name: "Aarav Sharma", points: 450, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Aarav" },
-  { rank: 2, name: "Priya Patel", points: 410, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Priya" },
-  { rank: 3, name: "You", points: 380, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=You", isUser: true },
-  { rank: 4, name: "David Kim", points: 350, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=David" },
-  { rank: 5, name: "Sarah Jenkins", points: 320, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Sarah" },
+  { id: "USR-001", rank: 1, name: "Aarav Sharma", email: "aarav@university.edu", points: 450, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Aarav", role: "user", status: "Active", joinedDate: "2023-09-01" },
+  { id: "USR-002", rank: 2, name: "Priya Patel", email: "priya@university.edu", points: 410, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Priya", role: "user", status: "Active", joinedDate: "2023-09-15" },
+  { id: "USR-CURRENT", rank: 3, name: "Student User", email: "student@university.edu", points: 380, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=You", isUser: true, role: "admin", status: "Active", joinedDate: "2023-09-20" },
+  { id: "USR-003", rank: 4, name: "David Kim", email: "david@university.edu", points: 350, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=David", role: "user", status: "Active", joinedDate: "2023-10-01" },
+  { id: "USR-004", rank: 5, name: "Sarah Jenkins", email: "sarah@university.edu", points: 320, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Sarah", role: "user", status: "Active", joinedDate: "2023-10-05" },
 ];
 
 export const impactStats: ImpactStats = {
@@ -74,41 +74,53 @@ export const collectionPoints: CollectionPoint[] = [
     id: 1, 
     name: "Student Center Hub", 
     location: "Building A, Ground Floor", 
+    address: "123 Campus Drive, Building A",
     hours: "9 AM - 6 PM", 
     coordinates: { lat: 12.9716, lng: 77.5946 },
     phone: "+91 80-2211-3344",
     email: "studenthub@ecosort.edu",
-    mapUrl: "https://www.google.com/maps/search/?api=1&query=Student+Center+Hub"
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Student+Center+Hub",
+    status: 'Active',
+    totalCollected: 1240
   },
   { 
     id: 2, 
     name: "Engineering Lab Drop-off", 
     location: "Tech Block B, Room 102", 
+    address: "Tech Block B, 2nd Floor",
     hours: "8 AM - 8 PM", 
     coordinates: { lat: 12.9720, lng: 77.5950 },
     phone: "+91 80-2211-5566",
     email: "engglab@ecosort.edu",
-    mapUrl: "https://www.google.com/maps/search/?api=1&query=Engineering+Lab"
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Engineering+Lab",
+    status: 'Active',
+    totalCollected: 850
   },
   { 
     id: 3, 
     name: "Hostel 4 Recycling Zone", 
     location: "North Campus Hostel Area", 
+    address: "Hostel Block 4, Common Area",
     hours: "24/7", 
     coordinates: { lat: 12.9730, lng: 77.5960 },
     phone: "+91 80-2211-7788",
     email: "hostel4@ecosort.edu",
-    mapUrl: "https://www.google.com/maps/search/?api=1&query=North+Campus+Hostel"
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=North+Campus+Hostel",
+    status: 'Active',
+    totalCollected: 420
   },
   { 
     id: 4, 
     name: "Library E-Waste Bin", 
     location: "Main Library Entrance", 
+    address: "Central Library, Foyer",
     hours: "8 AM - 10 PM", 
     coordinates: { lat: 12.9700, lng: 77.5930 },
     phone: "+91 80-2211-9900",
     email: "library@ecosort.edu",
-    mapUrl: "https://www.google.com/maps/search/?api=1&query=Main+Library"
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Main+Library",
+    status: 'Maintenance',
+    totalCollected: 310
   },
 ];
 
@@ -156,6 +168,8 @@ export const userActivity: UserActivity[] = [
 export const mockRequests: UserRequest[] = [
     {
         id: "REQ-2023-001",
+        userId: "USR-001",
+        userName: "Aarav Sharma",
         type: "Support",
         subject: "Credits not credited for old phone",
         message: "I dropped off my iPhone 8 at the Student Center Hub last Tuesday but I haven't received my green credits yet.",
@@ -165,6 +179,8 @@ export const mockRequests: UserRequest[] = [
     },
     {
         id: "REQ-2023-002",
+        userId: "USR-CURRENT",
+        userName: "Student User",
         type: "Bug Report",
         subject: "Map not loading on mobile",
         message: "When I try to open the locations page on my Android phone, the map shows a gray box.",
@@ -176,6 +192,8 @@ export const mockRequests: UserRequest[] = [
 export const mockSubmissions: Submission[] = [
   {
     id: "SUB-001",
+    userId: "USR-CURRENT",
+    userName: "Student User",
     category: "Mobile Phones",
     condition: "Yes, perfectly",
     intent: "Donate",
@@ -188,6 +206,8 @@ export const mockSubmissions: Submission[] = [
   },
   {
     id: "SUB-002",
+    userId: "USR-CURRENT",
+    userName: "Student User",
     category: "Laptops",
     condition: "No, won't turn on",
     intent: "Recycle it safely",
@@ -201,6 +221,8 @@ export const mockSubmissions: Submission[] = [
   },
   {
     id: "SUB-003",
+    userId: "USR-CURRENT",
+    userName: "Student User",
     category: "Batteries",
     condition: "Not sure",
     intent: "Recycle it safely",
@@ -210,8 +232,45 @@ export const mockSubmissions: Submission[] = [
     creditsAwarded: 30,
     dropOffCode: "DRP-99999",
     createdAt: new Date(Date.now() - 259200000).toISOString(),
-    droppedAt: new Date(Date.now() - 172800000).toISOString()
+    droppedAt: new Date(Date.now() - 172800000).toISOString(),
+    verifiedAt: new Date(Date.now() - 86400000).toISOString()
+  },
+  {
+    id: "SUB-004",
+    userId: "USR-001",
+    userName: "Aarav Sharma",
+    category: "Laptops",
+    condition: "Yes, perfectly",
+    intent: "Donate",
+    recommendation: "Donate",
+    status: "DROPPED",
+    creditsPending: 150,
+    creditsAwarded: 0,
+    dropOffCode: "DRP-55555",
+    createdAt: new Date(Date.now() - 400000000).toISOString(),
+    droppedAt: new Date(Date.now() - 100000000).toISOString(),
   }
+];
+
+export const activityLogs: ActivityLog[] = [
+    {
+        id: "ACT-001",
+        action: "SUBMISSION_VERIFIED",
+        adminId: "USR-CURRENT",
+        adminName: "Student User",
+        targetId: "SUB-003",
+        details: "Verified batch of batteries from Student Center.",
+        timestamp: new Date(Date.now() - 86400000).toISOString()
+    },
+    {
+        id: "ACT-002",
+        action: "USER_ROLE_UPDATED",
+        adminId: "SYSTEM",
+        adminName: "System",
+        targetId: "USR-CURRENT",
+        details: "Promoted to Admin role.",
+        timestamp: new Date(Date.now() - 900000000).toISOString()
+    }
 ];
 
 export const blogPosts: BlogPost[] = [
@@ -223,24 +282,8 @@ export const blogPosts: BlogPost[] = [
         author: "Sarah Jenkins",
         category: "Awareness",
         image: "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        content: `
-            <p class="mb-4">Electronic waste (e-waste) is the fastest-growing waste stream in the world. On university campuses, the problem is magnified by the high density of technology users, frequent device upgrades, and a lack of specialized disposal infrastructure.</p>
-            
-            <h3 class="text-xl font-bold text-slate-900 mt-8 mb-4">The Campus Challenge</h3>
-            <p class="mb-4">Students and faculty rely heavily on laptops, tablets, and smartphones. With academic cycles often dictating hardware upgrades, thousands of devices become obsolete every semester. Unlike traditional waste, e-waste contains toxic components like lead, mercury, and cadmium, which can leach into the soil if improperly disposed of.</p>
-            
-            <h3 class="text-xl font-bold text-slate-900 mt-8 mb-4">A Circular Solution</h3>
-            <p class="mb-4">The concept of a circular economy offers a promising path forward. Instead of the linear "take-make-dispose" model, a circular approach emphasizes repair, reuse, and recycling. At ECO-SORT, we are facilitating this transition by connecting campus communities with verified local recyclers and repair shops.</p>
-            
-            <p class="mb-4">By extending the lifespan of devices through repair or ensuring they are recycled to recover valuable materials like gold and copper, campuses can significantly reduce their environmental footprint.</p>
-            
-            <h3 class="text-xl font-bold text-slate-900 mt-8 mb-4">What You Can Do</h3>
-            <ul class="list-disc pl-6 space-y-2 mb-6">
-                <li>Check if your device can be repaired before discarding it.</li>
-                <li>Donate working electronics to local charities or student support programs.</li>
-                <li>Use designated e-waste bins for non-functional items—never throw batteries in the trash.</li>
-            </ul>
-        `
+        content: `...`,
+        status: 'Published'
     },
     {
         id: "lithium-batteries-guide",
@@ -250,22 +293,8 @@ export const blogPosts: BlogPost[] = [
         author: "Mike Chen",
         category: "Guide",
         image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        content: `
-            <p class="mb-4">Lithium-ion batteries power everything from our phones to electric scooters. While they are efficient energy sources, they pose significant fire risks if damaged or disposed of incorrectly.</p>
-            
-            <h3 class="text-xl font-bold text-slate-900 mt-8 mb-4">Why Not the Trash?</h3>
-            <p class="mb-4">When a lithium battery is crushed in a garbage truck or landfill compactor, it can puncture and ignite, causing difficult-to-extinguish fires. This puts sanitation workers at risk and releases toxic fumes.</p>
-            
-            <h3 class="text-xl font-bold text-slate-900 mt-8 mb-4">Preparation for Disposal</h3>
-            <p class="mb-4">Before heading to a collection point, follow these steps:</p>
-            <ol class="list-decimal pl-6 space-y-2 mb-6">
-                <li><strong>Tape the Terminals:</strong> Use electrical tape or clear packing tape to cover the contact points. This prevents short-circuiting.</li>
-                <li><strong>Don't Remove if Swollen:</strong> If a device has a swollen battery, do not attempt to remove it yourself. Take the entire device to a professional e-waste facility immediately.</li>
-                <li><strong>Bag It:</strong> Place individual batteries in clear plastic bags if required by your local collection center.</li>
-            </ol>
-            
-            <p>Our interactive map on the Locations page highlights specific drop-off points that accept hazardous battery waste.</p>
-        `
+        content: `...`,
+        status: 'Published'
     },
     {
         id: "eco-sort-milestone",
@@ -275,27 +304,7 @@ export const blogPosts: BlogPost[] = [
         author: "ECO-SORT Team",
         category: "Company News",
         image: "https://images.unsplash.com/photo-1605600659908-0ef719419d41?q=80&w=800&auto=format&fit=crop",
-        content: `
-            <p class="mb-4">We are thrilled to announce that the ECO-SORT community has collectively diverted over 10,000 electronic devices from landfills this year!</p>
-            
-            <h3 class="text-xl font-bold text-slate-900 mt-8 mb-4">By the Numbers</h3>
-            <div class="grid grid-cols-2 gap-4 my-6">
-                <div class="bg-slate-50 p-4 rounded-lg">
-                    <p class="text-2xl font-bold text-emerald-600">10,420</p>
-                    <p class="text-xs text-slate-500">Total Items</p>
-                </div>
-                <div class="bg-slate-50 p-4 rounded-lg">
-                    <p class="text-2xl font-bold text-blue-600">4,500 kg</p>
-                    <p class="text-xs text-slate-500">CO₂ Prevented</p>
-                </div>
-            </div>
-
-            <p class="mb-4">This achievement wouldn't be possible without the students, faculty, and facilities management staff who have embraced the ECO-SORT platform. From organizing dorm recycling drives to advocating for more collection bins, your grassroots efforts are driving real change.</p>
-            
-            <h3 class="text-xl font-bold text-slate-900 mt-8 mb-4">Looking Ahead</h3>
-            <p class="mb-4">Our next goal is to expand to 5 partner universities by 2025. We are also launching a "Repair Café" initiative next semester to teach students how to fix common hardware issues themselves.</p>
-            
-            <p>Thank you for being part of the solution. Keep sorting!</p>
-        `
+        content: `...`,
+        status: 'Published'
     }
 ];
