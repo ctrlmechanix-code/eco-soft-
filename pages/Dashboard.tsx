@@ -1,9 +1,10 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { dashboardStats } from '../data/mockData';
 import AnimatedCounter from '../components/ui/AnimatedCounter';
-import { TrendingUp, ArrowUpRight } from 'lucide-react';
+import { TrendingUp, ArrowUpRight, Calendar, Printer, Plus, Download } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const chartData = [
@@ -21,7 +22,7 @@ const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.5 }}
-        className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8"
+        className="max-w-7xl mx-auto py-12 md:py-16 px-4 sm:px-6 lg:px-8"
     >
         {children}
     </motion.div>
@@ -52,6 +53,8 @@ const StatCard = ({ stat }: { stat: typeof dashboardStats[0] }) => {
 };
 
 const Dashboard = () => {
+    const navigate = useNavigate();
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -60,15 +63,45 @@ const Dashboard = () => {
         },
     };
 
+    const handlePrintLabel = () => {
+        // In a real app, this would generate a PDF
+        alert("Shipping label generated successfully! Check your downloads.");
+    };
+
+    const handleDownloadReport = () => {
+        // Generate a CSV string from the chart data
+        const headers = ['Month', 'Recycled Items', 'Repaired Items'];
+        const rows = chartData.map(row => [row.name, row.Recycled, row.Repaired]);
+        
+        const csvContent = [
+            headers.join(','),
+            ...rows.map(row => row.join(','))
+        ].join('\n');
+
+        // Create a Blob and trigger download
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `ecosort_report_${new Date().toISOString().split('T')[0]}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
         <PageWrapper>
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-12">
+            <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
                 <div>
                     <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
                     <p className="text-slate-500 mt-1">Overview of campus sustainability metrics.</p>
                 </div>
-                <div className="mt-4 md:mt-0">
-                    <button className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">
+                <div className="flex-shrink-0">
+                    <button 
+                        onClick={handleDownloadReport}
+                        className="w-full md:w-auto px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors flex items-center justify-center gap-2"
+                    >
+                        <Download className="w-4 h-4" />
                         Download Report
                     </button>
                 </div>
@@ -92,9 +125,9 @@ const Dashboard = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="lg:col-span-2 bg-white p-8 rounded-3xl border border-slate-200 shadow-sm"
+                    className="lg:col-span-2 bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm"
                 >
-                    <div className="flex items-center justify-between mb-8">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
                         <div>
                              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
                                 <TrendingUp className="w-5 h-5 text-emerald-500"/> Activity Trends
@@ -135,18 +168,39 @@ const Dashboard = () => {
                     </div>
                 </motion.div>
 
-                <div className="bg-slate-900 rounded-3xl p-8 text-white flex flex-col justify-center relative overflow-hidden">
+                <div className="bg-slate-900 rounded-3xl p-6 md:p-8 text-white flex flex-col justify-center relative overflow-hidden">
                      <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-500/30 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
-                     <h3 className="text-xl font-bold mb-4 relative z-10">Quick Actions</h3>
-                     <div className="space-y-3 relative z-10">
-                         <button className="w-full py-3 px-4 bg-white/10 hover:bg-white/20 rounded-xl text-left text-sm font-medium transition-colors flex items-center justify-between">
-                             Schedule Pickup <ArrowUpRight className="w-4 h-4"/>
+                     <h3 className="text-xl font-bold mb-6 relative z-10">Quick Actions</h3>
+                     <div className="space-y-4 relative z-10">
+                         <button 
+                            onClick={() => navigate('/collection-points')}
+                            className="w-full py-4 px-5 bg-white/10 hover:bg-white/20 active:scale-95 rounded-xl text-left text-sm font-medium transition-all flex items-center justify-between group"
+                         >
+                             <div className="flex items-center gap-3">
+                                <Calendar className="w-5 h-5 text-emerald-400"/>
+                                <span>Schedule Pickup</span>
+                             </div>
+                             <ArrowUpRight className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity"/>
                          </button>
-                         <button className="w-full py-3 px-4 bg-white/10 hover:bg-white/20 rounded-xl text-left text-sm font-medium transition-colors flex items-center justify-between">
-                             Print Label <ArrowUpRight className="w-4 h-4"/>
+                         <button 
+                            onClick={handlePrintLabel}
+                            className="w-full py-4 px-5 bg-white/10 hover:bg-white/20 active:scale-95 rounded-xl text-left text-sm font-medium transition-all flex items-center justify-between group"
+                         >
+                             <div className="flex items-center gap-3">
+                                <Printer className="w-5 h-5 text-blue-400"/>
+                                <span>Print Label</span>
+                             </div>
+                             <ArrowUpRight className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity"/>
                          </button>
-                         <button className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 rounded-xl text-left text-sm font-medium transition-colors flex items-center justify-between shadow-lg shadow-emerald-900/50">
-                             Log New Item <ArrowUpRight className="w-4 h-4"/>
+                         <button 
+                            onClick={() => navigate('/categories')}
+                            className="w-full py-4 px-5 bg-emerald-600 hover:bg-emerald-500 active:scale-95 rounded-xl text-left text-sm font-medium transition-all flex items-center justify-between shadow-lg shadow-emerald-900/50 group"
+                         >
+                             <div className="flex items-center gap-3">
+                                <Plus className="w-5 h-5 text-white"/>
+                                <span>Log New Item</span>
+                             </div>
+                             <ArrowUpRight className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity"/>
                          </button>
                      </div>
                 </div>

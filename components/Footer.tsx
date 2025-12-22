@@ -81,6 +81,7 @@ const Footer = () => {
                             <FooterLink to="/dashboard">Impact Dashboard</FooterLink>
                             <FooterLink to="/collection-points">Find Locations</FooterLink>
                             <FooterLink to="/credits">Green Credits</FooterLink>
+                            <FooterLink to="/feedback">Feedback & Support</FooterLink>
                         </ul>
                     </div>
 

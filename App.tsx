@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { HashRouter, Routes, Route, Outlet, useLocation } from 'react-router-dom';
+import { MemoryRouter, Routes, Route, Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -18,6 +18,9 @@ import Careers from './pages/Careers';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import Profile from './pages/Profile';
+import UserAnalysis from './pages/UserAnalysis';
+import Feedback from './pages/Feedback';
+import UserRequests from './pages/UserRequests';
 
 const AppLayout = () => {
     const location = useLocation();
@@ -25,7 +28,7 @@ const AppLayout = () => {
 
     return (
         <div className="flex flex-col min-h-screen bg-slate-50">
-            {!isAuthPage && <Navbar />}
+            <Navbar />
             <main className="flex-grow">
                 <AnimatePresence mode="wait">
                     <Outlet />
@@ -38,7 +41,7 @@ const AppLayout = () => {
 
 function App() {
   return (
-    <HashRouter>
+    <MemoryRouter>
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<Landing />} />
@@ -49,6 +52,9 @@ function App() {
           <Route path="/credits" element={<GreenCredits />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/analysis" element={<UserAnalysis />} />
+          <Route path="/feedback" element={<Feedback />} />
+          <Route path="/requests" element={<UserRequests />} />
           
           {/* Company Pages */}
           <Route path="/about" element={<AboutUs />} />
@@ -56,10 +62,10 @@ function App() {
           <Route path="/careers" element={<Careers />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogPost />} />
+          <Route path="/auth" element={<Auth />} />
         </Route>
-        <Route path="/auth" element={<Auth />} />
       </Routes>
-    </HashRouter>
+    </MemoryRouter>
   );
 }
 

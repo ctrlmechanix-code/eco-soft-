@@ -142,7 +142,7 @@ const ImageGenerator = () => {
                             rows={3}
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
-                            className="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
+                            className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-slate-900 font-medium placeholder:text-slate-400"
                             placeholder="e.g., A 3D illustration of a robot recycling a laptop"
                         />
                     </div>

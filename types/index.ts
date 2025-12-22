@@ -59,3 +59,13 @@ export interface BlogPost {
     category: string;
     image: string;
 }
+
+export interface UserRequest {
+    id: string;
+    type: 'Support' | 'Feedback' | 'Bug Report' | 'Feature Request';
+    subject: string;
+    message: string;
+    date: string;
+    status: 'Open' | 'In Progress' | 'Resolved' | 'Closed';
+    response?: string;
+}

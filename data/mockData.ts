@@ -1,5 +1,5 @@
 
-import type { Category, LeaderboardUser, ImpactStats, CollectionPoint, UserActivity, BlogPost } from '../types';
+import type { Category, LeaderboardUser, ImpactStats, CollectionPoint, UserActivity, BlogPost, UserRequest } from '../types';
 
 export const categories: Category[] = [
   {
@@ -117,6 +117,26 @@ export const userActivity: UserActivity[] = [
     { id: 4, date: '2023-10-28', item: 'iPhone 11', category: 'Mobile Phones', action: 'Repaired', credits: 0, status: 'Completed' },
 ];
 
+export const mockRequests: UserRequest[] = [
+    {
+        id: "REQ-2023-001",
+        type: "Support",
+        subject: "Credits not credited for old phone",
+        message: "I dropped off my iPhone 8 at the Student Center Hub last Tuesday but I haven't received my green credits yet.",
+        date: "2023-11-18",
+        status: "Resolved",
+        response: "Credits have been added manually. Apologies for the delay."
+    },
+    {
+        id: "REQ-2023-002",
+        type: "Bug Report",
+        subject: "Map not loading on mobile",
+        message: "When I try to open the locations page on my Android phone, the map shows a gray box.",
+        date: "2023-11-25",
+        status: "In Progress"
+    }
+];
+
 export const blogPosts: BlogPost[] = [
     {
         id: "e-waste-crisis",
@@ -152,7 +172,7 @@ export const blogPosts: BlogPost[] = [
         date: "Nov 02, 2023",
         author: "Mike Chen",
         category: "Guide",
-        image: "https://images.unsplash.com/photo-1611566026373-c6c85447dbdc?q=80&w=800&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
         content: `
             <p class="mb-4">Lithium-ion batteries power everything from our phones to electric scooters. While they are efficient energy sources, they pose significant fire risks if damaged or disposed of incorrectly.</p>
             
@@ -177,7 +197,7 @@ export const blogPosts: BlogPost[] = [
         date: "Nov 15, 2023",
         author: "ECO-SORT Team",
         category: "Company News",
-        image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1605600659908-0ef719419d41?q=80&w=800&auto=format&fit=crop",
         content: `
             <p class="mb-4">We are thrilled to announce that the ECO-SORT community has collectively diverted over 10,000 electronic devices from landfills this year!</p>
             

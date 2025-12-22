@@ -160,7 +160,7 @@ const Categories = () => {
                                     value={customItem}
                                     onChange={(e) => setCustomItem(e.target.value)}
                                     placeholder="e.g., Electric Toothbrush, Drone..."
-                                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all mb-6 text-slate-900 placeholder:text-slate-400"
+                                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all mb-6 text-slate-900 font-medium placeholder:text-slate-400"
                                     autoFocus
                                 />
                                 <button
