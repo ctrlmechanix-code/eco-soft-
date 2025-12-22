@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { mockSubmissions, leaderboard } from '../../data/mockData';
 import type { Submission, ActivityLog, LeaderboardUser } from '../../types';
@@ -142,7 +141,7 @@ const AdminSubmissions = () => {
                             placeholder="Search ID, user, code..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 rounded-lg bg-white border border-slate-200 focus:outline-none focus:border-blue-500 text-sm"
+                            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all text-sm"
                         />
                     </div>
                     <button className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-slate-600 text-sm font-medium hover:bg-slate-50 flex items-center gap-2 justify-center">

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MemoryRouter, Routes, Route, Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
@@ -23,6 +22,7 @@ import Feedback from './pages/Feedback';
 import UserRequests from './pages/UserRequests';
 import Submissions from './pages/Submissions';
 import ImageGenerator from './pages/ImageGenerator';
+import NotFound from './pages/NotFound';
 
 // Admin Imports
 import AdminLayout from './components/admin/AdminLayout';
@@ -80,6 +80,9 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/auth" element={<Auth />} />
+          
+          {/* Catch all */}
+          <Route path="*" element={<NotFound />} />
         </Route>
 
         {/* Admin Routes - Separate Layout */}

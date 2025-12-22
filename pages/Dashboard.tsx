@@ -1,8 +1,7 @@
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { dashboardStats } from '../data/mockData';
+import { dashboardStats as mockStats, mockSubmissions } from '../data/mockData';
 import AnimatedCounter from '../components/ui/AnimatedCounter';
 import { TrendingUp, ArrowUpRight, Calendar, Printer, Plus, Download } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -28,7 +27,7 @@ const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
     </motion.div>
 );
 
-const StatCard = ({ stat }: { stat: typeof dashboardStats[0] }) => {
+const StatCard = ({ stat }: { stat: typeof mockStats[0] }) => {
     return (
         <motion.div
             whileHover={{ y: -5 }}
@@ -54,6 +53,29 @@ const StatCard = ({ stat }: { stat: typeof dashboardStats[0] }) => {
 
 const Dashboard = () => {
     const navigate = useNavigate();
+    const [stats, setStats] = useState(mockStats);
+
+    useEffect(() => {
+        // Calculate real stats from submissions
+        const localSubmissions = JSON.parse(localStorage.getItem('user_submissions') || '[]');
+        const all = [...mockSubmissions, ...localSubmissions];
+        
+        const completed = all.filter((s: any) => s.status === 'COMPLETED');
+        const pending = all.filter((s: any) => s.status === 'PENDING' || s.status === 'DROPPED');
+        
+        // Use mock base values if no real data is added yet to prevent empty dashboard
+        const credits = completed.reduce((acc: number, s: any) => acc + (s.creditsAwarded || 0), 0) || 380;
+        const recycledCount = completed.length > 0 ? completed.length : 124;
+        const pendingCount = pending.length > 0 ? pending.length : 2;
+        const co2 = Math.round(recycledCount * 0.36) || 45; // approx 0.36kg per device
+
+        setStats([
+            { label: "Total Recycled", value: recycledCount, icon: "https://api.dicebear.com/8.x/icons/svg?seed=recycle", gradientLight: "bg-emerald-100" },
+            { label: "Green Credits", value: credits, icon: "https://api.dicebear.com/8.x/icons/svg?seed=coin", gradientLight: "bg-amber-100" },
+            { label: "CO₂ Saved (kg)", value: co2, icon: "https://api.dicebear.com/8.x/icons/svg?seed=cloud", gradientLight: "bg-blue-100" },
+            { label: "Pending Items", value: pendingCount, icon: "https://api.dicebear.com/8.x/icons/svg?seed=clock", gradientLight: "bg-purple-100" },
+        ]);
+    }, []);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -64,12 +86,10 @@ const Dashboard = () => {
     };
 
     const handlePrintLabel = () => {
-        // In a real app, this would generate a PDF
         alert("Shipping label generated successfully! Check your downloads.");
     };
 
     const handleDownloadReport = () => {
-        // Generate a CSV string from the chart data
         const headers = ['Month', 'Recycled Items', 'Repaired Items'];
         const rows = chartData.map(row => [row.name, row.Recycled, row.Repaired]);
         
@@ -78,7 +98,6 @@ const Dashboard = () => {
             ...rows.map(row => row.join(','))
         ].join('\n');
 
-        // Create a Blob and trigger download
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -113,7 +132,7 @@ const Dashboard = () => {
                 initial="hidden"
                 animate="visible"
             >
-                {dashboardStats.map((stat, index) => (
+                {stats.map((stat, index) => (
                     <motion.div key={index} variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
                         <StatCard stat={stat} />
                     </motion.div>

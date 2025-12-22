@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { blogPosts as mockPosts } from '../../data/mockData';
 import { Edit2, Eye, Trash2, Plus, X, Save } from 'lucide-react';
@@ -55,6 +54,8 @@ const AdminContent = () => {
         setIsModalOpen(false);
     };
 
+    const inputClasses = "w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-slate-700";
+
     return (
         <div>
             <div className="flex justify-between items-center mb-8">
@@ -106,16 +107,28 @@ const AdminContent = () => {
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
                     <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg">
-                        <div className="p-6 border-b border-slate-100 flex justify-between items-center">
+                        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                             <h3 className="text-lg font-bold text-slate-900">New Article</h3>
                             <button onClick={() => setIsModalOpen(false)}><X className="w-5 h-5 text-slate-400" /></button>
                         </div>
                         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-                            <input type="text" placeholder="Title" required className="w-full px-3 py-2 border rounded-lg" value={formData.title || ''} onChange={e => setFormData({...formData, title: e.target.value})} />
-                            <input type="text" placeholder="Category" className="w-full px-3 py-2 border rounded-lg" value={formData.category || ''} onChange={e => setFormData({...formData, category: e.target.value})} />
-                            <textarea placeholder="Excerpt" rows={3} className="w-full px-3 py-2 border rounded-lg" value={formData.excerpt || ''} onChange={e => setFormData({...formData, excerpt: e.target.value})} />
-                            <input type="text" placeholder="Image URL" className="w-full px-3 py-2 border rounded-lg" value={formData.image || ''} onChange={e => setFormData({...formData, image: e.target.value})} />
-                            <button type="submit" className="w-full py-2.5 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">Publish Post</button>
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Title</label>
+                                <input type="text" placeholder="Article Title" required className={inputClasses} value={formData.title || ''} onChange={e => setFormData({...formData, title: e.target.value})} />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Category</label>
+                                <input type="text" placeholder="News, Guide, etc." className={inputClasses} value={formData.category || ''} onChange={e => setFormData({...formData, category: e.target.value})} />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Excerpt</label>
+                                <textarea placeholder="Short summary..." rows={3} className={inputClasses} value={formData.excerpt || ''} onChange={e => setFormData({...formData, excerpt: e.target.value})} />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Cover Image URL</label>
+                                <input type="text" placeholder="https://..." className={inputClasses} value={formData.image || ''} onChange={e => setFormData({...formData, image: e.target.value})} />
+                            </div>
+                            <button type="submit" className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-lg shadow-blue-900/20 mt-2">Publish Post</button>
                         </form>
                     </div>
                 </div>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { collectionPoints as mockPoints } from '../../data/mockData';
 import { MapPin, Phone, Mail, Edit2, Trash2, Plus, X, Save } from 'lucide-react';
@@ -68,6 +67,8 @@ const AdminCollectionPoints = () => {
         setIsModalOpen(false);
     };
 
+    const inputClasses = "w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-slate-700";
+
     return (
         <div>
             <div className="flex justify-between items-center mb-8">
@@ -128,7 +129,7 @@ const AdminCollectionPoints = () => {
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
                     <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden max-h-[90vh] overflow-y-auto">
-                        <div className="p-6 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white z-10">
+                        <div className="p-6 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white z-10 bg-slate-50/50">
                             <h3 className="text-lg font-bold text-slate-900">{editingPoint ? 'Edit Location' : 'Add Location'}</h3>
                             <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600">
                                 <X className="w-5 h-5" />
@@ -136,25 +137,25 @@ const AdminCollectionPoints = () => {
                         </div>
                         <form onSubmit={handleSubmit} className="p-6 space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Name</label>
-                                <input type="text" required value={formData.name || ''} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-3 py-2 border rounded-lg" />
+                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Name</label>
+                                <input type="text" required value={formData.name || ''} onChange={e => setFormData({...formData, name: e.target.value})} className={inputClasses} placeholder="Student Center Hub" />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Location/Building</label>
-                                <input type="text" required value={formData.location || ''} onChange={e => setFormData({...formData, location: e.target.value})} className="w-full px-3 py-2 border rounded-lg" />
+                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Location/Building</label>
+                                <input type="text" required value={formData.location || ''} onChange={e => setFormData({...formData, location: e.target.value})} className={inputClasses} placeholder="Building A, Ground Floor" />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Full Address</label>
-                                <input type="text" value={formData.address || ''} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full px-3 py-2 border rounded-lg" />
+                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Full Address</label>
+                                <input type="text" value={formData.address || ''} onChange={e => setFormData({...formData, address: e.target.value})} className={inputClasses} placeholder="123 Campus Drive..." />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-1">Phone</label>
-                                    <input type="text" value={formData.phone || ''} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full px-3 py-2 border rounded-lg" />
+                                    <label className="block text-sm font-bold text-slate-700 mb-1.5">Phone</label>
+                                    <input type="text" value={formData.phone || ''} onChange={e => setFormData({...formData, phone: e.target.value})} className={inputClasses} placeholder="+1 555-0123" />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
-                                    <select value={formData.status || 'Active'} onChange={e => setFormData({...formData, status: e.target.value as any})} className="w-full px-3 py-2 border rounded-lg">
+                                    <label className="block text-sm font-bold text-slate-700 mb-1.5">Status</label>
+                                    <select value={formData.status || 'Active'} onChange={e => setFormData({...formData, status: e.target.value as any})} className={inputClasses}>
                                         <option value="Active">Active</option>
                                         <option value="Maintenance">Maintenance</option>
                                         <option value="Closed">Closed</option>
@@ -162,16 +163,16 @@ const AdminCollectionPoints = () => {
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
-                                <input type="email" value={formData.email || ''} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full px-3 py-2 border rounded-lg" />
+                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Email</label>
+                                <input type="email" value={formData.email || ''} onChange={e => setFormData({...formData, email: e.target.value})} className={inputClasses} placeholder="contact@ecosort.edu" />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Opening Hours</label>
-                                <input type="text" value={formData.hours || ''} onChange={e => setFormData({...formData, hours: e.target.value})} className="w-full px-3 py-2 border rounded-lg" />
+                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Opening Hours</label>
+                                <input type="text" value={formData.hours || ''} onChange={e => setFormData({...formData, hours: e.target.value})} className={inputClasses} placeholder="9 AM - 6 PM" />
                             </div>
                             
                             <div className="pt-4">
-                                <button type="submit" className="w-full py-2.5 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                                <button type="submit" className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20">
                                     <Save className="w-4 h-4" /> Save Location
                                 </button>
                             </div>

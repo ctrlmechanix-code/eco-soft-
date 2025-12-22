@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Coins, CheckCircle2 } from 'lucide-react';
 
@@ -19,6 +18,8 @@ const AdminCredits = () => {
         setTimeout(() => setSaved(false), 2000);
     };
 
+    const inputClasses = "w-32 px-4 py-2.5 rounded-xl bg-white border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-right font-bold text-slate-700 placeholder:text-slate-400";
+
     return (
         <div>
             <div className="flex justify-between items-center mb-8">
@@ -36,38 +37,38 @@ const AdminCredits = () => {
                 <p className="text-slate-500 mb-6">Manage how many points users earn per action.</p>
                 
                 <div className="grid gap-4 text-left">
-                    <div className="flex justify-between items-center p-4 bg-slate-50 rounded-lg">
+                    <div className="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
                         <span className="font-medium text-slate-700">Recycle Item</span>
                         <input 
                             type="number" 
                             value={rates.recycle}
                             onChange={(e) => setRates({...rates, recycle: parseInt(e.target.value) || 0})}
-                            className="w-24 px-2 py-1 border rounded text-right" 
+                            className={inputClasses}
                         />
                     </div>
-                    <div className="flex justify-between items-center p-4 bg-slate-50 rounded-lg">
+                    <div className="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
                         <span className="font-medium text-slate-700">Donate Item</span>
                         <input 
                             type="number" 
                             value={rates.donate}
                             onChange={(e) => setRates({...rates, donate: parseInt(e.target.value) || 0})}
-                            className="w-24 px-2 py-1 border rounded text-right" 
+                            className={inputClasses}
                         />
                     </div>
-                    <div className="flex justify-between items-center p-4 bg-slate-50 rounded-lg">
+                    <div className="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
                         <span className="font-medium text-slate-700">Repair Item</span>
                         <input 
                             type="number" 
                             value={rates.repair}
                             onChange={(e) => setRates({...rates, repair: parseInt(e.target.value) || 0})}
-                            className="w-24 px-2 py-1 border rounded text-right" 
+                            className={inputClasses}
                         />
                     </div>
                 </div>
                 
                 <button 
                     onClick={handleSave}
-                    className="mt-8 px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 flex items-center justify-center gap-2 mx-auto"
+                    className="mt-8 px-8 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 flex items-center justify-center gap-2 mx-auto shadow-lg shadow-blue-900/20 transition-all hover:-translate-y-0.5"
                 >
                     {saved ? <><CheckCircle2 className="w-4 h-4"/> Saved</> : 'Save Changes'}
                 </button>

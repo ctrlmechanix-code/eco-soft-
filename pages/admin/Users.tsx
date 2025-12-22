@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { leaderboard } from '../../data/mockData';
 import { Search, MoreHorizontal, Shield, Mail, Trash2, Edit2, Plus, X, Save } from 'lucide-react';
@@ -74,6 +73,8 @@ const AdminUsers = () => {
         (u.email || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const inputClasses = "w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-slate-700";
+
     return (
         <div>
             <div className="flex justify-between items-center mb-8">
@@ -98,7 +99,7 @@ const AdminUsers = () => {
                             placeholder="Search users..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 rounded-lg bg-white border border-slate-200 focus:outline-none focus:border-blue-500 text-sm"
+                            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all text-sm"
                         />
                     </div>
                 </div>
@@ -146,13 +147,13 @@ const AdminUsers = () => {
                                         <div className="flex justify-end gap-2">
                                             <button 
                                                 onClick={() => handleEditUser(user)}
-                                                className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
+                                                className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                                             >
                                                 <Edit2 className="w-4 h-4" />
                                             </button>
                                             <button 
                                                 onClick={() => handleDeleteUser(user.id || '')}
-                                                className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                                                className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </button>
@@ -169,51 +170,53 @@ const AdminUsers = () => {
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
                     <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
-                        <div className="p-6 border-b border-slate-100 flex justify-between items-center">
+                        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                             <h3 className="text-lg font-bold text-slate-900">{editingUser ? 'Edit User' : 'Add New User'}</h3>
                             <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
-                        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+                        <form onSubmit={handleSubmit} className="p-6 space-y-5">
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
+                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Full Name</label>
                                 <input 
                                     type="text" 
                                     required
                                     value={formData.name || ''}
                                     onChange={e => setFormData({...formData, name: e.target.value})}
-                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                                    className={inputClasses}
+                                    placeholder="Jane Doe"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Email Address</label>
                                 <input 
                                     type="email" 
                                     required
                                     value={formData.email || ''}
                                     onChange={e => setFormData({...formData, email: e.target.value})}
-                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                                    className={inputClasses}
+                                    placeholder="jane@university.edu"
                                 />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-1">Role</label>
+                                    <label className="block text-sm font-bold text-slate-700 mb-1.5">Role</label>
                                     <select 
                                         value={formData.role || 'user'}
                                         onChange={e => setFormData({...formData, role: e.target.value as any})}
-                                        className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                        className={inputClasses}
                                     >
                                         <option value="user">User</option>
                                         <option value="admin">Admin</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
+                                    <label className="block text-sm font-bold text-slate-700 mb-1.5">Status</label>
                                     <select 
                                         value={formData.status || 'Active'}
                                         onChange={e => setFormData({...formData, status: e.target.value as any})}
-                                        className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                        className={inputClasses}
                                     >
                                         <option value="Active">Active</option>
                                         <option value="Suspended">Suspended</option>
@@ -221,16 +224,16 @@ const AdminUsers = () => {
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1">Points Balance</label>
+                                <label className="block text-sm font-bold text-slate-700 mb-1.5">Points Balance</label>
                                 <input 
                                     type="number" 
                                     value={formData.points || 0}
                                     onChange={e => setFormData({...formData, points: parseInt(e.target.value)})}
-                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                    className={inputClasses}
                                 />
                             </div>
                             <div className="pt-4">
-                                <button type="submit" className="w-full py-2.5 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                                <button type="submit" className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20">
                                     <Save className="w-4 h-4" /> Save User
                                 </button>
                             </div>
