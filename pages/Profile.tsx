@@ -2,9 +2,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 // Added useNavigate import to fix navigation error
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { leaderboard, achievements, userActivity } from '../data/mockData';
-import { User, MapPin, Calendar, Award, Zap, Clock, Package, Leaf, MessageSquare, ExternalLink, Send, ArrowRight, X, ChevronRight } from 'lucide-react';
+import { User, MapPin, Calendar, Award, Zap, Clock, Package, Leaf, MessageSquare, ExternalLink, Send, ArrowRight, X, ChevronRight, Gift } from 'lucide-react';
 import Icon from '../components/ui/Icon';
 import AnimatedCounter from '../components/ui/AnimatedCounter';
 import { CollectionPointMessage } from '../types';
@@ -30,10 +30,18 @@ const Profile = () => {
     const [isSending, setIsSending] = useState(false);
     const chatEndRef = useRef<HTMLDivElement>(null);
 
+    // User State from storage
+    const [user, setUser] = useState<any>(null);
+
     useEffect(() => {
         loadMessages();
         // Clear unread flag when viewing profile
         localStorage.removeItem('unread_messages');
+
+        // Load user
+        const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+        let currentUser = storedUsers.find((u: any) => u.id === 'USR-CURRENT') || leaderboard.find(u => u.isUser);
+        setUser(currentUser);
     }, []);
 
     useEffect(() => {
@@ -88,7 +96,7 @@ const Profile = () => {
         }, 3000);
     };
 
-    const user = leaderboard.find(u => u.isUser) || { 
+    const userData = user || { 
         points: 0, 
         name: 'Alex Morgan', 
         rank: 0, 
@@ -113,11 +121,11 @@ const Profile = () => {
                         animate={{ scale: 1, opacity: 1 }}
                         className="w-32 h-32 rounded-3xl bg-white p-1.5 shadow-xl"
                     >
-                        <img src={user.avatar} alt={user.name} className="w-full h-full rounded-2xl bg-slate-50" />
+                        <img src={userData.avatar} alt={userData.name} className="w-full h-full rounded-2xl bg-slate-50" />
                     </motion.div>
                     
                     <div className="flex-grow mb-2">
-                        <h1 className="text-3xl font-bold text-slate-900">{user.name}</h1>
+                        <h1 className="text-3xl font-bold text-slate-900">{userData.name}</h1>
                         <div className="flex flex-wrap items-center gap-4 text-slate-500 mt-2">
                             <span className="flex items-center gap-1.5 text-sm">
                                 <User className="w-4 h-4" /> Student
@@ -134,13 +142,44 @@ const Profile = () => {
                     <div className="flex gap-4">
                         <div className="text-center bg-emerald-50 px-6 py-3 rounded-2xl border border-emerald-100">
                             <p className="text-xs font-bold text-emerald-600 uppercase tracking-wide mb-1">Total Credits</p>
-                            <p className="text-2xl font-black text-slate-900"><AnimatedCounter to={user.points} /></p>
+                            <p className="text-2xl font-black text-slate-900"><AnimatedCounter to={userData.points} /></p>
                         </div>
                         <div className="text-center bg-slate-50 px-6 py-3 rounded-2xl border border-slate-200">
                             <p className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">Rank</p>
-                            <p className="text-2xl font-black text-slate-900">#{user.rank}</p>
+                            <p className="text-2xl font-black text-slate-900">#{userData.rank}</p>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            {/* NEW: Rewards & Transactions Summary */}
+            <div className="grid lg:grid-cols-2 gap-8 mb-8">
+                <div 
+                    onClick={() => navigate('/my-redemptions')}
+                    className="bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                >
+                    <div className="flex justify-between items-start mb-4">
+                        <div className="p-3 bg-purple-50 text-purple-600 rounded-xl">
+                            <Gift className="w-6 h-6" />
+                        </div>
+                        <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-purple-500 transition-colors" />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-1">My Redemptions</h3>
+                    <p className="text-slate-500 text-sm">View active codes and past rewards.</p>
+                </div>
+
+                <div 
+                    onClick={() => navigate('/credits/transactions')}
+                    className="bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                >
+                    <div className="flex justify-between items-start mb-4">
+                        <div className="p-3 bg-amber-50 text-amber-600 rounded-xl">
+                            <Clock className="w-6 h-6" />
+                        </div>
+                        <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-amber-500 transition-colors" />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900 mb-1">Transaction Ledger</h3>
+                    <p className="text-slate-500 text-sm">Track how you earned and spent credits.</p>
                 </div>
             </div>
 

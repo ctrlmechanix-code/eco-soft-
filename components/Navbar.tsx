@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Recycle, Menu, X, Home, Trash2, BarChart3, Medal, LogOut, User, ChevronDown, MapPin, TrendingUp, MessageSquare, ListTodo, Shield } from 'lucide-react';
+import { Recycle, Menu, X, Home, Trash2, BarChart3, Medal, LogOut, User, ChevronDown, MapPin, TrendingUp, MessageSquare, ListTodo, Shield, Gift } from 'lucide-react';
 
 const NavItem = ({ to, children, Icon, onClick }: { to: string; children?: React.ReactNode; Icon: React.ElementType; onClick?: () => void }) => (
     <NavLink
@@ -105,6 +105,7 @@ const Navbar = () => {
                         <NavItem to="/" Icon={Home}>Home</NavItem>
                         <NavItem to="/categories" Icon={Trash2}>Report</NavItem>
                         <NavItem to="/submissions" Icon={ListTodo}>My Submissions</NavItem>
+                        <NavItem to="/rewards" Icon={Gift}>Rewards</NavItem>
                         <NavItem to="/dashboard" Icon={BarChart3}>Dashboard</NavItem>
                         <NavItem to="/credits" Icon={Medal}>Credits</NavItem>
                         <NavItem to="/collection-points" Icon={MapPin}>Locations</NavItem>
@@ -161,6 +162,9 @@ const Navbar = () => {
                                                         <User className="w-4 h-4" /> My Profile
                                                     </div>
                                                     {hasUnread && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
+                                                </Link>
+                                                <Link to="/my-redemptions" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition-colors">
+                                                    <Gift className="w-4 h-4" /> My Redemptions
                                                 </Link>
                                                 <Link to="/admin/dashboard" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">
                                                     <Shield className="w-4 h-4" /> Admin Panel
@@ -220,6 +224,7 @@ const Navbar = () => {
                             <NavItem to="/" Icon={Home}>Home</NavItem>
                             <NavItem to="/categories" Icon={Trash2}>Report Waste</NavItem>
                             <NavItem to="/submissions" Icon={ListTodo}>My Submissions</NavItem>
+                            <NavItem to="/rewards" Icon={Gift}>Rewards</NavItem>
                             <NavItem to="/dashboard" Icon={BarChart3}>Dashboard</NavItem>
                             <NavItem to="/credits" Icon={Medal}>Green Credits</NavItem>
                             <NavItem to="/collection-points" Icon={MapPin}>Find Locations</NavItem>

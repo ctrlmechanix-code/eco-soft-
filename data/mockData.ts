@@ -1,5 +1,5 @@
 
-import type { Category, LeaderboardUser, ImpactStats, CollectionPoint, UserActivity, BlogPost, UserRequest, Submission, ActivityLog } from '../types';
+import type { Category, LeaderboardUser, ImpactStats, CollectionPoint, UserActivity, BlogPost, UserRequest, Submission, ActivityLog, Reward, RedemptionTransaction, CreditTransaction } from '../types';
 
 export const categories: Category[] = [
   {
@@ -56,7 +56,7 @@ export const categories: Category[] = [
 export const leaderboard: LeaderboardUser[] = [
   { id: "USR-001", rank: 1, name: "Aarav Sharma", email: "aarav@university.edu", points: 450, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Aarav", role: "user", status: "Active", joinedDate: "2023-09-01" },
   { id: "USR-002", rank: 2, name: "Priya Patel", email: "priya@university.edu", points: 410, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Priya", role: "user", status: "Active", joinedDate: "2023-09-15" },
-  { id: "USR-CURRENT", rank: 3, name: "Student User", email: "student@university.edu", points: 380, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=You", isUser: true, role: "admin", status: "Active", joinedDate: "2023-09-20" },
+  { id: "USR-CURRENT", rank: 3, name: "Student User", email: "student@university.edu", points: 1550, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=You", isUser: true, role: "admin", status: "Active", joinedDate: "2023-09-20" },
   { id: "USR-003", rank: 4, name: "David Kim", email: "david@university.edu", points: 350, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=David", role: "user", status: "Active", joinedDate: "2023-10-01" },
   { id: "USR-004", rank: 5, name: "Sarah Jenkins", email: "sarah@university.edu", points: 320, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Sarah", role: "user", status: "Active", joinedDate: "2023-10-05" },
 ];
@@ -126,7 +126,7 @@ export const collectionPoints: CollectionPoint[] = [
 
 export const dashboardStats = [
     { label: "Total Recycled", value: 124, icon: "https://api.dicebear.com/8.x/icons/svg?seed=recycle", gradientLight: "bg-emerald-100" },
-    { label: "Green Credits", value: 380, icon: "https://api.dicebear.com/8.x/icons/svg?seed=coin", gradientLight: "bg-amber-100" },
+    { label: "Green Credits", value: 1550, icon: "https://api.dicebear.com/8.x/icons/svg?seed=coin", gradientLight: "bg-amber-100" },
     { label: "CO₂ Saved (kg)", value: 45, icon: "https://api.dicebear.com/8.x/icons/svg?seed=cloud", gradientLight: "bg-blue-100" },
     { label: "Pending Items", value: 2, icon: "https://api.dicebear.com/8.x/icons/svg?seed=clock", gradientLight: "bg-purple-100" },
 ];
@@ -307,4 +307,236 @@ export const blogPosts: BlogPost[] = [
         content: `...`,
         status: 'Published'
     }
+];
+
+// --- NEW DATA FOR REWARDS ---
+
+export const rewardCatalog: Reward[] = [
+  {
+    id: 'reward-001',
+    name: 'Bronze Badge',
+    description: 'Official digital recognition for your first contributions.',
+    category: 'recognition',
+    creditCost: 0,
+    minTier: 'bronze',
+    stock: 'unlimited',
+    imageUrl: 'https://api.dicebear.com/8.x/icons/svg?seed=bronze&backgroundColor=b45309',
+    redemptionType: 'instant',
+    termsAndConditions: 'Digital badge added to your profile immediately.'
+  },
+  {
+    id: 'reward-002',
+    name: 'Plant 1 Tree',
+    description: 'We will plant a sapling in the campus garden on your behalf.',
+    category: 'impact',
+    creditCost: 100,
+    minTier: 'bronze',
+    stock: 'unlimited',
+    imageUrl: 'https://api.dicebear.com/8.x/icons/svg?seed=tree&backgroundColor=166534',
+    redemptionType: 'instant',
+    termsAndConditions: 'Trees are planted quarterly during campus drives.'
+  },
+  {
+    id: 'reward-003',
+    name: 'Cafeteria Coffee Coupon',
+    description: 'Get a free coffee at the Main Block Cafeteria.',
+    category: 'campus_perk',
+    creditCost: 150,
+    minTier: 'bronze',
+    stock: 50,
+    imageUrl: 'https://api.dicebear.com/8.x/icons/svg?seed=coffee&backgroundColor=78350f',
+    redemptionType: 'instant',
+    termsAndConditions: 'One time use only. Valid for 7 days.'
+  },
+  {
+    id: 'reward-004',
+    name: 'Library Late Fee Waiver',
+    description: 'Waive up to ₹50 in library late fees.',
+    category: 'campus_perk',
+    creditCost: 200,
+    minTier: 'silver',
+    stock: 200,
+    imageUrl: 'https://api.dicebear.com/8.x/icons/svg?seed=book&backgroundColor=1e40af',
+    redemptionType: 'instant',
+    termsAndConditions: 'Show code at library desk. Valid for current fines only.'
+  },
+  {
+    id: 'reward-005',
+    name: 'Eco-Friendly Notebook',
+    description: 'Recycled paper notebook with ECO-SORT branding.',
+    category: 'physical_item',
+    creditCost: 300,
+    minTier: 'silver',
+    stock: 25,
+    imageUrl: 'https://api.dicebear.com/8.x/icons/svg?seed=notebook&backgroundColor=f59e0b',
+    redemptionType: 'requires_approval',
+    termsAndConditions: 'Collect from Admin Block Room 102.'
+  },
+  {
+    id: 'reward-006',
+    name: 'Silver Badge',
+    description: 'Recognition for consistent recyclers.',
+    category: 'recognition',
+    creditCost: 0,
+    minTier: 'silver',
+    stock: 'unlimited',
+    imageUrl: 'https://api.dicebear.com/8.x/icons/svg?seed=silver&backgroundColor=94a3b8',
+    redemptionType: 'instant'
+  },
+  {
+    id: 'reward-007',
+    name: 'Priority Parking (1 Week)',
+    description: 'Reserved parking spot near the Tech Park.',
+    category: 'campus_perk',
+    creditCost: 600,
+    minTier: 'gold',
+    stock: 5,
+    imageUrl: 'https://api.dicebear.com/8.x/icons/svg?seed=car&backgroundColor=dc2626',
+    redemptionType: 'requires_approval',
+    termsAndConditions: 'Subject to availability. Must book 2 days in advance.'
+  },
+  {
+    id: 'reward-008',
+    name: 'Reusable Tote Bag',
+    description: 'High-quality canvas tote for daily use.',
+    category: 'physical_item',
+    creditCost: 400,
+    minTier: 'gold',
+    stock: 40,
+    imageUrl: 'https://api.dicebear.com/8.x/icons/svg?seed=bag&backgroundColor=059669',
+    redemptionType: 'requires_approval',
+    termsAndConditions: 'Collect from Student Hub.'
+  },
+  {
+    id: 'reward-009',
+    name: 'Sponsor Device Repair',
+    description: 'Fund the repair of a student laptop.',
+    category: 'impact',
+    creditCost: 1200,
+    minTier: 'gold',
+    stock: 'unlimited',
+    imageUrl: 'https://api.dicebear.com/8.x/icons/svg?seed=repair&backgroundColor=4f46e5',
+    redemptionType: 'instant',
+    termsAndConditions: 'Credits go directly to the Campus Repair Fund.'
+  },
+  {
+    id: 'reward-010',
+    name: 'Gold Badge',
+    description: 'Elite status for top contributors.',
+    category: 'recognition',
+    creditCost: 0,
+    minTier: 'gold',
+    stock: 'unlimited',
+    imageUrl: 'https://api.dicebear.com/8.x/icons/svg?seed=gold&backgroundColor=fbbf24',
+    redemptionType: 'instant'
+  },
+  {
+    id: 'reward-011',
+    name: 'Premium Tech Kit',
+    description: 'Includes cable organizer, cleaning kit, and stand.',
+    category: 'physical_item',
+    creditCost: 2000,
+    minTier: 'platinum',
+    stock: 10,
+    imageUrl: 'https://api.dicebear.com/8.x/icons/svg?seed=tech&backgroundColor=111827',
+    redemptionType: 'requires_approval',
+    termsAndConditions: 'One per academic year.'
+  },
+  {
+    id: 'reward-012',
+    name: 'Semester Parking Pass',
+    description: 'Guaranteed parking for the full semester.',
+    category: 'campus_perk',
+    creditCost: 2500,
+    minTier: 'platinum',
+    stock: 2,
+    imageUrl: 'https://api.dicebear.com/8.x/icons/svg?seed=parking&backgroundColor=7f1d1d',
+    redemptionType: 'requires_approval',
+    termsAndConditions: 'Non-transferable.'
+  },
+  {
+    id: 'reward-013',
+    name: 'Platinum Ambassador',
+    description: 'Official title and feature on campus board.',
+    category: 'recognition',
+    creditCost: 0,
+    minTier: 'platinum',
+    stock: 'unlimited',
+    imageUrl: 'https://api.dicebear.com/8.x/icons/svg?seed=crown&backgroundColor=e2e8f0',
+    redemptionType: 'instant'
+  },
+  {
+    id: 'reward-014',
+    name: 'Campus Store Voucher (₹500)',
+    description: 'Valid for books, stationery, or apparel.',
+    category: 'campus_perk',
+    creditCost: 800,
+    minTier: 'gold',
+    stock: 20,
+    imageUrl: 'https://api.dicebear.com/8.x/icons/svg?seed=voucher&backgroundColor=db2777',
+    redemptionType: 'instant',
+    termsAndConditions: 'Digital code sent instantly.'
+  },
+  {
+    id: 'reward-015',
+    name: 'E-Waste Drive Sponsor',
+    description: 'Your name listed as a sponsor for the next drive.',
+    category: 'impact',
+    creditCost: 500,
+    minTier: 'silver',
+    stock: 'unlimited',
+    imageUrl: 'https://api.dicebear.com/8.x/icons/svg?seed=speaker&backgroundColor=8b5cf6',
+    redemptionType: 'instant'
+  }
+];
+
+export const mockRedemptions: RedemptionTransaction[] = [
+  {
+    id: 'RED-2024-001',
+    userId: 'USR-CURRENT',
+    rewardId: 'reward-003',
+    rewardName: 'Cafeteria Coffee Coupon',
+    creditsCost: 150,
+    status: 'approved',
+    redemptionCode: 'CAFE-8HG4J2',
+    redeemedAt: new Date(Date.now() - 172800000).toISOString(),
+    fulfilledAt: new Date(Date.now() - 172800000).toISOString(),
+    expiresAt: new Date(Date.now() + 2419200000).toISOString(), // +28 days
+    notes: 'Show this code at the counter.'
+  }
+];
+
+export const mockCreditTransactions: CreditTransaction[] = [
+  {
+    id: 'txn-001',
+    userId: 'USR-CURRENT',
+    type: 'earned',
+    amount: 50,
+    balance: 50,
+    source: 'submission',
+    referenceId: 'SUB-001',
+    description: 'Recycled Mobile Phone',
+    timestamp: new Date(Date.now() - 864000000).toISOString()
+  },
+  {
+    id: 'txn-002',
+    userId: 'USR-CURRENT',
+    type: 'earned',
+    amount: 1500,
+    balance: 1550,
+    source: 'bonus',
+    description: 'Early Adopter Bonus',
+    timestamp: new Date(Date.now() - 432000000).toISOString()
+  },
+  {
+    id: 'txn-003',
+    userId: 'USR-CURRENT',
+    type: 'spent',
+    amount: -150,
+    balance: 1400,
+    source: 'redemption',
+    referenceId: 'RED-2024-001',
+    description: 'Redeemed: Cafeteria Coffee Coupon',
+    timestamp: new Date(Date.now() - 172800000).toISOString()
+  }
 ];

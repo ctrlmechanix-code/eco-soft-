@@ -120,3 +120,50 @@ export interface ActivityLog {
     details: string;
     timestamp: string;
 }
+
+// --- NEW REDEMPTION SYSTEM TYPES ---
+
+export interface Reward {
+  id: string;
+  name: string;
+  description: string;
+  category: 'recognition' | 'campus_perk' | 'physical_item' | 'impact';
+  creditCost: number;
+  minTier: 'bronze' | 'silver' | 'gold' | 'platinum';
+  stock: number | 'unlimited';
+  imageUrl: string;
+  redemptionType: 'instant' | 'requires_approval' | 'scheduled';
+  availability?: {
+    startDate?: string;
+    endDate?: string;
+    campusOnly: boolean;
+  };
+  termsAndConditions?: string;
+}
+
+export interface RedemptionTransaction {
+  id: string;
+  userId: string;
+  rewardId: string;
+  rewardName: string;
+  creditsCost: number;
+  status: 'pending' | 'approved' | 'fulfilled' | 'rejected' | 'cancelled';
+  redemptionCode?: string;
+  redeemedAt: string; // ISO Date
+  fulfilledAt?: string;
+  approvedBy?: string;
+  notes?: string;
+  expiresAt?: string;
+}
+
+export interface CreditTransaction {
+  id: string;
+  userId: string;
+  type: 'earned' | 'spent' | 'refunded' | 'expired';
+  amount: number;
+  balance: number;
+  source: 'submission' | 'redemption' | 'admin_award' | 'referral' | 'bonus';
+  referenceId?: string;
+  description: string;
+  timestamp: string;
+}

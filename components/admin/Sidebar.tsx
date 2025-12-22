@@ -13,7 +13,8 @@ import {
     BarChart3, 
     Settings,
     LogOut,
-    Recycle
+    Recycle,
+    Gift
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -23,6 +24,7 @@ const Sidebar = () => {
         { to: "/admin/users", icon: Users, label: "Users" },
         { to: "/admin/collection-points", icon: MapPin, label: "Collection Points" },
         { to: "/admin/credits", icon: Coins, label: "Credits" },
+        { to: "/admin/redemptions", icon: Gift, label: "Rewards" }, // Renamed from Redemptions
         { to: "/admin/content", icon: FileText, label: "Content" },
         { to: "/admin/requests", icon: MessageSquare, label: "Requests" },
         { to: "/admin/activity", icon: Activity, label: "Activity Log" },

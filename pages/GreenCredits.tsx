@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { leaderboard, achievements, mockSubmissions } from '../data/mockData';
+import { useNavigate, Link } from 'react-router-dom';
+import { leaderboard, achievements, mockSubmissions, rewardCatalog as mockRewards } from '../data/mockData';
 import AnimatedCounter from '../components/ui/AnimatedCounter';
-import { Trophy, Award, Zap, Crown, Clock } from 'lucide-react';
+import { Trophy, Award, Zap, Crown, Clock, Gift, ArrowRight } from 'lucide-react';
 import Icon from '../components/ui/Icon';
-import type { Submission } from '../types';
+import type { Submission, Reward } from '../types';
 
 const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
     <motion.div
@@ -20,10 +21,14 @@ const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
 );
 
 const GreenCredits = () => {
+    const navigate = useNavigate();
     const [pendingTotal, setPendingTotal] = useState(0);
     const [awardedTotal, setAwardedTotal] = useState(0);
+    const [userPoints, setUserPoints] = useState(0);
+    const [featuredRewards, setFeaturedRewards] = useState<Reward[]>([]);
 
     useEffect(() => {
+      // 1. Calculate credits from submissions
       const localSubmissions = JSON.parse(localStorage.getItem('user_submissions') || '[]');
       const allSubmissions = [...mockSubmissions, ...localSubmissions];
       
@@ -31,18 +36,20 @@ const GreenCredits = () => {
         return (sub.status === 'PENDING' || sub.status === 'DROPPED') ? acc + sub.creditsPending : acc;
       }, 0);
 
-      const awarded = allSubmissions.reduce((acc: number, sub: Submission) => {
-        return (sub.status === 'COMPLETED') ? acc + sub.creditsAwarded : acc;
-      }, 0);
-
+      // In a real scenario, points come from user profile, not just raw sum of submissions (due to spending)
+      // We will read from 'users' in localStorage for the "current balance"
+      const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+      const currentUser = storedUsers.find((u: any) => u.id === 'USR-CURRENT') || leaderboard.find(u => u.isUser);
+      
       setPendingTotal(pending);
-      setAwardedTotal(awarded);
-    }, []);
+      setUserPoints(currentUser ? currentUser.points : 0);
 
-    const user = leaderboard.find(u => u.isUser) || { points: 0, name: 'Guest', rank: 0, avatar: '' };
-    // In a real app we'd combine awardedTotal with user.points, 
-    // but for now we'll just show the awardedTotal if it's non-zero, otherwise fallback to mock user points.
-    const displayPoints = awardedTotal > 0 ? awardedTotal : user.points;
+      // Load Featured Rewards (Top 3 by lowest cost usually, or just first 3)
+      const storedRewards = JSON.parse(localStorage.getItem('rewards_catalog') || '[]');
+      const catalog = storedRewards.length > 0 ? storedRewards : mockRewards;
+      setFeaturedRewards(catalog.slice(0, 3));
+
+    }, []);
 
     return (
         <PageWrapper>
@@ -51,10 +58,10 @@ const GreenCredits = () => {
                 <div className="md:col-span-2 bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                     <div className="relative z-10 flex flex-col justify-between h-full">
-                        <div className="flex flex-col md:flex-row md:items-end gap-8">
+                        <div className="flex flex-col md:flex-row md:items-end gap-8 mb-6">
                           <div>
                               <p className="text-slate-400 font-medium mb-1">Total Balance</p>
-                              <h2 className="text-6xl font-black mb-2"><AnimatedCounter to={displayPoints} /></h2>
+                              <h2 className="text-6xl font-black mb-2"><AnimatedCounter to={userPoints} /></h2>
                               <p className="text-emerald-400 text-sm font-semibold">Green Credits Available</p>
                           </div>
                           
@@ -69,9 +76,15 @@ const GreenCredits = () => {
                           </div>
                         </div>
                         
-                        <div className="mt-8">
-                             <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-xs font-medium border border-white/10">
-                                <Zap className="w-3 h-3 text-yellow-400" /> Top 5% Contributor
+                        <div className="mt-auto flex flex-col sm:flex-row gap-4">
+                             <button 
+                                onClick={() => navigate('/rewards')}
+                                className="px-6 py-3 bg-white text-emerald-900 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-emerald-50 transition-colors shadow-lg"
+                             >
+                                <Gift className="w-5 h-5 text-emerald-600" /> Browse Rewards
+                             </button>
+                             <div className="inline-flex items-center justify-center gap-2 px-4 py-3 bg-white/10 rounded-xl text-sm font-medium border border-white/10">
+                                <Zap className="w-4 h-4 text-yellow-400" /> Top 5% Contributor
                              </div>
                         </div>
                     </div>
@@ -80,10 +93,47 @@ const GreenCredits = () => {
                 <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-8 text-white flex flex-col justify-center items-center text-center shadow-lg shadow-emerald-500/20">
                      <Crown className="w-12 h-12 mb-4 text-white" />
                      <h3 className="text-2xl font-bold mb-1">Gold Tier</h3>
-                     <p className="text-emerald-100 text-sm">Next tier at 500 pts</p>
+                     <p className="text-emerald-100 text-sm">Next tier at 3000 pts</p>
                      <div className="w-full bg-black/20 h-1.5 rounded-full mt-4 overflow-hidden">
                          <div className="bg-white h-full rounded-full" style={{width: '75%'}}></div>
                      </div>
+                </div>
+            </div>
+
+            {/* Featured Rewards Preview */}
+            <div className="mb-12">
+                <div className="flex justify-between items-end mb-6">
+                    <div>
+                        <h3 className="text-xl font-bold text-slate-900">Featured Rewards</h3>
+                        <p className="text-slate-500 text-sm">Redeem your hard-earned credits for these perks.</p>
+                    </div>
+                    <Link to="/rewards" className="text-emerald-600 font-bold hover:text-emerald-700 flex items-center gap-1 text-sm">
+                        View Marketplace <ArrowRight className="w-4 h-4" />
+                    </Link>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {featuredRewards.map((reward) => (
+                        <motion.div 
+                            key={reward.id}
+                            whileHover={{ y: -5 }}
+                            className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 cursor-pointer"
+                            onClick={() => navigate('/rewards')}
+                        >
+                            <div className="w-16 h-16 rounded-xl bg-slate-50 overflow-hidden shrink-0">
+                                <img src={reward.imageUrl} alt={reward.name} className="w-full h-full object-cover" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <div className="flex justify-between items-start mb-1">
+                                    <h4 className="font-bold text-slate-900 text-sm truncate pr-2">{reward.name}</h4>
+                                    <span className="text-xs font-bold text-amber-500 bg-amber-50 px-2 py-0.5 rounded-full whitespace-nowrap">
+                                        {reward.creditCost} pts
+                                    </span>
+                                </div>
+                                <p className="text-xs text-slate-500 line-clamp-1">{reward.description}</p>
+                            </div>
+                        </motion.div>
+                    ))}
                 </div>
             </div>
 

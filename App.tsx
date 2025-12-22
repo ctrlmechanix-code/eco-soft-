@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { MemoryRouter, Routes, Route, Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
@@ -23,6 +24,9 @@ import UserRequests from './pages/UserRequests';
 import Submissions from './pages/Submissions';
 import ImageGenerator from './pages/ImageGenerator';
 import NotFound from './pages/NotFound';
+import Rewards from './pages/Rewards';
+import MyRedemptions from './pages/MyRedemptions';
+import CreditTransactions from './pages/CreditTransactions';
 
 // Admin Imports
 import AdminLayout from './components/admin/AdminLayout';
@@ -36,6 +40,7 @@ import AdminRequests from './pages/admin/Requests';
 import AdminActivity from './pages/admin/Activity';
 import AdminReports from './pages/admin/Reports';
 import AdminSettings from './pages/admin/Settings';
+import AdminRedemptions from './pages/admin/Redemptions';
 
 const AppLayout = () => {
     const location = useLocation();
@@ -71,6 +76,9 @@ function App() {
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/requests" element={<UserRequests />} />
           <Route path="/submissions" element={<Submissions />} />
+          <Route path="/rewards" element={<Rewards />} />
+          <Route path="/my-redemptions" element={<MyRedemptions />} />
+          <Route path="/credits/transactions" element={<CreditTransactions />} />
           <Route path="/generate-image" element={<ImageGenerator />} />
           
           {/* Company Pages */}
@@ -92,6 +100,7 @@ function App() {
             <Route path="users" element={<AdminUsers />} />
             <Route path="collection-points" element={<AdminCollectionPoints />} />
             <Route path="credits" element={<AdminCredits />} />
+            <Route path="redemptions" element={<AdminRedemptions />} />
             <Route path="content" element={<AdminContent />} />
             <Route path="requests" element={<AdminRequests />} />
             <Route path="activity" element={<AdminActivity />} />
