@@ -29,6 +29,7 @@ import MyRedemptions from './pages/MyRedemptions';
 import CreditTransactions from './pages/CreditTransactions';
 import Notifications from './pages/Notifications';
 import Legal from './pages/Legal';
+import Testimonials from './pages/Testimonials'; // New
 
 // Admin Imports
 import AdminLayout from './components/admin/AdminLayout';
@@ -43,6 +44,7 @@ import AdminActivity from './pages/admin/Activity';
 import AdminReports from './pages/admin/Reports';
 import AdminSettings from './pages/admin/Settings';
 import AdminRedemptions from './pages/admin/Redemptions';
+import AdminTestimonials from './pages/admin/Testimonials'; // New
 
 const AppLayout = () => {
     const location = useLocation();
@@ -90,6 +92,7 @@ function App() {
           <Route path="/careers" element={<Careers />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogPost />} />
+          <Route path="/testimonials" element={<Testimonials />} />
           <Route path="/auth" element={<Auth />} />
           
           {/* Legal Pages */}
@@ -110,6 +113,7 @@ function App() {
             <Route path="credits" element={<AdminCredits />} />
             <Route path="redemptions" element={<AdminRedemptions />} />
             <Route path="content" element={<AdminContent />} />
+            <Route path="testimonials" element={<AdminTestimonials />} />
             <Route path="requests" element={<AdminRequests />} />
             <Route path="activity" element={<AdminActivity />} />
             <Route path="reports" element={<AdminReports />} />

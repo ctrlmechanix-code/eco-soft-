@@ -11,7 +11,7 @@ const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.5 }}
-        className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 min-h-[calc(100vh-80px)]"
+        className="max-w-7xl mx-auto pt-12 pb-24 px-4 sm:px-6 lg:px-8 min-h-[calc(100vh-80px)]"
     >
         {children}
     </motion.div>

@@ -15,7 +15,8 @@ import {
     LogOut,
     Recycle,
     Gift,
-    X
+    X,
+    Quote
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -32,6 +33,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         { to: "/admin/credits", icon: Coins, label: "Credits" },
         { to: "/admin/redemptions", icon: Gift, label: "Rewards" },
         { to: "/admin/content", icon: FileText, label: "Content" },
+        { to: "/admin/testimonials", icon: Quote, label: "Testimonials" },
         { to: "/admin/requests", icon: MessageSquare, label: "Requests" },
         { to: "/admin/activity", icon: Activity, label: "Activity Log" },
         { to: "/admin/reports", icon: BarChart3, label: "Reports" },
