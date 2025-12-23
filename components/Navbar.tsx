@@ -65,11 +65,17 @@ const Navbar = () => {
     // Check login state and notifications
     useEffect(() => {
         const auth = localStorage.getItem('isAuthenticated');
-        setIsLoggedIn(!!auth);
+        const loggedIn = !!auth;
+        setIsLoggedIn(loggedIn);
         setIsProfileOpen(false); 
         setIsOpen(false);
 
         const checkNotifications = () => {
+            if (!loggedIn) {
+                setHasUnread(false);
+                return;
+            }
+
             // Check message unread status
             const messageUnread = localStorage.getItem('unread_messages') === 'true';
             
@@ -121,6 +127,7 @@ const Navbar = () => {
     const handleLogout = () => {
         localStorage.removeItem('isAuthenticated');
         setIsLoggedIn(false);
+        setHasUnread(false);
         navigate('/');
     };
 
@@ -266,7 +273,7 @@ const Navbar = () => {
                             className="p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-95 transition-all relative"
                         >
                             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                            {!isOpen && hasUnread && <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>}
+                            {!isOpen && hasUnread && isLoggedIn && <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>}
                         </button>
                     </div>
                 </div>

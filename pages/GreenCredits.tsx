@@ -104,10 +104,10 @@ const GreenCredits = () => {
             <div className="mb-12">
                 <div className="flex justify-between items-end mb-6">
                     <div>
-                        <h3 className="text-xl font-bold text-slate-900">Featured Rewards</h3>
-                        <p className="text-slate-500 text-sm">Redeem your hard-earned credits for these perks.</p>
+                        <h3 className="text-xl font-bold text-slate-900 dark:text-white">Featured Rewards</h3>
+                        <p className="text-slate-500 dark:text-slate-400 text-sm">Redeem your hard-earned credits for these perks.</p>
                     </div>
-                    <Link to="/rewards" className="text-emerald-600 font-bold hover:text-emerald-700 flex items-center gap-1 text-sm">
+                    <Link to="/rewards" className="text-emerald-600 dark:text-emerald-400 font-bold hover:text-emerald-700 dark:hover:text-emerald-300 flex items-center gap-1 text-sm">
                         View Marketplace <ArrowRight className="w-4 h-4" />
                     </Link>
                 </div>
@@ -117,20 +117,20 @@ const GreenCredits = () => {
                         <motion.div 
                             key={reward.id}
                             whileHover={{ y: -5 }}
-                            className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 cursor-pointer"
+                            className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4 cursor-pointer"
                             onClick={() => navigate('/rewards')}
                         >
-                            <div className="w-16 h-16 rounded-xl bg-slate-50 overflow-hidden shrink-0">
+                            <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0">
                                 <img src={reward.imageUrl} alt={reward.name} className="w-full h-full object-cover" />
                             </div>
                             <div className="flex-1 min-w-0">
                                 <div className="flex justify-between items-start mb-1">
-                                    <h4 className="font-bold text-slate-900 text-sm truncate pr-2">{reward.name}</h4>
-                                    <span className="text-xs font-bold text-amber-500 bg-amber-50 px-2 py-0.5 rounded-full whitespace-nowrap">
+                                    <h4 className="font-bold text-slate-900 dark:text-white text-sm truncate pr-2">{reward.name}</h4>
+                                    <span className="text-xs font-bold text-amber-500 bg-amber-50 dark:bg-amber-900/30 px-2 py-0.5 rounded-full whitespace-nowrap">
                                         {reward.creditCost} pts
                                     </span>
                                 </div>
-                                <p className="text-xs text-slate-500 line-clamp-1">{reward.description}</p>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">{reward.description}</p>
                             </div>
                         </motion.div>
                     ))}
@@ -140,39 +140,39 @@ const GreenCredits = () => {
             <div className="grid lg:grid-cols-3 gap-8">
                 {/* Leaderboard */}
                 <div className="lg:col-span-2">
-                    <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden">
-                        <div className="p-6 border-b border-slate-100 flex justify-between items-center">
-                            <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                        <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                                 <Trophy className="w-5 h-5 text-amber-500" /> Leaderboard
                             </h3>
                             <span className="text-sm text-slate-400">This Month</span>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
-                                <thead className="bg-slate-50 text-slate-500 text-xs uppercase font-semibold">
+                                <thead className="bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs uppercase font-semibold">
                                     <tr>
                                         <th className="px-6 py-4">Rank</th>
                                         <th className="px-6 py-4">User</th>
                                         <th className="px-6 py-4 text-right">Points</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-100">
+                                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                                     {leaderboard.map((entry) => (
-                                        <tr key={entry.rank} className={entry.isUser ? "bg-emerald-50/50" : "hover:bg-slate-50 transition-colors"}>
+                                        <tr key={entry.rank} className={entry.isUser ? "bg-emerald-50/50 dark:bg-emerald-900/20" : "hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"}>
                                             <td className="px-6 py-4">
-                                                <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold ${entry.rank <= 3 ? 'bg-slate-900 text-white' : 'text-slate-500'}`}>
+                                                <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold ${entry.rank <= 3 ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900' : 'text-slate-500 dark:text-slate-400'}`}>
                                                     {entry.rank}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <img src={entry.avatar} alt={entry.name} className="w-8 h-8 rounded-full bg-slate-100" />
-                                                    <span className={`text-sm font-medium ${entry.isUser ? 'text-emerald-700' : 'text-slate-700'}`}>
+                                                    <img src={entry.avatar} alt={entry.name} className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800" />
+                                                    <span className={`text-sm font-medium ${entry.isUser ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-700 dark:text-slate-300'}`}>
                                                         {entry.name} {entry.isUser && "(You)"}
                                                     </span>
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4 text-right font-bold text-slate-900">
+                                            <td className="px-6 py-4 text-right font-bold text-slate-900 dark:text-white">
                                                 {entry.points}
                                             </td>
                                         </tr>
@@ -185,8 +185,8 @@ const GreenCredits = () => {
 
                 {/* Achievements */}
                 <div>
-                     <div className="bg-white rounded-3xl border border-slate-200 p-6 h-full">
-                        <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                     <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 h-full">
+                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
                             <Award className="w-5 h-5 text-blue-500" /> Achievements
                         </h3>
                         <div className="grid grid-cols-1 gap-4">
@@ -194,14 +194,14 @@ const GreenCredits = () => {
                                 <motion.div 
                                     key={i}
                                     whileHover={{ x: 5 }}
-                                    className="flex items-center gap-4 p-3 rounded-2xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100"
+                                    className="flex items-center gap-4 p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-700"
                                 >
-                                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                                    <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
                                         <Icon name={ach.icon as any} className="w-5 h-5" />
                                     </div>
                                     <div>
-                                        <h4 className="text-sm font-bold text-slate-900">{ach.title}</h4>
-                                        <p className="text-xs text-slate-500">{ach.description}</p>
+                                        <h4 className="text-sm font-bold text-slate-900 dark:text-white">{ach.title}</h4>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400">{ach.description}</p>
                                     </div>
                                 </motion.div>
                             ))}

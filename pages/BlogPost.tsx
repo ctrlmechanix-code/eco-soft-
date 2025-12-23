@@ -75,9 +75,9 @@ const BlogPost = () => {
 
     if (!post) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-slate-950">
                 <div className="text-center">
-                    <h2 className="text-2xl font-bold text-slate-900 mb-2">Article not found</h2>
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Article not found</h2>
                     <button 
                         onClick={() => navigate('/blog')}
                         className="text-emerald-600 font-medium hover:underline"
@@ -95,7 +95,7 @@ const BlogPost = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
-            className="bg-white min-h-screen pb-20"
+            className="bg-white dark:bg-slate-950 min-h-screen pb-20 transition-colors duration-300"
         >
             {/* Hero Section */}
             <div className="relative h-[400px] md:h-[500px] w-full overflow-hidden">
@@ -146,8 +146,8 @@ const BlogPost = () => {
 
             {/* Content Section */}
             <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                <div className="prose prose-lg prose-slate hover:prose-a:text-emerald-600 prose-img:rounded-2xl max-w-none">
-                    <p className="lead text-xl text-slate-600 font-medium mb-8 border-l-4 border-emerald-500 pl-4 italic">
+                <div className="prose prose-lg prose-slate dark:prose-invert hover:prose-a:text-emerald-600 prose-img:rounded-2xl max-w-none">
+                    <p className="lead text-xl text-slate-600 dark:text-slate-300 font-medium mb-8 border-l-4 border-emerald-500 pl-4 italic">
                         {post.excerpt}
                     </p>
                     
@@ -155,14 +155,14 @@ const BlogPost = () => {
                     <div dangerouslySetInnerHTML={{ __html: post.content }} />
                 </div>
 
-                <hr className="my-12 border-slate-200" />
+                <hr className="my-12 border-slate-200 dark:border-slate-800" />
 
                 <div className="relative z-20 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
                     <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-                        <span className="text-sm text-slate-500 font-medium">Tags:</span>
+                        <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">Tags:</span>
                         <div className="flex gap-2 flex-wrap">
-                            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-md">#Sustainability</span>
-                            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-md">#CampusLife</span>
+                            <span className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-md">#Sustainability</span>
+                            <span className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-md">#CampusLife</span>
                         </div>
                     </div>
                     
@@ -171,8 +171,8 @@ const BlogPost = () => {
                         onClick={handleShare}
                         className={`flex-shrink-0 relative z-30 cursor-pointer flex items-center gap-2 transition-all duration-200 font-medium text-sm px-5 py-2.5 rounded-full border shadow-sm active:scale-95 select-none
                             ${copied 
-                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
-                                : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-emerald-600 hover:border-emerald-200'
+                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800' 
+                                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-200 dark:hover:border-emerald-800'
                             }`}
                     >
                         {copied ? (

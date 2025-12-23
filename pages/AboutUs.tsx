@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Users, Target, Heart, ArrowRight } from 'lucide-react';
@@ -24,18 +25,18 @@ const AboutUs = () => {
                 <motion.span 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="text-emerald-600 font-bold tracking-wide uppercase text-sm"
+                    className="text-emerald-600 dark:text-emerald-400 font-bold tracking-wide uppercase text-sm"
                 >
                     Who We Are
                 </motion.span>
                 <motion.h1 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-4xl md:text-6xl font-bold text-slate-900 mt-3 mb-6"
+                    className="text-4xl md:text-6xl font-bold text-slate-900 dark:text-white mt-3 mb-6"
                 >
-                    Building a circular economy for <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">campuses.</span>
+                    Building a circular economy for <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500 dark:from-emerald-400 dark:to-teal-400">campuses.</span>
                 </motion.h1>
-                <p className="text-xl text-slate-500 leading-relaxed">
+                <p className="text-xl text-slate-500 dark:text-slate-400 leading-relaxed">
                     ECO-SORT was founded with a simple belief: technology can turn the tide on electronic waste. We are empowering the next generation to take responsible action through smart, gamified solutions.
                 </p>
             </div>
@@ -49,18 +50,18 @@ const AboutUs = () => {
                     <motion.div 
                         key={i}
                         whileHover={{ y: -5 }}
-                        className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm"
+                        className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm"
                     >
-                        <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 mb-6">
+                        <div className="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6">
                             <item.icon className="w-6 h-6" />
                         </div>
-                        <h3 className="text-xl font-bold text-slate-900 mb-3">{item.title}</h3>
-                        <p className="text-slate-500 leading-relaxed">{item.desc}</p>
+                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{item.title}</h3>
+                        <p className="text-slate-500 dark:text-slate-400 leading-relaxed">{item.desc}</p>
                     </motion.div>
                 ))}
             </div>
 
-            <div className="bg-slate-900 rounded-[2.5rem] p-12 md:p-20 text-center text-white relative overflow-hidden">
+            <div className="bg-slate-900 dark:bg-black rounded-[2.5rem] p-12 md:p-20 text-center text-white relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
                 <div className="relative z-10 max-w-2xl mx-auto">
                     <h2 className="text-3xl font-bold mb-6">Join the movement</h2>

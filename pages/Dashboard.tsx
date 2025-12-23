@@ -175,9 +175,10 @@ const Dashboard = () => {
                                 <Tooltip 
                                     cursor={{fill: '#f8fafc', opacity: 0.5}}
                                     contentStyle={{
-                                        backgroundColor: '#fff', 
+                                        backgroundColor: '#1e293b', 
                                         borderRadius: '12px', 
-                                        border: '1px solid #e2e8f0', 
+                                        border: 'none',
+                                        color: '#fff', 
                                         boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
                                     }}
                                 />

@@ -40,46 +40,46 @@ const UserAnalysis = () => {
     return (
         <PageWrapper>
              <div className="mb-10">
-                <h1 className="text-3xl font-bold text-slate-900">Contribution Analysis</h1>
-                <p className="text-slate-500 mt-1">Detailed insights into your sustainability journey and past contributions.</p>
+                <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Contribution Analysis</h1>
+                <p className="text-slate-500 dark:text-slate-400 mt-1">Detailed insights into your sustainability journey and past contributions.</p>
             </div>
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                 <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                 <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
                     <div className="flex items-center gap-4 mb-4">
-                        <div className="p-3 bg-emerald-100 text-emerald-600 rounded-xl">
+                        <div className="p-3 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-xl">
                             <Leaf className="w-6 h-6" />
                         </div>
                         <div>
-                            <p className="text-sm text-slate-500 font-medium">Net CO₂ Impact</p>
-                            <h3 className="text-2xl font-bold text-slate-900">45.2 kg</h3>
+                            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Net CO₂ Impact</p>
+                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white">45.2 kg</h3>
                         </div>
                     </div>
                      <p className="text-xs text-slate-400">Equivalent to planting 2 trees this year.</p>
                  </div>
                  
-                 <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                 <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
                     <div className="flex items-center gap-4 mb-4">
-                        <div className="p-3 bg-blue-100 text-blue-600 rounded-xl">
+                        <div className="p-3 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl">
                             <Package className="w-6 h-6" />
                         </div>
                         <div>
-                            <p className="text-sm text-slate-500 font-medium">Items Diverted</p>
-                            <h3 className="text-2xl font-bold text-slate-900">28</h3>
+                            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Items Diverted</p>
+                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white">28</h3>
                         </div>
                     </div>
                      <p className="text-xs text-slate-400">Top category: Batteries</p>
                  </div>
 
-                 <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                 <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
                     <div className="flex items-center gap-4 mb-4">
-                        <div className="p-3 bg-amber-100 text-amber-600 rounded-xl">
+                        <div className="p-3 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-xl">
                             <TrendingUp className="w-6 h-6" />
                         </div>
                         <div>
-                            <p className="text-sm text-slate-500 font-medium">Consistency</p>
-                            <h3 className="text-2xl font-bold text-slate-900">Top 15%</h3>
+                            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Consistency</p>
+                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Top 15%</h3>
                         </div>
                     </div>
                      <p className="text-xs text-slate-400">You report e-waste more often than average.</p>
@@ -89,22 +89,22 @@ const UserAnalysis = () => {
             {/* Charts Section */}
             <div className="grid lg:grid-cols-2 gap-8 mb-8">
                 {/* Monthly Activity */}
-                <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
                     <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-lg font-bold text-slate-900">Monthly Contributions</h3>
-                        <div className="flex items-center text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-white">Monthly Contributions</h3>
+                        <div className="flex items-center text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-full">
                             +15% <ArrowUpRight className="w-3 h-3 ml-1" />
                         </div>
                     </div>
                     <div className="h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={userMonthlyData}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" className="dark:opacity-10"/>
                                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} dy={10} />
                                 <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
                                 <Tooltip 
-                                    cursor={{fill: '#f8fafc'}}
-                                    contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0' }}
+                                    cursor={{fill: '#f8fafc', opacity: 0.5}}
+                                    contentStyle={{ borderRadius: '12px', border: 'none', backgroundColor: '#1e293b', color: '#fff' }}
                                 />
                                 <Bar dataKey="items" fill="#10b981" radius={[6, 6, 0, 0]} />
                             </BarChart>
@@ -113,8 +113,8 @@ const UserAnalysis = () => {
                 </div>
 
                 {/* Category Breakdown */}
-                 <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-                    <h3 className="text-lg font-bold text-slate-900 mb-6">Waste Type Distribution</h3>
+                 <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Waste Type Distribution</h3>
                     <div className="h-[300px] flex items-center justify-center">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
@@ -131,7 +131,7 @@ const UserAnalysis = () => {
                                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                     ))}
                                 </Pie>
-                                <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0' }} />
+                                <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', backgroundColor: '#1e293b', color: '#fff' }} />
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
@@ -139,7 +139,7 @@ const UserAnalysis = () => {
                         {userCategoryData.map((entry, index) => (
                             <div key={entry.name} className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
-                                <span className="text-sm text-slate-600">{entry.name}</span>
+                                <span className="text-sm text-slate-600 dark:text-slate-400">{entry.name}</span>
                             </div>
                         ))}
                     </div>
@@ -147,27 +147,27 @@ const UserAnalysis = () => {
             </div>
             
             {/* Timeline / Recent Analysis Text */}
-            <div className="bg-slate-50 rounded-3xl p-8 border border-slate-100">
-                <h3 className="text-lg font-bold text-slate-900 mb-8 flex items-center gap-2">
-                    <Calendar className="w-5 h-5 text-emerald-600"/> Impact Timeline
+            <div className="bg-slate-50 dark:bg-slate-900 rounded-3xl p-8 border border-slate-100 dark:border-slate-800">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-2">
+                    <Calendar className="w-5 h-5 text-emerald-600 dark:text-emerald-400"/> Impact Timeline
                 </h3>
                 <div className="space-y-0">
                     {userActivity.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((activity, index) => (
-                        <div key={activity.id} className="relative pl-8 border-l-2 border-slate-200 pb-8 last:pb-0 last:border-l-0">
+                        <div key={activity.id} className="relative pl-8 border-l-2 border-slate-200 dark:border-slate-800 pb-8 last:pb-0 last:border-l-0">
                              {/* Line connector hack for last item */}
-                            <div className={`absolute top-0 left-[-2px] bottom-0 w-[2px] bg-slate-200 ${index === userActivity.length -1 ? 'hidden' : 'block'}`}></div>
+                            <div className={`absolute top-0 left-[-2px] bottom-0 w-[2px] bg-slate-200 dark:bg-slate-800 ${index === userActivity.length -1 ? 'hidden' : 'block'}`}></div>
                             
-                            <div className={`absolute top-0 left-[-9px] w-4 h-4 rounded-full border-4 border-slate-50 ${
+                            <div className={`absolute top-0 left-[-9px] w-4 h-4 rounded-full border-4 border-slate-50 dark:border-slate-900 ${
                                 activity.action === 'Recycled' ? 'bg-emerald-500' :
                                 activity.action === 'Repaired' ? 'bg-blue-500' : 'bg-amber-500'
                             }`}></div>
                             
                             <p className="text-sm text-slate-400 mb-1">{new Date(activity.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
-                            <p className="text-slate-800 font-medium">
+                            <p className="text-slate-800 dark:text-slate-200 font-medium">
                                 <span className="font-bold">{activity.action}</span> {activity.item} ({activity.category}).
-                                {activity.credits > 0 && <span className="text-emerald-600 font-bold ml-1">+{activity.credits} credits</span>}
+                                {activity.credits > 0 && <span className="text-emerald-600 dark:text-emerald-400 font-bold ml-1">+{activity.credits} credits</span>}
                             </p>
-                            <p className="text-xs text-slate-500 mt-1">Status: {activity.status}</p>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Status: {activity.status}</p>
                         </div>
                     ))}
                 </div>
