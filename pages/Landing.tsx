@@ -97,7 +97,7 @@ const Landing = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60 shadow-sm mb-10 backdrop-blur-md cursor-default ring-1 ring-slate-900/5 dark:ring-white/5"
+                    className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60 shadow-sm mb-12 backdrop-blur-md cursor-default ring-1 ring-slate-900/5 dark:ring-white/5"
                 >
                     <span className="flex h-2.5 w-2.5 relative">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -151,7 +151,7 @@ const Landing = () => {
       </section>
 
       {/* Floating Stats Glass Card */}
-      <section className="container mx-auto px-6 max-w-7xl -mt-20 mb-32 relative z-20">
+      <section className="container mx-auto px-6 max-w-7xl mt-12 lg:-mt-20 mb-32 relative z-20">
         <motion.div 
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
