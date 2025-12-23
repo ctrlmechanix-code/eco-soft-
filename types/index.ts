@@ -167,3 +167,14 @@ export interface CreditTransaction {
   description: string;
   timestamp: string;
 }
+
+export interface AppNotification {
+    id: string;
+    userId?: string; // 'all' or specific userId
+    type: 'info' | 'success' | 'warning' | 'alert';
+    title: string;
+    message: string;
+    date: string;
+    read: boolean;
+    link?: string;
+}

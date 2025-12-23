@@ -27,6 +27,7 @@ import NotFound from './pages/NotFound';
 import Rewards from './pages/Rewards';
 import MyRedemptions from './pages/MyRedemptions';
 import CreditTransactions from './pages/CreditTransactions';
+import Notifications from './pages/Notifications';
 
 // Admin Imports
 import AdminLayout from './components/admin/AdminLayout';
@@ -72,6 +73,7 @@ function App() {
           <Route path="/credits" element={<GreenCredits />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/notifications" element={<Notifications />} />
           <Route path="/analysis" element={<UserAnalysis />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/requests" element={<UserRequests />} />

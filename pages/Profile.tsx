@@ -104,7 +104,7 @@ const Profile = () => {
     };
 
     // Group messages by PointId for the list
-    const threads = Array.from(new Map(messages.map(m => [m.pointId, m])).values());
+    const threads = Array.from(new Map(messages.map(m => [m.pointId, m])).values()) as (CollectionPointMessage & { isReply?: boolean; unread?: boolean })[];
     const activeChatMessages = messages
         .filter(m => m.pointId === activeChatId)
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
@@ -184,11 +184,11 @@ const Profile = () => {
             </div>
 
             <div className="grid lg:grid-cols-2 gap-8 mb-8">
-                <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-6 md:p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
                         <Leaf className="w-5 h-5 text-emerald-500" /> Lifetime Impact
                     </h3>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="p-5 bg-emerald-50/50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800 rounded-2xl">
                             <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-xl flex items-center justify-center mb-3">
                                 <Package className="w-5 h-5" />
@@ -206,15 +206,15 @@ const Profile = () => {
                     </div>
                 </div>
 
-                <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-6 md:p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                             <Award className="w-5 h-5 text-amber-500" /> Badges & Achievements
                         </h3>
                     </div>
-                    <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+                    <div className="grid grid-cols-2 sm:flex sm:gap-4 gap-3 sm:overflow-x-auto pb-2 scrollbar-hide">
                         {achievements.map((ach, i) => (
-                            <div key={i} className="flex-shrink-0 flex flex-col items-center text-center p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 w-32">
+                            <div key={i} className="flex-shrink-0 flex flex-col items-center text-center p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 w-full sm:w-32">
                                 <div className="w-12 h-12 rounded-full bg-white dark:bg-slate-700 shadow-sm flex items-center justify-center text-amber-500 mb-3">
                                     <Icon name={ach.icon as any} className="w-6 h-6" />
                                 </div>
@@ -320,7 +320,7 @@ const Profile = () => {
                                         <button 
                                             type="submit"
                                             disabled={!replyText.trim() || isSending}
-                                            className="absolute right-2 top-2 p-2.5 bg-slate-900 dark:bg-blue-600 text-white rounded-xl hover:bg-blue-600 dark:hover:bg-blue-500 disabled:bg-slate-200 dark:disabled:bg-slate-700 transition-all active:scale-95"
+                                            className="absolute right-2 top-2 p-2.5 bg-slate-900 dark:bg-blue-600 text-white rounded-xl hover:bg-blue-600 dark:hover:bg-blue-50 disabled:bg-slate-200 dark:disabled:bg-slate-700 transition-all active:scale-95"
                                         >
                                             <Send className="w-5 h-5" />
                                         </button>
@@ -360,7 +360,7 @@ const Profile = () => {
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className="group flex flex-col sm:flex-row items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-2xl transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-700"
+                            className="group flex items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-2xl transition-colors border border-transparent hover:border-slate-100 dark:hover:border-slate-700"
                         >
                             <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 font-bold text-xs shrink-0">
                                 {new Date(activity.date).getDate()}
@@ -368,15 +368,15 @@ const Profile = () => {
                                     {new Date(activity.date).toLocaleString('default', { month: 'short' })}
                                 </span>
                             </div>
-                            <div className="flex-grow text-center sm:text-left">
-                                <h4 className="font-bold text-slate-900 dark:text-white">{activity.item}</h4>
-                                <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-1">
-                                    <span className="text-xs text-slate-500 dark:text-slate-400 px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded-md">
+                            <div className="flex-grow min-w-0">
+                                <h4 className="font-bold text-slate-900 dark:text-white truncate">{activity.item}</h4>
+                                <div className="flex flex-wrap gap-2 mt-1">
+                                    <span className="text-xs text-slate-500 dark:text-slate-400 px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded-md truncate">
                                         {activity.category}
                                     </span>
                                 </div>
                             </div>
-                            <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1.5 ${activity.status === 'Verified' ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>
+                            <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1.5 shrink-0 ${activity.status === 'Verified' ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>
                                 {activity.status}
                             </div>
                         </motion.div>

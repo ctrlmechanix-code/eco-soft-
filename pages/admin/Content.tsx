@@ -1,13 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { blogPosts as mockPosts } from '../../data/mockData';
-import { Edit2, Eye, Trash2, Plus, X, Save } from 'lucide-react';
-import type { BlogPost } from '../../types';
+import { Edit2, Eye, Trash2, Plus, X, Save, Bell, Send } from 'lucide-react';
+import type { BlogPost, AppNotification } from '../../types';
 
 const AdminContent = () => {
     const [posts, setPosts] = useState<BlogPost[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAnnouncementModalOpen, setIsAnnouncementModalOpen] = useState(false);
     const [formData, setFormData] = useState<Partial<BlogPost>>({});
+    const [announcementData, setAnnouncementData] = useState({ title: '', message: '', type: 'info' as AppNotification['type'] });
 
     useEffect(() => {
         const stored = localStorage.getItem('blog_posts');
@@ -55,6 +57,26 @@ const AdminContent = () => {
         setIsModalOpen(false);
     };
 
+    const handleSendAnnouncement = (e: React.FormEvent) => {
+        e.preventDefault();
+        const newNotification: AppNotification = {
+            id: `NOTIF-${Date.now()}`,
+            userId: 'all',
+            type: announcementData.type,
+            title: announcementData.title,
+            message: announcementData.message,
+            date: new Date().toISOString(),
+            read: false
+        };
+
+        const existingNotifs = JSON.parse(localStorage.getItem('user_notifications') || '[]');
+        localStorage.setItem('user_notifications', JSON.stringify([newNotification, ...existingNotifs]));
+        
+        setIsAnnouncementModalOpen(false);
+        setAnnouncementData({ title: '', message: '', type: 'info' });
+        alert('Announcement sent successfully!');
+    };
+
     const inputClasses = "w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:bg-white dark:focus:bg-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-slate-700 dark:text-white";
 
     return (
@@ -64,12 +86,20 @@ const AdminContent = () => {
                     <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Content Management</h1>
                     <p className="text-slate-500 dark:text-slate-400">Manage blog posts, announcements, and FAQs.</p>
                 </div>
-                <button 
-                    onClick={handleAdd}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 flex items-center gap-2"
-                >
-                    <Plus className="w-4 h-4" /> New Post
-                </button>
+                <div className="flex gap-3">
+                    <button 
+                        onClick={() => setIsAnnouncementModalOpen(true)}
+                        className="px-4 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 flex items-center gap-2"
+                    >
+                        <Bell className="w-4 h-4" /> Send Alert
+                    </button>
+                    <button 
+                        onClick={handleAdd}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 flex items-center gap-2"
+                    >
+                        <Plus className="w-4 h-4" /> New Post
+                    </button>
+                </div>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -104,7 +134,7 @@ const AdminContent = () => {
                 ))}
             </div>
 
-            {/* Simple Add Modal */}
+            {/* Add Post Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
                     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl w-full max-w-lg border border-slate-100 dark:border-slate-800">
@@ -130,6 +160,58 @@ const AdminContent = () => {
                                 <input type="text" placeholder="https://..." className={inputClasses} value={formData.image || ''} onChange={e => setFormData({...formData, image: e.target.value})} />
                             </div>
                             <button type="submit" className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-lg shadow-blue-900/20 mt-2">Publish Post</button>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Announcement Modal */}
+            {isAnnouncementModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl w-full max-w-md border border-slate-100 dark:border-slate-800">
+                        <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
+                            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Broadcast Announcement</h3>
+                            <button onClick={() => setIsAnnouncementModalOpen(false)}><X className="w-5 h-5 text-slate-400" /></button>
+                        </div>
+                        <form onSubmit={handleSendAnnouncement} className="p-6 space-y-4">
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Title</label>
+                                <input 
+                                    type="text" 
+                                    required 
+                                    className={inputClasses} 
+                                    value={announcementData.title} 
+                                    onChange={e => setAnnouncementData({...announcementData, title: e.target.value})}
+                                    placeholder="e.g. Maintenance Update" 
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Message</label>
+                                <textarea 
+                                    required 
+                                    rows={4} 
+                                    className={inputClasses} 
+                                    value={announcementData.message} 
+                                    onChange={e => setAnnouncementData({...announcementData, message: e.target.value})}
+                                    placeholder="Your message to all users..." 
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Type</label>
+                                <select 
+                                    className={inputClasses}
+                                    value={announcementData.type}
+                                    onChange={e => setAnnouncementData({...announcementData, type: e.target.value as any})}
+                                >
+                                    <option value="info">Info</option>
+                                    <option value="success">Success</option>
+                                    <option value="warning">Warning</option>
+                                    <option value="alert">Alert</option>
+                                </select>
+                            </div>
+                            <button type="submit" className="w-full py-3 bg-purple-600 text-white rounded-xl font-bold hover:bg-purple-700 shadow-lg shadow-purple-900/20 mt-2 flex items-center justify-center gap-2">
+                                <Send className="w-4 h-4" /> Send to All Users
+                            </button>
                         </form>
                     </div>
                 </div>

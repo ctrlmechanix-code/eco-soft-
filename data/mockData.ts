@@ -1,5 +1,5 @@
 
-import type { Category, LeaderboardUser, ImpactStats, CollectionPoint, UserActivity, BlogPost, UserRequest, Submission, ActivityLog, Reward, RedemptionTransaction, CreditTransaction } from '../types';
+import type { Category, LeaderboardUser, ImpactStats, CollectionPoint, UserActivity, BlogPost, UserRequest, Submission, ActivityLog, Reward, RedemptionTransaction, CreditTransaction, AppNotification } from '../types';
 
 export const categories: Category[] = [
   {
@@ -539,4 +539,25 @@ export const mockCreditTransactions: CreditTransaction[] = [
     description: 'Redeemed: Cafeteria Coffee Coupon',
     timestamp: new Date(Date.now() - 172800000).toISOString()
   }
+];
+
+export const mockNotifications: AppNotification[] = [
+    {
+        id: "NOTIF-001",
+        userId: "USR-CURRENT",
+        type: "success",
+        title: "Credits Awarded",
+        message: "You received 50 credits for recycling your mobile phone.",
+        date: new Date(Date.now() - 100000000).toISOString(),
+        read: true
+    },
+    {
+        id: "NOTIF-002",
+        userId: "all",
+        type: "info",
+        title: "Campus E-Waste Drive",
+        message: "Join us this Friday at the Student Center for a special collection event!",
+        date: new Date(Date.now() - 200000).toISOString(),
+        read: false
+    }
 ];

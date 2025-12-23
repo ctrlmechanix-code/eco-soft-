@@ -2,7 +2,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Recycle, Menu, X, Home, Trash2, BarChart3, Medal, LogOut, User, ChevronDown, MapPin, TrendingUp, MessageSquare, ListTodo, Shield, Gift, Sun, Moon } from 'lucide-react';
+import { Recycle, Menu, X, Home, Trash2, BarChart3, Medal, LogOut, User, ChevronDown, MapPin, TrendingUp, MessageSquare, ListTodo, Shield, Gift, Sun, Moon, Bell } from 'lucide-react';
+import { mockNotifications } from '../data/mockData';
+import type { AppNotification } from '../types';
 
 const NavItem = ({ to, children, Icon, onClick }: { to: string; children?: React.ReactNode; Icon: React.ElementType; onClick?: () => void }) => (
     <NavLink
@@ -68,8 +70,24 @@ const Navbar = () => {
         setIsOpen(false);
 
         const checkNotifications = () => {
-            const unread = localStorage.getItem('unread_messages');
-            setHasUnread(unread === 'true');
+            // Check message unread status
+            const messageUnread = localStorage.getItem('unread_messages') === 'true';
+            
+            // Check notification system unread status
+            const storedNotifs = JSON.parse(localStorage.getItem('user_notifications') || '[]');
+            
+            // Merge Mock and Stored - Stored takes precedence to respect "read" status
+            const allNotifs = [...mockNotifications, ...storedNotifs];
+            
+            // Deduplicate to get the latest version of each notification
+            const uniqueNotifs = Array.from(new Map(allNotifs.map(item => [item.id, item])).values());
+            
+            // Filter by userId and check read status
+            const hasUnreadNotifs = uniqueNotifs.some((n: AppNotification) => 
+                !n.read && (n.userId === 'USR-CURRENT' || n.userId === 'all')
+            );
+
+            setHasUnread(messageUnread || hasUnreadNotifs);
         };
 
         checkNotifications();
@@ -192,6 +210,11 @@ const Navbar = () => {
                                                     <div className="flex items-center gap-3">
                                                         <User className="w-4 h-4" /> My Profile
                                                     </div>
+                                                </Link>
+                                                <Link to="/notifications" className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                                                    <div className="flex items-center gap-3">
+                                                        <Bell className="w-4 h-4" /> Notifications
+                                                    </div>
                                                     {hasUnread && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
                                                 </Link>
                                                 <Link to="/my-redemptions" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
@@ -255,7 +278,7 @@ const Navbar = () => {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 overflow-hidden shadow-2xl"
+                        className="md:hidden bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 overflow-y-auto overscroll-y-contain max-h-[calc(100vh-5rem)] shadow-2xl"
                     >
                         <div className="px-4 py-6 space-y-2">
                             <NavItem to="/" Icon={Home}>Home</NavItem>
@@ -281,6 +304,11 @@ const Navbar = () => {
                                         <Link to="/profile" className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900">
                                             <div className="flex items-center gap-3">
                                                 <User className="w-4 h-4" /> My Profile
+                                            </div>
+                                        </Link>
+                                        <Link to="/notifications" className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900">
+                                            <div className="flex items-center gap-3">
+                                                <Bell className="w-4 h-4" /> Notifications
                                             </div>
                                             {hasUnread && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
                                         </Link>
