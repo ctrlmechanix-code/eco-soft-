@@ -1,10 +1,10 @@
-
-import React from 'react';
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Recycle, Check, Leaf, Zap, BarChart3, Globe, ShieldCheck } from 'lucide-react';
-import { impactStats } from '../data/mockData';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate, Link } from 'react-router-dom';
+import { ArrowRight, Recycle, Check, Leaf, Zap, BarChart3, Globe, ShieldCheck, Quote, ChevronDown, ChevronUp, Calendar, User, Gift } from 'lucide-react';
+import { impactStats, blogPosts, mockTestimonials } from '../data/mockData';
 import AnimatedCounter from '../components/ui/AnimatedCounter';
+import type { Testimonial } from '../types';
 
 const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
   <motion.div
@@ -20,6 +20,28 @@ const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
 
 const Landing = () => {
   const navigate = useNavigate();
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+
+  useEffect(() => {
+      // Load testimonials from storage or mock to simulate admin management capability
+      const stored = JSON.parse(localStorage.getItem('testimonials') || '[]');
+      if (stored.length > 0) {
+          setTestimonials(stored);
+      } else {
+          setTestimonials(mockTestimonials);
+          localStorage.setItem('testimonials', JSON.stringify(mockTestimonials));
+      }
+  }, []);
+
+  const featuredPosts = blogPosts.slice(0, 3);
+
+  const faqs = [
+      { q: "What types of items can I recycle?", a: "We accept most electronic devices including phones, laptops, batteries, chargers, and small appliances. Large appliances might need special pickup arrangements." },
+      { q: "How do Green Credits work?", a: "You earn credits for every verified submission. These credits accumulate in your wallet and can be redeemed for campus perks, goods, or charitable donations." },
+      { q: "Where are the collection points located?", a: "We have multiple secure drop-off bins across campus, typically in the Student Center, Library, and major faculty buildings. Check the Locations page for a map." },
+      { q: "Is my data safe?", a: "We strongly recommend wiping your devices before drop-off. However, our certified recycling partners follow strict data destruction protocols for all devices." }
+  ];
 
   return (
     <PageWrapper>
@@ -87,8 +109,23 @@ const Landing = () => {
         </div>
       </section>
 
+      {/* Trusted By Strip */}
+      <div className="py-10 border-y border-slate-100 dark:border-slate-800/50 bg-slate-50/50 dark:bg-slate-900/20">
+          <div className="container mx-auto px-6 max-w-7xl">
+              <p className="text-center text-sm font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-6">Trusted by Campus Departments</p>
+              <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                  {['Engineering', 'Architecture', 'Student Affairs', 'Facilities', 'IT Services'].map((name, i) => (
+                      <div key={i} className="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-lg">
+                          <div className="w-6 h-6 bg-current rounded-full opacity-20"></div>
+                          {name}
+                      </div>
+                  ))}
+              </div>
+          </div>
+      </div>
+
       {/* Bento Grid Features */}
-      <section className="py-24 bg-slate-50/50 dark:bg-slate-900/50 border-y border-slate-200/60 dark:border-slate-800/60">
+      <section className="py-24 bg-slate-50/50 dark:bg-slate-900/50 border-b border-slate-200/60 dark:border-slate-800/60">
         <div className="container mx-auto px-6 max-w-7xl">
             <div className="text-center mb-16">
                 <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Orchestrate your impact</h2>
@@ -166,10 +203,40 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
+      {/* How It Works */}
       <section className="py-24 bg-white dark:bg-slate-950">
+          <div className="container mx-auto px-6 max-w-7xl">
+              <div className="text-center mb-20">
+                  <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Three Steps to Zero Waste</h2>
+                  <p className="text-slate-500 dark:text-slate-400">Simple, transparent, and rewarding.</p>
+              </div>
+              
+              <div className="grid md:grid-cols-3 gap-12 relative">
+                  {/* Connector Line */}
+                  <div className="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-800 to-transparent z-0"></div>
+
+                  {[
+                      { icon: Recycle, title: "Report Device", desc: "Select your item category and answer a few questions about its condition." },
+                      { icon: Zap, title: "Get Recommendation", desc: "Our system instantly decides: Repair, Donate, or Recycle." },
+                      { icon: Gift, title: "Earn Rewards", desc: "Drop it off at a designated point and receive Green Credits instantly." }
+                  ].map((step, i) => (
+                      <div key={i} className="relative z-10 flex flex-col items-center text-center">
+                          <div className="w-24 h-24 bg-white dark:bg-slate-900 border-4 border-slate-50 dark:border-slate-800 rounded-full flex items-center justify-center mb-6 shadow-xl relative">
+                              <span className="absolute -top-2 -right-2 w-8 h-8 bg-emerald-500 text-white rounded-full flex items-center justify-center font-bold text-sm border-4 border-white dark:border-slate-900">{i + 1}</span>
+                              <step.icon className="w-10 h-10 text-slate-700 dark:text-slate-200" />
+                          </div>
+                          <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{step.title}</h3>
+                          <p className="text-slate-500 dark:text-slate-400 leading-relaxed max-w-xs">{step.desc}</p>
+                      </div>
+                  ))}
+              </div>
+          </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-24 bg-slate-50 dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800">
         <div className="container mx-auto px-6 max-w-7xl">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-slate-100 dark:divide-slate-800">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-slate-200 dark:divide-slate-800">
                 <div className="text-center px-4">
                     <p className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-2"><AnimatedCounter to={impactStats.totalDevices} /></p>
                     <p className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Devices Processed</p>
@@ -188,6 +255,105 @@ const Landing = () => {
                 </div>
             </div>
         </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-24 bg-white dark:bg-slate-950">
+          <div className="container mx-auto px-6 max-w-7xl">
+              <div className="flex justify-between items-end mb-12">
+                  <div>
+                      <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Campus Voices</h2>
+                      <p className="text-slate-500 dark:text-slate-400">See how students and staff are making a difference.</p>
+                  </div>
+              </div>
+              
+              <div className="grid md:grid-cols-3 gap-8">
+                  {testimonials.map((t) => (
+                      <div key={t.id} className="bg-slate-50 dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 relative">
+                          <Quote className="w-10 h-10 text-emerald-100 dark:text-emerald-900/30 absolute top-6 right-6" />
+                          <p className="text-slate-600 dark:text-slate-300 mb-8 relative z-10 leading-relaxed">"{t.content}"</p>
+                          <div className="flex items-center gap-4">
+                              <img src={t.avatar} alt={t.name} className="w-12 h-12 rounded-full bg-white dark:bg-slate-800" />
+                              <div>
+                                  <h4 className="font-bold text-slate-900 dark:text-white text-sm">{t.name}</h4>
+                                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">{t.role}</p>
+                              </div>
+                          </div>
+                      </div>
+                  ))}
+              </div>
+          </div>
+      </section>
+
+      {/* Latest News (Featured) */}
+      <section className="py-24 bg-slate-50/50 dark:bg-slate-900/20 border-t border-slate-200 dark:border-slate-800">
+          <div className="container mx-auto px-6 max-w-7xl">
+              <div className="flex justify-between items-center mb-12">
+                  <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Campus Updates</h2>
+                  <Link to="/blog" className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1">
+                      View all news <ArrowRight className="w-4 h-4" />
+                  </Link>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-8">
+                  {featuredPosts.map((post) => (
+                      <Link 
+                          key={post.id}
+                          to={`/blog/${post.id}`}
+                          className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-xl transition-all duration-300 block"
+                      >
+                          <div className="h-48 overflow-hidden">
+                              <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                          </div>
+                          <div className="p-6">
+                              <div className="flex items-center gap-3 text-xs text-slate-400 mb-3">
+                                  <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {post.date}</span>
+                                  <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded-full text-slate-600 dark:text-slate-300">{post.category}</span>
+                              </div>
+                              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-emerald-600 transition-colors line-clamp-2">{post.title}</h3>
+                              <p className="text-slate-500 dark:text-slate-400 text-sm line-clamp-2">{post.excerpt}</p>
+                          </div>
+                      </Link>
+                  ))}
+              </div>
+          </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-24 bg-white dark:bg-slate-950">
+          <div className="container mx-auto px-6 max-w-4xl">
+              <div className="text-center mb-16">
+                  <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Frequently Asked Questions</h2>
+              </div>
+              
+              <div className="space-y-4">
+                  {faqs.map((faq, i) => (
+                      <div key={i} className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+                          <button 
+                              onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                              className="w-full flex items-center justify-between p-6 bg-slate-50 dark:bg-slate-900 text-left hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                          >
+                              <span className="font-bold text-slate-900 dark:text-white">{faq.q}</span>
+                              {openFaq === i ? <ChevronUp className="w-5 h-5 text-emerald-500" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
+                          </button>
+                          <AnimatePresence>
+                              {openFaq === i && (
+                                  <motion.div 
+                                      initial={{ height: 0, opacity: 0 }}
+                                      animate={{ height: 'auto', opacity: 1 }}
+                                      exit={{ height: 0, opacity: 0 }}
+                                      className="bg-white dark:bg-slate-950"
+                                  >
+                                      <div className="p-6 text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800">
+                                          {faq.a}
+                                      </div>
+                                  </motion.div>
+                              )}
+                          </AnimatePresence>
+                      </div>
+                  ))}
+              </div>
+          </div>
       </section>
 
       {/* CTA */}

@@ -178,3 +178,11 @@ export interface AppNotification {
     read: boolean;
     link?: string;
 }
+
+export interface Testimonial {
+    id: string;
+    name: string;
+    role: string;
+    avatar: string;
+    content: string;
+}

@@ -1,5 +1,5 @@
 
-import type { Category, LeaderboardUser, ImpactStats, CollectionPoint, UserActivity, BlogPost, UserRequest, Submission, ActivityLog, Reward, RedemptionTransaction, CreditTransaction, AppNotification } from '../types';
+import type { Category, LeaderboardUser, ImpactStats, CollectionPoint, UserActivity, BlogPost, UserRequest, Submission, ActivityLog, Reward, RedemptionTransaction, CreditTransaction, AppNotification, Testimonial } from '../types';
 
 export const categories: Category[] = [
   {
@@ -559,5 +559,29 @@ export const mockNotifications: AppNotification[] = [
         message: "Join us this Friday at the Student Center for a special collection event!",
         date: new Date(Date.now() - 200000).toISOString(),
         read: false
+    }
+];
+
+export const mockTestimonials: Testimonial[] = [
+    {
+        id: "t1",
+        name: "Elena Rodriguez",
+        role: "Architecture Student",
+        avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Elena",
+        content: "ECO-SORT made it incredibly easy to find a place for my old drafting tablet. The credits system is a huge bonus!"
+    },
+    {
+        id: "t2",
+        name: "Prof. James Chen",
+        role: "Computer Science Dept.",
+        avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=James",
+        content: "We've diverted over 200kg of e-waste from our labs thanks to this platform. It's essential for a modern campus."
+    },
+    {
+        id: "t3",
+        name: "Sarah Miller",
+        role: "Sustainability Club Lead",
+        avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=SarahM",
+        content: "Finally, a way to track our actual impact. Seeing the CO2 saved numbers go up motivates the whole team."
     }
 ];
