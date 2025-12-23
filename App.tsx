@@ -28,6 +28,7 @@ import Rewards from './pages/Rewards';
 import MyRedemptions from './pages/MyRedemptions';
 import CreditTransactions from './pages/CreditTransactions';
 import Notifications from './pages/Notifications';
+import Legal from './pages/Legal';
 
 // Admin Imports
 import AdminLayout from './components/admin/AdminLayout';
@@ -90,6 +91,11 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/auth" element={<Auth />} />
+          
+          {/* Legal Pages */}
+          <Route path="/privacy" element={<Legal type="privacy" />} />
+          <Route path="/terms" element={<Legal type="terms" />} />
+          <Route path="/cookies" element={<Legal type="cookies" />} />
           
           {/* Catch all */}
           <Route path="*" element={<NotFound />} />

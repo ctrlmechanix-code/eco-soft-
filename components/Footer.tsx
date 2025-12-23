@@ -133,9 +133,9 @@ const Footer = () => {
                         © {new Date().getFullYear()} ECO-SORT Inc. All rights reserved.
                     </p>
                     <div className="flex gap-8">
-                         <Link to="#" className="text-xs text-slate-500 hover:text-emerald-400 transition-colors">Privacy</Link>
-                         <Link to="#" className="text-xs text-slate-500 hover:text-emerald-400 transition-colors">Terms</Link>
-                         <Link to="#" className="text-xs text-slate-500 hover:text-emerald-400 transition-colors">Cookies</Link>
+                         <Link to="/privacy" className="text-xs text-slate-500 hover:text-emerald-400 transition-colors">Privacy</Link>
+                         <Link to="/terms" className="text-xs text-slate-500 hover:text-emerald-400 transition-colors">Terms</Link>
+                         <Link to="/cookies" className="text-xs text-slate-500 hover:text-emerald-400 transition-colors">Cookies</Link>
                     </div>
                 </div>
             </div>
