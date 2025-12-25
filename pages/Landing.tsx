@@ -84,7 +84,7 @@ const Landing = () => {
   return (
     <PageWrapper>
       {/* Hero Section */}
-      <section className="relative pt-32 pb-16 lg:pt-48 lg:pb-32 overflow-hidden">
+      <section className="relative pt-32 pb-20 md:pt-40 lg:pt-48 lg:pb-32 overflow-hidden">
         {/* Abstract Background */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1000px] max-w-7xl pointer-events-none opacity-60 dark:opacity-40">
              <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-emerald-200/40 dark:bg-emerald-500/20 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse" style={{ animationDuration: '8s' }} />
@@ -97,13 +97,13 @@ const Landing = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60 shadow-sm mb-12 backdrop-blur-md cursor-default ring-1 ring-slate-900/5 dark:ring-white/5"
+                    className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/40 dark:bg-slate-900/40 border border-slate-200/50 dark:border-slate-800/50 shadow-sm mb-12 backdrop-blur-md cursor-default ring-1 ring-slate-900/5 dark:ring-white/5"
                 >
                     <span className="flex h-2.5 w-2.5 relative">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                     </span>
-                    <span className="text-sm font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-500 dark:from-emerald-400 dark:to-teal-300 tracking-wide">
+                    <span className="text-sm font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-teal-500 to-blue-500 dark:from-emerald-400 dark:via-teal-300 dark:to-blue-400 tracking-wide">
                         Smart Waste Management 2.0
                     </span>
                 </motion.div>
@@ -112,7 +112,7 @@ const Landing = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.1 }}
-                    className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-slate-900 dark:text-white mb-8 leading-[1.1]"
+                    className="text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight text-slate-900 dark:text-white mb-8 leading-[1.1]"
                 >
                     Sustainability meets <br className="hidden md:block"/>
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-500 to-blue-500 dark:from-emerald-400 dark:via-teal-300 dark:to-blue-400">intelligent action.</span>
@@ -124,7 +124,7 @@ const Landing = () => {
                     transition={{ duration: 0.5, delay: 0.2 }}
                     className="text-xl text-slate-500 dark:text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed"
                 >
-                    Revolutionizing campus sustainability. Track, recover, and reward responsible e-waste disposal—turning obsolete tech into real-world impact.
+                    The intelligent platform for campuses to track, recover, and reward responsible electronic disposal. Turn your old tech into new impact.
                 </motion.p>
                 
                 <motion.div 
@@ -151,64 +151,65 @@ const Landing = () => {
       </section>
 
       {/* Floating Stats Glass Card */}
-      <section className="container mx-auto px-6 max-w-7xl mt-12 lg:-mt-20 mb-32 relative z-20">
+      {/* Adjusted top margin to be positive on tablet (md/lg) but negative on large screens (xl) */}
+      <section className="container mx-auto px-6 max-w-7xl mt-12 xl:-mt-32 mb-32 relative z-20">
         <motion.div 
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
             className="bg-white/70 dark:bg-slate-900/80 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-black/50 p-8 md:p-10 ring-1 ring-white/60 dark:ring-white/10"
         >
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-12">
                 
                 {/* Stat 1 */}
-                <div className="flex flex-col items-center text-center space-y-3 group hover:-translate-y-1 transition-transform duration-300">
-                    <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-1 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors shadow-sm">
+                <div className="flex flex-col items-center text-center p-6 rounded-3xl bg-white/40 dark:bg-white/5 border border-white/50 dark:border-white/5 shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 group">
+                    <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors shadow-inner">
                         <Smartphone className="w-7 h-7 text-slate-600 dark:text-slate-400" />
                     </div>
                     <div>
-                        <p className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-1">
+                        <p className="text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-1">
                             <AnimatedCounter to={impactStats.totalDevices} />
                         </p>
-                        <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Devices Processed</p>
+                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Devices Processed</p>
                     </div>
                 </div>
 
                 {/* Stat 2 */}
-                <div className="flex flex-col items-center text-center space-y-3 group hover:-translate-y-1 transition-transform duration-300">
-                    <div className="w-14 h-14 rounded-2xl bg-emerald-100/50 dark:bg-emerald-900/20 flex items-center justify-center mb-1 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/30 transition-colors shadow-sm">
+                <div className="flex flex-col items-center text-center p-6 rounded-3xl bg-emerald-50/40 dark:bg-emerald-900/10 border border-emerald-100/50 dark:border-emerald-800/20 shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 group">
+                    <div className="w-14 h-14 rounded-2xl bg-emerald-100/50 dark:bg-emerald-900/20 flex items-center justify-center mb-4 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/30 transition-colors shadow-inner">
                         <Recycle className="w-7 h-7 text-emerald-600 dark:text-emerald-400" />
                     </div>
                     <div>
-                        <p className="text-3xl md:text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 tracking-tight mb-1">
+                        <p className="text-3xl lg:text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 tracking-tight mb-1">
                             <AnimatedCounter to={impactStats.devicesRecycled} />
                         </p>
-                        <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Recycled</p>
+                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Recycled</p>
                     </div>
                 </div>
 
                 {/* Stat 3 */}
-                <div className="flex flex-col items-center text-center space-y-3 group hover:-translate-y-1 transition-transform duration-300">
-                    <div className="w-14 h-14 rounded-2xl bg-blue-100/50 dark:bg-blue-900/20 flex items-center justify-center mb-1 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30 transition-colors shadow-sm">
+                <div className="flex flex-col items-center text-center p-6 rounded-3xl bg-blue-50/40 dark:bg-blue-900/10 border border-blue-100/50 dark:border-blue-800/20 shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 group">
+                    <div className="w-14 h-14 rounded-2xl bg-blue-100/50 dark:bg-blue-900/20 flex items-center justify-center mb-4 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30 transition-colors shadow-inner">
                         <Cloud className="w-7 h-7 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div>
-                        <p className="text-3xl md:text-4xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight mb-1">
+                        <p className="text-3xl lg:text-4xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight mb-1">
                             <AnimatedCounter to={impactStats.co2Saved} />
                         </p>
-                        <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Kg CO₂ Saved</p>
+                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Kg CO₂ Saved</p>
                     </div>
                 </div>
 
                 {/* Stat 4 */}
-                <div className="flex flex-col items-center text-center space-y-3 group hover:-translate-y-1 transition-transform duration-300">
-                    <div className="w-14 h-14 rounded-2xl bg-amber-100/50 dark:bg-amber-900/20 flex items-center justify-center mb-1 group-hover:bg-amber-100 dark:group-hover:bg-amber-900/30 transition-colors shadow-sm">
+                <div className="flex flex-col items-center text-center p-6 rounded-3xl bg-amber-50/40 dark:bg-amber-900/10 border border-amber-100/50 dark:border-amber-800/20 shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 group">
+                    <div className="w-14 h-14 rounded-2xl bg-amber-100/50 dark:bg-amber-900/20 flex items-center justify-center mb-4 group-hover:bg-amber-100 dark:group-hover:bg-amber-900/30 transition-colors shadow-inner">
                         <TreeDeciduous className="w-7 h-7 text-amber-600 dark:text-amber-400" />
                     </div>
                     <div>
-                        <p className="text-3xl md:text-4xl font-extrabold text-amber-500 dark:text-amber-400 tracking-tight mb-1">
+                        <p className="text-3xl lg:text-4xl font-extrabold text-amber-500 dark:text-amber-400 tracking-tight mb-1">
                             <AnimatedCounter to={impactStats.treesEquivalent} />
                         </p>
-                        <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Trees Planted</p>
+                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Trees Planted</p>
                     </div>
                 </div>
 

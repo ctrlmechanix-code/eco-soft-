@@ -140,7 +140,7 @@ const Navbar = () => {
             }`}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16 md:h-20">
+                <div className="flex justify-between items-center h-16 xl:h-20">
                     <Link to="/" className="flex items-center gap-2 group">
                         <div className="relative w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-900/20 group-hover:shadow-emerald-500/30 group-hover:scale-105 transition-all duration-300">
                             <Recycle className="h-5 w-5 text-white" />
@@ -148,7 +148,8 @@ const Navbar = () => {
                         <span className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">ECO-SORT</span>
                     </Link>
 
-                    <div className="hidden md:flex items-center p-1.5 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md rounded-full border border-slate-200/60 dark:border-slate-800/60 shadow-sm ring-1 ring-white/50 dark:ring-slate-800/50">
+                    {/* Desktop Menu - Hidden on Tablet/Mobile */}
+                    <div className="hidden xl:flex items-center p-1.5 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md rounded-full border border-slate-200/60 dark:border-slate-800/60 shadow-sm ring-1 ring-white/50 dark:ring-slate-800/50">
                         <NavItem to="/" Icon={Home}>Home</NavItem>
                         <NavItem to="/categories" Icon={Trash2}>Report</NavItem>
                         <NavItem to="/submissions" Icon={ListTodo}>My Submissions</NavItem>
@@ -158,7 +159,7 @@ const Navbar = () => {
                         <NavItem to="/collection-points" Icon={MapPin}>Locations</NavItem>
                     </div>
 
-                    <div className="hidden md:flex items-center gap-4">
+                    <div className="hidden xl:flex items-center gap-4">
                         {/* Theme Toggle */}
                         <button
                             onClick={toggleTheme}
@@ -261,7 +262,8 @@ const Navbar = () => {
                         )}
                     </div>
 
-                    <div className="md:hidden flex items-center gap-4">
+                    {/* Mobile/Tablet Menu Button */}
+                    <div className="xl:hidden flex items-center gap-4">
                         <button
                             onClick={toggleTheme}
                             className="p-2 rounded-full text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
@@ -285,7 +287,7 @@ const Navbar = () => {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 overflow-y-auto overscroll-y-contain max-h-[calc(100vh-5rem)] shadow-2xl"
+                        className="xl:hidden bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 overflow-y-auto overscroll-y-contain max-h-[calc(100vh-5rem)] shadow-2xl"
                     >
                         <div className="px-4 py-6 space-y-2">
                             <NavItem to="/" Icon={Home}>Home</NavItem>
