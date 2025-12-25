@@ -165,7 +165,7 @@ const AdminCollectionPoints = () => {
                             </div>
                             <div>
                                 <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Email</label>
-                                <input type="email" value={formData.email || ''} onChange={e => setFormData({...formData, email: e.target.value})} className={inputClasses} placeholder="contact@ecosort.edu" />
+                                <input type="email" value={formData.email || ''} onChange={e => setFormData({...formData, email: e.target.value})} className={inputClasses} placeholder="ctrlmechanix@gmail.com" />
                             </div>
                             <div>
                                 <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Opening Hours</label>

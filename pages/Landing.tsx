@@ -84,7 +84,7 @@ const Landing = () => {
   return (
     <PageWrapper>
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 md:pt-40 lg:pt-48 lg:pb-32 overflow-hidden">
+      <section className="relative pt-32 pb-24 md:pt-40 lg:pt-48 lg:pb-32 overflow-hidden">
         {/* Abstract Background */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1000px] max-w-7xl pointer-events-none opacity-60 dark:opacity-40">
              <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-emerald-200/40 dark:bg-emerald-500/20 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse" style={{ animationDuration: '8s' }} />
@@ -151,8 +151,7 @@ const Landing = () => {
       </section>
 
       {/* Floating Stats Glass Card */}
-      {/* Adjusted top margin to be positive on tablet (md/lg) but negative on large screens (xl) */}
-      <section className="container mx-auto px-6 max-w-7xl mt-12 xl:-mt-32 mb-32 relative z-20">
+      <section className="container mx-auto px-6 max-w-7xl mt-24 xl:-mt-32 mb-32 relative z-20">
         <motion.div 
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}

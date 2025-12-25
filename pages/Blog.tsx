@@ -32,7 +32,7 @@ const Blog = () => {
                     </div>
                     <p className="text-sm text-slate-700 dark:text-slate-300 font-medium">
                         Have an idea for a blog post or a story you want to add here? <br className="hidden sm:block"/>
-                        Mail us at our official mail ID: <a href="mailto:hello@ecosort.edu" className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline font-bold">hello@ecosort.edu</a>
+                        Mail us at our official mail ID: <a href="mailto:ctrlmechanix@gmail.com" className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline font-bold">ctrlmechanix@gmail.com</a>
                     </p>
                 </div>
             </div>

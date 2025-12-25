@@ -2,7 +2,8 @@ export {};
 
 declare global {
   interface AIStudio {
-    // Methods are defined in the environment types.
+    hasSelectedApiKey(): Promise<boolean>;
+    openSelectKey(): Promise<void>;
   }
 
   interface Window {

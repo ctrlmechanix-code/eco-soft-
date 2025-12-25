@@ -118,11 +118,11 @@ const Footer = () => {
                         <div className="space-y-3">
                             <div className="flex items-start gap-3 text-sm text-slate-500">
                                 <MapPin className="w-4 h-4 mt-0.5 text-emerald-600/80" />
-                                <span>University Campus, Building 4<br/>Innovation District, 94043</span>
+                                <span>SAC building, Nit Patna ,800005</span>
                             </div>
                             <div className="flex items-center gap-3 text-sm text-slate-500">
                                 <Mail className="w-4 h-4 text-emerald-600/80" />
-                                <a href="mailto:hello@ecosort.edu" className="hover:text-emerald-400 transition-colors">hello@ecosort.edu</a>
+                                <a href="mailto:ctrlmechanix@gmail.com" className="hover:text-emerald-400 transition-colors">ctrlmechanix@gmail.com</a>
                             </div>
                         </div>
                     </div>

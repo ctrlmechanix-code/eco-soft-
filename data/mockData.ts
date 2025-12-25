@@ -281,8 +281,25 @@ export const blogPosts: BlogPost[] = [
         date: "Oct 24, 2023",
         author: "Sarah Jenkins",
         category: "Awareness",
-        image: "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        content: `...`,
+        image: "https://images.unsplash.com/photo-1591193686104-fddba4d0e4d8?q=80&w=800&auto=format&fit=crop",
+        content: `
+            <p>University campuses are hubs of innovation and technology. Every year, thousands of students arrive with new laptops, smartphones, and tablets. But what happens to the old ones? The reality is often hidden in dorm room drawers or, worse, general waste bins.</p>
+            
+            <h3>The Scale of the Problem</h3>
+            <p>Recent studies suggest that university campuses generate e-waste at a rate 3x higher than residential areas. With the average lifespan of a smartphone dropping to just 18 months, the turnover of technology in academic environments is staggering. Cables, chargers, broken headphones, and old batteries accumulate rapidly.</p>
+            
+            <h3>Environmental Impact</h3>
+            <p>When electronics end up in landfills, they leach toxic heavy metals like lead, mercury, and cadmium into the soil and groundwater. Moreover, we lose valuable resources. A ton of smartphones contains 300 times more gold than a ton of gold ore. By not recycling, we are literally throwing away value while poisoning our environment.</p>
+            
+            <h3>What Can Students Do?</h3>
+            <p>The solution starts with awareness and convenient action. Programs like ECO-SORT are designed to bridge the gap between intent and action.</p>
+            <ul>
+                <li><strong>Audit your tech:</strong> Check your drawers for unused devices.</li>
+                <li><strong>Repair first:</strong> Before discarding, see if a simple screen fix or battery swap can extend the life.</li>
+                <li><strong>Recycle responsibly:</strong> Use designated campus e-waste bins rather than general trash.</li>
+            </ul>
+            <p>It's time for the academic community to lead by example. Sustainable technology use isn't just about what we buy, but how we say goodbye to our old gadgets.</p>
+        `,
         status: 'Published'
     },
     {
@@ -293,7 +310,28 @@ export const blogPosts: BlogPost[] = [
         author: "Mike Chen",
         category: "Guide",
         image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        content: `...`,
+        content: `
+            <p>Lithium-ion batteries power almost everything we use, from phones to laptops and e-scooters. However, they pose a significant fire risk if damaged or disposed of improperly. They are the leading cause of waste facility fires globally.</p>
+
+            <h3>Why are they dangerous?</h3>
+            <p>Inside a lithium battery is a pressurized cocktail of chemicals. If the casing is punctured or crushed—common in garbage trucks—the battery can short-circuit, leading to "thermal runaway." This creates an intense, self-sustaining fire that is difficult to extinguish.</p>
+
+            <h3>Disposal Do's and Don'ts</h3>
+            <p><strong>DO NOT:</strong></p>
+            <ul>
+                <li>Throw batteries in regular trash or recycling bins.</li>
+                <li>Store swollen or damaged batteries in your home.</li>
+                <li>Leave batteries in devices you are recycling (remove them if possible).</li>
+            </ul>
+
+            <p><strong>DO:</strong></p>
+            <ul>
+                <li><strong>Tape the terminals:</strong> Use clear tape or electrical tape over the contact points to prevent short circuits.</li>
+                <li><strong>Use dedicated drop-off points:</strong> Look for the specific battery tubes in the library or student union.</li>
+                <li><strong>Store safely:</strong> Keep old batteries in a cool, dry place away from flammable materials until you can drop them off.</li>
+            </ul>
+            <p>Safety is paramount. By taking a few extra seconds to tape and separate your batteries, you protect sanitation workers and our campus infrastructure.</p>
+        `,
         status: 'Published'
     },
     {
@@ -304,7 +342,25 @@ export const blogPosts: BlogPost[] = [
         author: "ECO-SORT Team",
         category: "Company News",
         image: "https://images.unsplash.com/photo-1605600659908-0ef719419d41?q=80&w=800&auto=format&fit=crop",
-        content: `...`,
+        content: `
+            <p>We are incredibly proud to announce that as of this week, the ECO-SORT platform has facilitated the recovery of over <strong>10,000 electronic devices</strong> across partner campuses!</p>
+
+            <h3>By the Numbers</h3>
+            <p>This isn't just about the count of devices. The impact is measurable and significant:</p>
+            <ul>
+                <li><strong>4,500 kg</strong> of CO2 emissions prevented (equivalent to taking 1,000 cars off the road for a day).</li>
+                <li><strong>$15,000</strong> worth of raw materials recovered (gold, silver, copper, and rare earth elements).</li>
+                <li><strong>3,200</strong> devices refurbished and donated to local schools.</li>
+            </ul>
+
+            <h3>A Community Effort</h3>
+            <p>"This milestone belongs to the students," says our founder. "Their willingness to walk an extra 5 minutes to a collection point, to verify their drops, and to engage with the credit system is what drives this engine."</p>
+
+            <h3>What's Next?</h3>
+            <p>We are expanding! In the coming semester, look out for our new "Repair Cafés"—pop-up events where engineering students help fix broken electronics for free. We are also increasing the Green Credit rewards for repairable items to incentivize longevity over disposal.</p>
+            
+            <p>Thank you for being part of the solution. Here's to the next 10,000!</p>
+        `,
         status: 'Published'
     }
 ];

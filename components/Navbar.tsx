@@ -148,7 +148,7 @@ const Navbar = () => {
                         <span className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">ECO-SORT</span>
                     </Link>
 
-                    {/* Desktop Menu - Hidden on Tablet/Mobile */}
+                    {/* Desktop Menu - Hidden on Tablet (md/lg), Visible on XL */}
                     <div className="hidden xl:flex items-center p-1.5 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md rounded-full border border-slate-200/60 dark:border-slate-800/60 shadow-sm ring-1 ring-white/50 dark:ring-slate-800/50">
                         <NavItem to="/" Icon={Home}>Home</NavItem>
                         <NavItem to="/categories" Icon={Trash2}>Report</NavItem>
@@ -262,7 +262,7 @@ const Navbar = () => {
                         )}
                     </div>
 
-                    {/* Mobile/Tablet Menu Button */}
+                    {/* Mobile/Tablet Menu Button - Visible on lg, md, sm (Anything smaller than xl) */}
                     <div className="xl:hidden flex items-center gap-4">
                         <button
                             onClick={toggleTheme}
