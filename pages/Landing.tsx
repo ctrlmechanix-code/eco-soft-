@@ -83,8 +83,8 @@ const Landing = () => {
 
   return (
     <PageWrapper>
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-24 md:pt-40 lg:pt-48 lg:pb-32 overflow-hidden">
+      {/* Hero Section - Increased bottom padding on XL screens to fix layout gap */}
+      <section className="relative pt-32 pb-24 md:pt-40 lg:pt-48 lg:pb-32 xl:pb-56 overflow-hidden">
         {/* Abstract Background */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1000px] max-w-7xl pointer-events-none opacity-60 dark:opacity-40">
              <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-emerald-200/40 dark:bg-emerald-500/20 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse" style={{ animationDuration: '8s' }} />

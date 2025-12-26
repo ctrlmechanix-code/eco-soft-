@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Recycle, Menu, X, Home, Trash2, BarChart3, Medal, LogOut, User, ChevronDown, MapPin, TrendingUp, MessageSquare, ListTodo, Shield, Gift, Sun, Moon, Bell } from 'lucide-react';
+import { Recycle, Menu, X, Home, Trash2, BarChart3, Medal, LogOut, User, ChevronDown, MapPin, TrendingUp, MessageSquare, ListTodo, Shield, Gift, Sun, Moon, Bell, ArrowLeft } from 'lucide-react';
 import { mockNotifications } from '../data/mockData';
 import type { AppNotification } from '../types';
 
@@ -131,6 +131,8 @@ const Navbar = () => {
         navigate('/');
     };
 
+    const showBackButton = location.pathname !== '/';
+
     return (
         <nav 
             className={`sticky top-0 z-50 transition-all duration-500 ease-in-out ${
@@ -141,12 +143,29 @@ const Navbar = () => {
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16 xl:h-20">
-                    <Link to="/" className="flex items-center gap-2 group">
-                        <div className="relative w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-900/20 group-hover:shadow-emerald-500/30 group-hover:scale-105 transition-all duration-300">
-                            <Recycle className="h-5 w-5 text-white" />
-                        </div>
-                        <span className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">ECO-SORT</span>
-                    </Link>
+                    <div className="flex items-center gap-4">
+                        {/* Premium Back Button */}
+                        {showBackButton && (
+                            <div className="flex items-center gap-4">
+                                <button 
+                                    onClick={() => navigate(-1)}
+                                    className="group flex items-center justify-center w-9 h-9 rounded-full bg-white/50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 backdrop-blur-md text-slate-500 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-200 dark:hover:border-emerald-800 hover:shadow-sm transition-all duration-300"
+                                    aria-label="Go Back"
+                                >
+                                    <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-0.5" />
+                                </button>
+                                {/* Vertical Divider */}
+                                <div className="h-6 w-px bg-slate-200 dark:bg-slate-700/50 hidden xs:block"></div>
+                            </div>
+                        )}
+
+                        <Link to="/" className="flex items-center gap-3 group">
+                            <div className="relative w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-900/20 group-hover:shadow-emerald-500/30 group-hover:scale-105 transition-all duration-300">
+                                <Recycle className="h-5 w-5 text-white" />
+                            </div>
+                            <span className="text-xl font-bold text-slate-900 dark:text-white tracking-tight hidden sm:block">ECO-SORT</span>
+                        </Link>
+                    </div>
 
                     {/* Desktop Menu - Hidden on Tablet (md/lg), Visible on XL */}
                     <div className="hidden xl:flex items-center p-1.5 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md rounded-full border border-slate-200/60 dark:border-slate-800/60 shadow-sm ring-1 ring-white/50 dark:ring-slate-800/50">
