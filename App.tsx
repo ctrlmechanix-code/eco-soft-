@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MemoryRouter, Routes, Route, Outlet, useLocation } from 'react-router-dom';
+import { HashRouter, MemoryRouter, Routes, Route, Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -64,8 +64,15 @@ const AppLayout = () => {
 };
 
 function App() {
+  // Detect if running in a restricted preview environment (blob URL)
+  // This prevents "TypeError: Location.assign" errors in development previews
+  const isPreviewEnv = typeof window !== 'undefined' && window.location.protocol === 'blob:';
+  
+  // Use MemoryRouter for preview stability, HashRouter for production functionality
+  const Router = isPreviewEnv ? MemoryRouter : HashRouter;
+
   return (
-    <MemoryRouter>
+    <Router>
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<Landing />} />
@@ -120,7 +127,7 @@ function App() {
             <Route path="settings" element={<AdminSettings />} />
         </Route>
       </Routes>
-    </MemoryRouter>
+    </Router>
   );
 }
 
