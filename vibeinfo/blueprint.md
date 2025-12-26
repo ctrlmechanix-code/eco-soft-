@@ -46,20 +46,20 @@ ECO-SORT is a comprehensive, single-page application (SPA) designed to revolutio
 ├── components/          
 │   ├── admin/
 │   │   ├── AdminLayout.tsx      # Layout wrapper for admin pages
-│   │   ├── AdminNavbar.tsx      # Top bar for admin
+│   │   ├── AdminNavbar.tsx      # Top bar for admin with notification logic
 │   │   └── Sidebar.tsx          # Admin navigation sidebar
 │   ├── ui/              
 │   │   ├── AnimatedCounter.tsx  # Counter animation component
 │   │   └── Icon.tsx             # Dynamic Lucide icon wrapper
 │   ├── Footer.tsx               # Global footer with links
-│   └── Navbar.tsx               # Global nav with mobile menu & notification logic
+│   └── Navbar.tsx               # Global nav with mobile menu & notifications
 ├── data/
 │   └── mockData.ts      # Static data (Categories, Leaderboard, Points) & mock DB
 ├── pages/
 │   ├── admin/           # -- ADMIN PANEL --
 │   │   ├── Activity.tsx         # Audit logs
 │   │   ├── CollectionPoints.tsx # Manage locations
-│   │   ├── Content.tsx          # Manage blog/CMS
+│   │   ├── Content.tsx          # Manage blog/CMS & Announcements
 │   │   ├── Credits.tsx          # Configure point rates
 │   │   ├── Dashboard.tsx        # Admin analytics
 │   │   ├── Redemptions.tsx      # Manage rewards & approvals
@@ -67,9 +67,10 @@ ECO-SORT is a comprehensive, single-page application (SPA) designed to revolutio
 │   │   ├── Requests.tsx         # User support tickets
 │   │   ├── Settings.tsx         # System config
 │   │   ├── Submissions.tsx      # Verify drop-offs
+│   │   ├── Testimonials.tsx     # Moderate user stories
 │   │   └── Users.tsx            # User management
 │   ├── AboutUs.tsx      # Mission statement page
-│   ├── Auth.tsx         # Login/Signup simulation
+│   ├── Auth.tsx         # Login/Signup (Simulated Google/Email)
 │   ├── Blog.tsx         # News feed listing
 │   ├── BlogPost.tsx     # Individual article view
 │   ├── Careers.tsx      # Job listings page
@@ -81,13 +82,17 @@ ECO-SORT is a comprehensive, single-page application (SPA) designed to revolutio
 │   ├── GreenCredits.tsx # Gamification & Leaderboard
 │   ├── ImageGenerator.tsx # AI-powered image creation tool
 │   ├── Landing.tsx      # Home page / Hero section
-│   ├── MyRedemptions.tsx # User reward history
+│   ├── Legal.tsx        # Privacy, Terms, and Cookies pages
+│   ├── MyRedemptions.tsx # User reward history and codes
+│   ├── Notifications.tsx # User notification center
+│   ├── NotFound.tsx     # 404 Error page
 │   ├── Profile.tsx      # User profile, history, and messaging center
 │   ├── QuestionFlow.tsx # Step 2: Diagnostic wizard logic
 │   ├── Result.tsx       # Step 3: Recommendation engine
 │   ├── Rewards.tsx      # Redemption marketplace
 │   ├── Submissions.tsx  # Track pending/dropped/completed items
 │   ├── Sustainability.tsx # Environmental impact report
+│   ├── Testimonials.tsx # Public testimonials page with submission form
 │   ├── UserAnalysis.tsx # Personal contribution analytics
 │   └── UserRequests.tsx # Support ticket tracking
 ├── types/
@@ -114,7 +119,7 @@ ECO-SORT is a comprehensive, single-page application (SPA) designed to revolutio
 ### 2. Admin Panel & Verification
 - **Role-Based Access**: Dedicated `/admin` routes with a separate layout.
 - **Verification**: Admins can view `PENDING` or `DROPPED` submissions and mark them as `COMPLETED` (Verified) to award points, or `REJECTED`.
-- **Management**: Full CRUD capabilities for Users, Collection Points, and Rewards.
+- **Management**: Full CRUD capabilities for Users, Collection Points, Rewards, and Content.
 
 ### 3. Rewards & Redemption System
 - **Marketplace**: Users browse rewards filtered by category and tier (Bronze, Silver, Gold, Platinum).
@@ -131,18 +136,20 @@ ECO-SORT is a comprehensive, single-page application (SPA) designed to revolutio
 ### 5. Messaging & Support
 - **Contextual Chat**: Users can chat with specific Collection Points.
 - **Support Tickets**: Users can submit feedback or bug reports; Admins can reply and resolve them.
-- **Notifications**: Real-time indicators for unread messages.
+- **Notifications**: Real-time indicators for unread messages and system alerts.
 
 ### 6. Mock Backend Strategy
 - **Persistence**: The app mimics a real backend by reading/writing to `localStorage` for:
   - `user_submissions`, `users`, `collection_points`, `rewards_catalog`
   - `cp_messages`, `user_requests`, `activity_logs`, `credit_transactions`
+  - `user_notifications`, `testimonials`, `blog_posts`
 - **Simulation**: `setTimeout` is used to simulate API latency and async admin responses.
 
 ---
 
 ## 🚀 Recent Updates
-- **Dark Mode**: Fully implemented dark mode across all User and Admin pages.
 - **Admin Suite**: Added comprehensive dashboard, user management, and content management for admins.
 - **Rewards System**: Launched a full marketplace with tier-based unlocking logic.
 - **AI Integration**: Added Generative AI capabilities for creative sustainability visualization.
+- **Testimonials**: Added community stories section.
+- **Legal**: Added standard legal pages (Privacy, Terms, Cookies).

@@ -1,13 +1,13 @@
 export {};
 
 declare global {
-  interface AIStudio {
+  interface GeminiAIStudio {
     hasSelectedApiKey(): Promise<boolean>;
     openSelectKey(): Promise<void>;
   }
 
   interface Window {
-    aistudio?: AIStudio;
+    aistudio?: GeminiAIStudio;
   }
 }
 

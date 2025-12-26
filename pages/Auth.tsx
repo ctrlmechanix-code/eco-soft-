@@ -27,10 +27,59 @@ const Auth = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleGoogleLogin = () => {
-        // Show development popup instead of logging in
+    const handleGoogleLogin = async () => {
+        // --- 1. CURRENT: PROTOTYPE MODE (Delete this block when enabling production) ---
         setShowDevPopup(true);
         setTimeout(() => setShowDevPopup(false), 4000);
+
+        // --- 2. FUTURE: PRODUCTION INTEGRATION (Uncomment to enable) ---
+        /*
+        // HOW TO ENABLE:
+        // 1. Install your auth provider SDK (e.g., `npm install firebase` or `@supabase/supabase-js`)
+        // 2. Import the auth instance and provider at the top of this file.
+        // 3. Delete the 'Prototype Mode' block above.
+        // 4. Uncomment the code below.
+
+        setIsLoading(true);
+        setError(null);
+        try {
+            // Example using a generic provider pattern (Firebase/Supabase)
+            // const result = await signInWithPopup(auth, googleProvider);
+            // const user = result.user;
+
+            // --- Simulate Successful Response for structure ---
+            const user = { 
+                email: "user@example.com", 
+                displayName: "Google User", 
+                uid: "google-123" 
+            }; 
+            
+            // Save Auth State
+            localStorage.setItem('isAuthenticated', 'true');
+            // Ideally, store a real token here
+            localStorage.setItem('auth_token', 'mock_token_xyz'); 
+            
+            // Optional: Save user profile to local state if needed for this prototype
+            const currentUser = {
+                id: 'USR-CURRENT', // or user.uid
+                name: user.displayName,
+                email: user.email,
+                avatar: `https://api.dicebear.com/8.x/avataaars/svg?seed=${user.displayName}`,
+                points: 0, // Fetch real points from DB
+                role: 'user',
+                status: 'Active'
+            };
+            localStorage.setItem('users', JSON.stringify([currentUser]));
+
+            // Redirect
+            navigate('/categories');
+        } catch (err: any) {
+            console.error("Google Auth Error:", err);
+            setError("Google sign-in failed. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
+        */
     };
 
     const handleEmailLogin = (e: React.FormEvent) => {
