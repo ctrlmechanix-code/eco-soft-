@@ -51,9 +51,9 @@ const MyRedemptions = () => {
 
     return (
         <PageWrapper>
-            <h1 className="text-3xl font-bold text-slate-900 mb-8">My Redemptions</h1>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-8">My Redemptions</h1>
 
-            <div className="flex border-b border-slate-200 mb-8">
+            <div className="flex border-b border-slate-200 dark:border-slate-800 mb-8">
                 {[
                     { id: 'active', label: 'Active Codes' },
                     { id: 'pending', label: 'Pending Approval' },
@@ -64,8 +64,8 @@ const MyRedemptions = () => {
                         onClick={() => setActiveTab(tab.id as any)}
                         className={`px-6 py-4 text-sm font-bold border-b-2 transition-colors ${
                             activeTab === tab.id 
-                            ? 'border-emerald-500 text-emerald-700' 
-                            : 'border-transparent text-slate-500 hover:text-slate-700'
+                            ? 'border-emerald-500 text-emerald-700 dark:text-emerald-400' 
+                            : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
                         }`}
                     >
                         {tab.label}
@@ -76,33 +76,33 @@ const MyRedemptions = () => {
             <div className="space-y-4">
                 {activeTab === 'active' && (
                     <>
-                        {activeRedemptions.length === 0 && <p className="text-slate-500">No active rewards.</p>}
+                        {activeRedemptions.length === 0 && <p className="text-slate-500 dark:text-slate-400">No active rewards.</p>}
                         {activeRedemptions.map(redemption => (
                             <motion.div 
                                 key={redemption.id}
                                 layoutId={redemption.id}
-                                className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col md:flex-row gap-6 items-start"
+                                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col md:flex-row gap-6 items-start"
                             >
                                 <div className="flex-1">
                                     <div className="flex items-center gap-2 mb-2">
-                                        <span className="px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 text-xs font-bold uppercase">Active</span>
-                                        <h3 className="font-bold text-slate-900">{redemption.rewardName}</h3>
+                                        <span className="px-2 py-1 rounded-md bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-xs font-bold uppercase">Active</span>
+                                        <h3 className="font-bold text-slate-900 dark:text-white">{redemption.rewardName}</h3>
                                     </div>
-                                    <p className="text-slate-500 text-sm mb-4">{redemption.notes || "Use this code at the designated location."}</p>
+                                    <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">{redemption.notes || "Use this code at the designated location."}</p>
                                     
                                     {redemption.expiresAt && (
-                                        <div className="flex items-center gap-1.5 text-xs text-amber-600 font-medium bg-amber-50 inline-block px-2 py-1 rounded">
+                                        <div className="flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400 font-medium bg-amber-50 dark:bg-amber-900/20 inline-block px-2 py-1 rounded">
                                             <Clock className="w-3.5 h-3.5" /> Expires {new Date(redemption.expiresAt).toLocaleDateString()}
                                         </div>
                                     )}
                                 </div>
 
-                                <div className="w-full md:w-auto bg-slate-50 p-4 rounded-xl border border-slate-200 border-dashed text-center min-w-[200px]">
-                                    <p className="text-xs text-slate-400 uppercase font-bold mb-2">Redemption Code</p>
-                                    <p className="text-2xl font-mono font-black text-slate-800 mb-3 tracking-wider">{redemption.redemptionCode}</p>
+                                <div className="w-full md:w-auto bg-slate-50 dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 border-dashed text-center min-w-[200px]">
+                                    <p className="text-xs text-slate-400 dark:text-slate-500 uppercase font-bold mb-2">Redemption Code</p>
+                                    <p className="text-2xl font-mono font-black text-slate-800 dark:text-white mb-3 tracking-wider">{redemption.redemptionCode}</p>
                                     <button 
                                         onClick={() => copyCode(redemption.redemptionCode!, redemption.id)}
-                                        className="w-full py-2 bg-white border border-slate-200 rounded-lg text-sm font-bold text-emerald-600 hover:bg-emerald-50 transition-colors flex items-center justify-center gap-2"
+                                        className="w-full py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-bold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors flex items-center justify-center gap-2"
                                     >
                                         {copiedId === redemption.id ? <><CheckCircle2 className="w-4 h-4"/> Copied</> : <><Copy className="w-4 h-4"/> Copy Code</>}
                                     </button>
@@ -114,19 +114,19 @@ const MyRedemptions = () => {
 
                 {activeTab === 'pending' && (
                     <>
-                        {pendingRedemptions.length === 0 && <p className="text-slate-500">No pending redemptions.</p>}
+                        {pendingRedemptions.length === 0 && <p className="text-slate-500 dark:text-slate-400">No pending redemptions.</p>}
                         {pendingRedemptions.map(redemption => (
-                            <div key={redemption.id} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                            <div key={redemption.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <div className="flex items-center gap-2 mb-2">
-                                            <span className="px-2 py-1 rounded-md bg-amber-100 text-amber-700 text-xs font-bold uppercase">Processing</span>
-                                            <h3 className="font-bold text-slate-900">{redemption.rewardName}</h3>
+                                            <span className="px-2 py-1 rounded-md bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-xs font-bold uppercase">Processing</span>
+                                            <h3 className="font-bold text-slate-900 dark:text-white">{redemption.rewardName}</h3>
                                         </div>
-                                        <p className="text-sm text-slate-500">Request submitted on {new Date(redemption.redeemedAt).toLocaleDateString()}. Pending admin approval.</p>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400">Request submitted on {new Date(redemption.redeemedAt).toLocaleDateString()}. Pending admin approval.</p>
                                     </div>
                                     <div className="text-right">
-                                        <span className="block font-bold text-slate-900">{redemption.creditsCost} pts</span>
+                                        <span className="block font-bold text-slate-900 dark:text-white">{redemption.creditsCost} pts</span>
                                     </div>
                                 </div>
                             </div>
@@ -135,34 +135,34 @@ const MyRedemptions = () => {
                 )}
 
                 {activeTab === 'history' && (
-                    <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
                         <table className="w-full text-left text-sm">
-                            <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
+                            <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
                                 <tr>
                                     <th className="px-6 py-4">Date</th>
                                     <th className="px-6 py-4">Reward</th>
                                     <th className="px-6 py-4 text-right">Status</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-100">
+                            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                                 {historyRedemptions.map(redemption => (
-                                    <tr key={redemption.id}>
-                                        <td className="px-6 py-4 text-slate-500">
+                                    <tr key={redemption.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30">
+                                        <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
                                             {new Date(redemption.redeemedAt).toLocaleDateString()}
                                         </td>
-                                        <td className="px-6 py-4 font-medium text-slate-900">
+                                        <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">
                                             {redemption.rewardName}
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            {redemption.status === 'rejected' && <span className="text-red-600 font-bold bg-red-50 px-2 py-1 rounded text-xs">Rejected</span>}
-                                            {redemption.status === 'fulfilled' && <span className="text-slate-600 bg-slate-100 px-2 py-1 rounded text-xs">Used</span>}
-                                            {redemption.status === 'approved' && <span className="text-amber-600 bg-amber-50 px-2 py-1 rounded text-xs">Expired</span>}
+                                            {redemption.status === 'rejected' && <span className="text-red-600 dark:text-red-400 font-bold bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded text-xs">Rejected</span>}
+                                            {redemption.status === 'fulfilled' && <span className="text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded text-xs">Used</span>}
+                                            {redemption.status === 'approved' && <span className="text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-1 rounded text-xs">Expired</span>}
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                        {historyRedemptions.length === 0 && <p className="p-6 text-slate-500 text-center">No history available.</p>}
+                        {historyRedemptions.length === 0 && <p className="p-6 text-slate-500 dark:text-slate-400 text-center">No history available.</p>}
                     </div>
                 )}
             </div>
