@@ -39,9 +39,21 @@ const Profile = () => {
         localStorage.removeItem('unread_messages');
 
         // Load user - Prioritize the currently logged in session
-        const sessionUser = localStorage.getItem('currentUser');
-        if (sessionUser) {
-            setUser(JSON.parse(sessionUser));
+        const sessionUserStr = localStorage.getItem('currentUser');
+        if (sessionUserStr) {
+            const sessionUser = JSON.parse(sessionUserStr);
+            
+            // CRITICAL SYNC: Fetch latest points from global 'users' array
+            // This ensures Admin updates to points are reflected immediately without re-login
+            const allUsers = JSON.parse(localStorage.getItem('users') || '[]');
+            const updatedUserEntry = allUsers.find((u: any) => u.id === sessionUser.id);
+            
+            if (updatedUserEntry) {
+                // Merge session data with latest points from DB
+                setUser({ ...sessionUser, points: updatedUserEntry.points });
+            } else {
+                setUser(sessionUser);
+            }
         } else {
             // Fallback for demo/dev if no auth session exists
             const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
