@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { Recycle, Mail, ArrowRight, ArrowLeft, Key, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Recycle, Mail, ArrowRight, ArrowLeft, Key, CheckCircle2, AlertCircle, Loader2, Info, X } from 'lucide-react';
 
 const GoogleLogo = () => (
     <svg className="w-5 h-5" viewBox="0 0 48 48">
@@ -21,17 +21,16 @@ const Auth = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
+    const [showDevPopup, setShowDevPopup] = useState(false);
 
     // Form States
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleGoogleLogin = () => {
-        setIsLoading(true);
-        setTimeout(() => {
-            localStorage.setItem('isAuthenticated', 'true');
-            navigate('/categories');
-        }, 1500);
+        // Show development popup instead of logging in
+        setShowDevPopup(true);
+        setTimeout(() => setShowDevPopup(false), 4000);
     };
 
     const handleEmailLogin = (e: React.FormEvent) => {
@@ -296,11 +295,34 @@ const Auth = () => {
                 {view === 'initial' && (
                     <div className="mt-8 text-center">
                         <p className="text-xs text-slate-400">
-                            By continuing, you agree to our <a href="#" className="underline hover:text-emerald-600">Terms</a> and <a href="#" className="underline hover:text-emerald-600">Privacy Policy</a>.
+                            By continuing, you agree to our <Link to="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-emerald-600">Terms</Link> and <Link to="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-emerald-600">Privacy Policy</Link>.
                         </p>
                     </div>
                 )}
             </motion.div>
+
+            {/* Development Popup Notification */}
+            <AnimatePresence>
+                {showDevPopup && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                        className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 max-w-sm w-full mx-4 border border-white/10 dark:border-slate-200"
+                    >
+                        <div className="p-2 bg-white/10 dark:bg-slate-100 rounded-full shrink-0">
+                            <Info className="w-5 h-5 text-blue-400 dark:text-blue-600" />
+                        </div>
+                        <div className="flex-1">
+                            <h4 className="font-bold text-sm mb-1">Feature In Development</h4>
+                            <p className="text-xs text-slate-300 dark:text-slate-600">Google Sign-In is coming soon! Please use Email Sign-In for this prototype.</p>
+                        </div>
+                        <button onClick={() => setShowDevPopup(false)} className="p-1 hover:bg-white/10 dark:hover:bg-slate-100 rounded-full transition-colors shrink-0">
+                            <X className="w-4 h-4" />
+                        </button>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
