@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Recycle, Mail, ArrowRight, ArrowLeft, Key, CheckCircle2, AlertCircle, Loader2, Info, X } from 'lucide-react';
+import { leaderboard } from '../data/mockData';
 
 const GoogleLogo = () => (
     <svg className="w-5 h-5" viewBox="0 0 48 48">
@@ -17,11 +18,15 @@ type AuthView = 'initial' | 'login' | 'forgot-password';
 
 const Auth = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [view, setView] = useState<AuthView>('initial');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [showDevPopup, setShowDevPopup] = useState(false);
+
+    // Get return path from location state or default to categories
+    const from = location.state?.from?.pathname || '/categories';
 
     // Form States
     const [email, setEmail] = useState('');
@@ -31,55 +36,6 @@ const Auth = () => {
         // --- 1. CURRENT: PROTOTYPE MODE (Delete this block when enabling production) ---
         setShowDevPopup(true);
         setTimeout(() => setShowDevPopup(false), 4000);
-
-        // --- 2. FUTURE: PRODUCTION INTEGRATION (Uncomment to enable) ---
-        /*
-        // HOW TO ENABLE:
-        // 1. Install your auth provider SDK (e.g., `npm install firebase` or `@supabase/supabase-js`)
-        // 2. Import the auth instance and provider at the top of this file.
-        // 3. Delete the 'Prototype Mode' block above.
-        // 4. Uncomment the code below.
-
-        setIsLoading(true);
-        setError(null);
-        try {
-            // Example using a generic provider pattern (Firebase/Supabase)
-            // const result = await signInWithPopup(auth, googleProvider);
-            // const user = result.user;
-
-            // --- Simulate Successful Response for structure ---
-            const user = { 
-                email: "user@example.com", 
-                displayName: "Google User", 
-                uid: "google-123" 
-            }; 
-            
-            // Save Auth State
-            localStorage.setItem('isAuthenticated', 'true');
-            // Ideally, store a real token here
-            localStorage.setItem('auth_token', 'mock_token_xyz'); 
-            
-            // Optional: Save user profile to local state if needed for this prototype
-            const currentUser = {
-                id: 'USR-CURRENT', // or user.uid
-                name: user.displayName,
-                email: user.email,
-                avatar: `https://api.dicebear.com/8.x/avataaars/svg?seed=${user.displayName}`,
-                points: 0, // Fetch real points from DB
-                role: 'user',
-                status: 'Active'
-            };
-            localStorage.setItem('users', JSON.stringify([currentUser]));
-
-            // Redirect
-            navigate('/categories');
-        } catch (err: any) {
-            console.error("Google Auth Error:", err);
-            setError("Google sign-in failed. Please try again.");
-        } finally {
-            setIsLoading(false);
-        }
-        */
     };
 
     const handleEmailLogin = (e: React.FormEvent) => {
@@ -92,16 +48,64 @@ const Auth = () => {
         }
 
         setIsLoading(true);
-        // Mock API call
+        
+        // Mock Auth Logic
         setTimeout(() => {
-            setIsLoading(false);
-            if (email.includes('error')) {
-                setError("Invalid credentials. Please try again.");
+            // Find user in mock data
+            const user = leaderboard.find(u => u.email?.toLowerCase() === email.toLowerCase());
+            
+            // Password Validation Logic (Hardcoded for demo safety)
+            let isValid = false;
+            
+            if (user) {
+                // Specific check for the new admin account
+                if (user.email === 'ctrlmechanix@gmail.com') {
+                    isValid = password === 'Ctrlmechanix@nitp2029';
+                } else {
+                    // Check for existing mock users (simple generic password)
+                    isValid = password === 'user123';
+                }
             } else {
-                localStorage.setItem('isAuthenticated', 'true');
-                navigate('/categories');
+                // If user not found in mock data, treat as a new user signup for demo purposes
+                isValid = true;
             }
-        }, 1500);
+
+            setIsLoading(false);
+
+            if (!user && !email.includes('@')) {
+                 setError("Please enter a valid email address.");
+                 return;
+            }
+
+            if (user && !isValid) {
+                setError("Invalid password. For demo users, use 'user123'. For Admin, check documentation.");
+                return;
+            }
+
+            // Create session data
+            const sessionUser = user ? {
+                ...user,
+                // Ensure role is preserved from mock data
+                role: user.role || 'user'
+            } : {
+                // Create new user session structure
+                id: `USR-${Date.now()}`,
+                name: email.split('@')[0],
+                email: email,
+                avatar: `https://api.dicebear.com/8.x/avataaars/svg?seed=${email}`,
+                points: 0,
+                role: 'user', // Default new users to 'user'
+                status: 'Active'
+            };
+
+            // Store authentication state
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('currentUser', JSON.stringify(sessionUser));
+            
+            // Redirect to previous page
+            navigate(from, { replace: true });
+            
+        }, 1000);
     };
 
     const handleResetPassword = (e: React.FormEvent) => {
@@ -377,3 +381,4 @@ const Auth = () => {
 };
 
 export default Auth;
+        

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 // Added useNavigate import to fix navigation error
 import { useNavigate, Link } from 'react-router-dom';
 import { leaderboard, achievements, userActivity } from '../data/mockData';
-import { User, MapPin, Calendar, Award, Zap, Clock, Package, Leaf, MessageSquare, ExternalLink, Send, ArrowRight, X, ChevronRight, Gift } from 'lucide-react';
+import { User, MapPin, Calendar, Award, Zap, Clock, Package, Leaf, MessageSquare, ExternalLink, Send, ArrowRight, X, ChevronRight, Gift, Shield } from 'lucide-react';
 import Icon from '../components/ui/Icon';
 import AnimatedCounter from '../components/ui/AnimatedCounter';
 import { CollectionPointMessage } from '../types';
@@ -38,10 +38,16 @@ const Profile = () => {
         // Clear unread flag when viewing profile
         localStorage.removeItem('unread_messages');
 
-        // Load user
-        const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
-        let currentUser = storedUsers.find((u: any) => u.id === 'USR-CURRENT') || leaderboard.find(u => u.isUser);
-        setUser(currentUser);
+        // Load user - Prioritize the currently logged in session
+        const sessionUser = localStorage.getItem('currentUser');
+        if (sessionUser) {
+            setUser(JSON.parse(sessionUser));
+        } else {
+            // Fallback for demo/dev if no auth session exists
+            const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+            let fallbackUser = storedUsers.find((u: any) => u.id === 'USR-CURRENT') || leaderboard.find(u => u.isUser);
+            setUser(fallbackUser);
+        }
     }, []);
 
     useEffect(() => {
@@ -100,7 +106,8 @@ const Profile = () => {
         points: 0, 
         name: 'Alex Morgan', 
         rank: 0, 
-        avatar: 'https://api.dicebear.com/8.x/avataaars/svg?seed=You' 
+        avatar: 'https://api.dicebear.com/8.x/avataaars/svg?seed=You',
+        role: 'user'
     };
 
     // Group messages by PointId for the list
@@ -125,10 +132,17 @@ const Profile = () => {
                     </motion.div>
                     
                     <div className="flex-grow mb-2 text-center md:text-left">
-                        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{userData.name}</h1>
+                        <h1 className="text-3xl font-bold text-slate-900 dark:text-white flex items-center justify-center md:justify-start gap-3">
+                            {userData.name}
+                            {userData.role === 'admin' && (
+                                <span className="px-2 py-1 rounded-md bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-bold uppercase tracking-wider border border-blue-200 dark:border-blue-800">
+                                    Admin
+                                </span>
+                            )}
+                        </h1>
                         <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 text-slate-500 dark:text-slate-400 mt-2">
                             <span className="flex items-center gap-1.5 text-sm">
-                                <User className="w-4 h-4" /> Student
+                                <User className="w-4 h-4" /> {userData.role === 'admin' ? 'Administrator' : 'Student'}
                             </span>
                             <span className="flex items-center gap-1.5 text-sm">
                                 <MapPin className="w-4 h-4" /> Innovation Campus
@@ -153,7 +167,23 @@ const Profile = () => {
             </div>
 
             {/* NEW: Rewards & Transactions Summary */}
-            <div className="grid lg:grid-cols-2 gap-8 mb-8">
+            <div className={`grid lg:grid-cols-${userData.role === 'admin' ? '3' : '2'} gap-8 mb-8`}>
+                {userData.role === 'admin' && (
+                    <div 
+                        onClick={() => navigate('/admin/dashboard')}
+                        className="bg-blue-50 dark:bg-blue-900/10 p-8 rounded-[2rem] border border-blue-100 dark:border-blue-900/30 shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                    >
+                        <div className="flex justify-between items-start mb-4">
+                            <div className="p-3 bg-white dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl shadow-sm">
+                                <Shield className="w-6 h-6" />
+                            </div>
+                            <ArrowRight className="w-5 h-5 text-blue-300 dark:text-blue-700 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1">Admin Panel</h3>
+                        <p className="text-slate-600 dark:text-slate-400 text-sm">Access system management.</p>
+                    </div>
+                )}
+
                 <div 
                     onClick={() => navigate('/my-redemptions')}
                     className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all cursor-pointer group"

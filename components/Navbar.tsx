@@ -31,6 +31,7 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [currentUser, setCurrentUser] = useState<any>(null);
     const [scrolled, setScrolled] = useState(false);
     const [hasUnread, setHasUnread] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -62,11 +63,19 @@ const Navbar = () => {
         }
     };
 
-    // Check login state and notifications
+    // Check login state, user data, and notifications
     useEffect(() => {
         const auth = localStorage.getItem('isAuthenticated');
+        const userStr = localStorage.getItem('currentUser');
         const loggedIn = !!auth;
+        
         setIsLoggedIn(loggedIn);
+        if (loggedIn && userStr) {
+            setCurrentUser(JSON.parse(userStr));
+        } else {
+            setCurrentUser(null);
+        }
+
         setIsProfileOpen(false); 
         setIsOpen(false);
 
@@ -126,12 +135,15 @@ const Navbar = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('currentUser');
         setIsLoggedIn(false);
+        setCurrentUser(null);
         setHasUnread(false);
         navigate('/');
     };
 
     const showBackButton = location.pathname !== '/';
+    const isAdmin = currentUser?.role && currentUser.role.toLowerCase() === 'admin';
 
     return (
         <nav 
@@ -188,7 +200,7 @@ const Navbar = () => {
                             {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                         </button>
 
-                        {isLoggedIn ? (
+                        {isLoggedIn && currentUser ? (
                             <div className="relative" ref={dropdownRef}>
                                 <button 
                                     onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -199,7 +211,7 @@ const Navbar = () => {
                                     }`}
                                 >
                                     <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden ring-2 ring-white dark:ring-slate-900">
-                                         <img src="https://api.dicebear.com/8.x/avataaars/svg?seed=You" alt="User" className="w-full h-full" />
+                                         <img src={currentUser.avatar || "https://api.dicebear.com/8.x/avataaars/svg?seed=You"} alt="User" className="w-full h-full" />
                                     </div>
                                     <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isProfileOpen ? 'rotate-180 text-emerald-600 dark:text-emerald-400' : ''}`} />
                                     
@@ -223,11 +235,11 @@ const Navbar = () => {
                                             <div className="px-5 py-4 border-b border-slate-50 dark:border-slate-800 mb-2 bg-slate-50/50 dark:bg-slate-800/50">
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden ring-1 ring-slate-200 dark:ring-slate-600">
-                                                        <img src="https://api.dicebear.com/8.x/avataaars/svg?seed=You" alt="User" className="w-full h-full" />
+                                                        <img src={currentUser.avatar || "https://api.dicebear.com/8.x/avataaars/svg?seed=You"} alt="User" className="w-full h-full" />
                                                     </div>
-                                                    <div>
-                                                        <p className="text-sm font-bold text-slate-900 dark:text-white">Student User</p>
-                                                        <p className="text-xs text-slate-500 dark:text-slate-400 truncate">student@university.edu</p>
+                                                    <div className="overflow-hidden">
+                                                        <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{currentUser.name}</p>
+                                                        <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{currentUser.email}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -247,9 +259,14 @@ const Navbar = () => {
                                                 <Link to="/my-redemptions" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                                                     <Gift className="w-4 h-4" /> My Redemptions
                                                 </Link>
-                                                <Link to="/admin/dashboard" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                                                    <Shield className="w-4 h-4" /> Admin Panel
-                                                </Link>
+                                                
+                                                {/* Logic: Only show Admin Panel if user.role is 'admin' */}
+                                                {isAdmin && (
+                                                    <Link to="/admin/dashboard" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                                        <Shield className="w-4 h-4" /> Admin Panel
+                                                    </Link>
+                                                )}
+
                                                 <Link to="/analysis" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                                                     <TrendingUp className="w-4 h-4" /> Analyse
                                                 </Link>
@@ -318,15 +335,15 @@ const Navbar = () => {
                             <NavItem to="/collection-points" Icon={MapPin}>Find Locations</NavItem>
                             
                             <div className="pt-6 mt-4 border-t border-slate-100 dark:border-slate-800">
-                                {isLoggedIn ? (
+                                {isLoggedIn && currentUser ? (
                                     <div className="space-y-4">
                                         <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800">
                                              <div className="w-10 h-10 rounded-full bg-white dark:bg-slate-800 overflow-hidden ring-1 ring-slate-200 dark:ring-slate-700">
-                                                 <img src="https://api.dicebear.com/8.x/avataaars/svg?seed=You" alt="User" className="w-full h-full" />
+                                                 <img src={currentUser.avatar || "https://api.dicebear.com/8.x/avataaars/svg?seed=You"} alt="User" className="w-full h-full" />
                                             </div>
-                                            <div>
-                                                <p className="text-sm font-bold text-slate-900 dark:text-white">Student User</p>
-                                                <p className="text-xs text-slate-500 dark:text-slate-400">student@university.edu</p>
+                                            <div className="overflow-hidden">
+                                                <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{currentUser.name}</p>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{currentUser.email}</p>
                                             </div>
                                         </div>
                                         <Link to="/profile" className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900">
@@ -340,9 +357,14 @@ const Navbar = () => {
                                             </div>
                                             {hasUnread && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
                                         </Link>
-                                        <Link to="/admin/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20">
-                                            <Shield className="w-4 h-4" /> Admin Panel
-                                        </Link>
+                                        
+                                        {/* Mobile Menu Logic: Only show Admin Panel if user.role is 'admin' */}
+                                        {isAdmin && (
+                                            <Link to="/admin/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20">
+                                                <Shield className="w-4 h-4" /> Admin Panel
+                                            </Link>
+                                        )}
+
                                         <Link to="/analysis" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900">
                                             <TrendingUp className="w-4 h-4" /> Analyse
                                         </Link>

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { HashRouter, MemoryRouter, Routes, Route, Outlet, useLocation } from 'react-router-dom';
+import { HashRouter, MemoryRouter, Routes, Route, Outlet, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -63,6 +63,21 @@ const AppLayout = () => {
     );
 };
 
+// Protected Route Component for Admin Access
+const AdminRoute = () => {
+    const userStr = localStorage.getItem('currentUser');
+    const user = userStr ? JSON.parse(userStr) : null;
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+
+    // Check if user is authenticated AND has admin role
+    if (!isAuthenticated || !user || user.role !== 'admin') {
+        // Redirect to dashboard or home if not authorized
+        return <Navigate to="/dashboard" replace />;
+    }
+
+    return <Outlet />;
+};
+
 function App() {
   // Detect if running in a restricted preview environment (blob URL)
   // This prevents "TypeError: Location.assign" errors in development previews
@@ -111,20 +126,22 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
 
-        {/* Admin Routes - Separate Layout */}
-        <Route path="/admin" element={<AdminLayout />}>
-            <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="submissions" element={<AdminSubmissions />} />
-            <Route path="users" element={<AdminUsers />} />
-            <Route path="collection-points" element={<AdminCollectionPoints />} />
-            <Route path="credits" element={<AdminCredits />} />
-            <Route path="redemptions" element={<AdminRedemptions />} />
-            <Route path="content" element={<AdminContent />} />
-            <Route path="testimonials" element={<AdminTestimonials />} />
-            <Route path="requests" element={<AdminRequests />} />
-            <Route path="activity" element={<AdminActivity />} />
-            <Route path="reports" element={<AdminReports />} />
-            <Route path="settings" element={<AdminSettings />} />
+        {/* Protected Admin Routes - Separate Layout */}
+        <Route element={<AdminRoute />}>
+            <Route path="/admin" element={<AdminLayout />}>
+                <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="submissions" element={<AdminSubmissions />} />
+                <Route path="users" element={<AdminUsers />} />
+                <Route path="collection-points" element={<AdminCollectionPoints />} />
+                <Route path="credits" element={<AdminCredits />} />
+                <Route path="redemptions" element={<AdminRedemptions />} />
+                <Route path="content" element={<AdminContent />} />
+                <Route path="testimonials" element={<AdminTestimonials />} />
+                <Route path="requests" element={<AdminRequests />} />
+                <Route path="activity" element={<AdminActivity />} />
+                <Route path="reports" element={<AdminReports />} />
+                <Route path="settings" element={<AdminSettings />} />
+            </Route>
         </Route>
       </Routes>
     </Router>

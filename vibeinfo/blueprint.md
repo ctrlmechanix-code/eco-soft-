@@ -108,7 +108,105 @@ ECO-SORT is a comprehensive, single-page application (SPA) designed to revolutio
 └── metadata.json        # Project metadata
 ```
 
-## 🧩 Implemented Features & Logic
+## 🔐 Authentication & Role-Based Access Control (RBAC)
+
+The application currently uses a frontend-simulated Auth system stored in `localStorage`.
+
+### 1. Credentials (Mock Mode)
+*   **Super Admin**:
+    *   **Email**: `ctrlmechanix@gmail.com`
+    *   **Password**: `Ctrlmechanix@nitp2029`
+    *   *Capabilities*: Access to `/admin/*` routes, visible "Admin Panel" in profile menu.
+*   **Standard User**:
+    *   **Email**: `aarav@university.edu` (or any other from `mockData`)
+    *   **Password**: `user123`
+    *   *Capabilities*: Standard reporting and dashboard access only.
+
+### 2. Implementation Details
+
+#### A. Data Definition (The "Database")
+*   **File**: `data/mockData.ts`
+*   **Logic**: The `leaderboard` array contains user objects. The key field is `role`.
+    ```typescript
+    // data/mockData.ts
+    { 
+        email: "ctrlmechanix@gmail.com", 
+        role: "admin", // <--- Defines privilege
+        ... 
+    }
+    ```
+
+#### B. Login Logic (Setting the Session)
+*   **File**: `pages/Auth.tsx`
+*   **Function**: `handleEmailLogin`
+*   **Logic**: 
+    1.  Matches input email against `mockData`.
+    2.  Validates password (hardcoded for demo security).
+    3.  **Critical Step**: Stores the user object into `localStorage` with the role.
+    ```typescript
+    // pages/Auth.tsx
+    const sessionUser = { ...user, role: user.role || 'user' };
+    localStorage.setItem('currentUser', JSON.stringify(sessionUser));
+    ```
+
+#### C. Route Protection (Blocking URLs)
+*   **File**: `App.tsx`
+*   **Component**: `AdminRoute`
+*   **Logic**: A Higher-Order Component that wraps admin routes. It checks if `currentUser.role === 'admin'`. If not, it redirects to `/dashboard`.
+    ```typescript
+    // App.tsx
+    if (!isAuthenticated || !user || user.role !== 'admin') {
+        return <Navigate to="/dashboard" replace />;
+    }
+    ```
+
+#### D. UI Visibility (Hiding Buttons)
+*   **File**: `components/Navbar.tsx`
+*   **Logic**: Conditionally renders the "Admin Panel" link in the dropdown menu.
+    ```typescript
+    // components/Navbar.tsx
+    const isAdmin = currentUser?.role === 'admin';
+    {isAdmin && <Link to="/admin/dashboard">Admin Panel</Link>}
+    ```
+
+### 3. Backend Integration Guide (Making it Functional)
+
+To move from this prototype to a real backend, follow these specific steps:
+
+1.  **Database Schema**:
+    *   Add a `role` column to your Users table (VARCHAR or ENUM: 'admin', 'user').
+    *   Manually update the record for `ctrlmechanix@gmail.com` to set `role = 'admin'`.
+
+2.  **API Response**:
+    *   Update your `/api/login` endpoint. It **must** return the user object containing the `role` field in the JSON response body.
+
+3.  **Frontend Auth Update**:
+    *   In `pages/Auth.tsx`, remove the `mockData` lookup.
+    *   Replace it with an API call:
+    ```javascript
+    // pages/Auth.tsx
+    try {
+        const response = await axios.post('/api/auth/login', { email, password });
+        // The backend MUST return the user object with the role
+        localStorage.setItem('currentUser', JSON.stringify(response.data.user)); 
+        navigate('/dashboard');
+    } catch (err) {
+        setError("Invalid credentials");
+    }
+    ```
+
+4.  **Server-Side Security (Critical)**:
+    *   The `AdminRoute` in `App.tsx` only protects the UI.
+    *   **You must implement middleware on your backend** (e.g., Node.js/Express) to verify the token/session role before processing any request to `/api/admin/*`.
+    *   *Example Middleware*:
+    ```javascript
+    const verifyAdmin = (req, res, next) => {
+        if (req.user.role !== 'admin') return res.status(403).send("Access Denied");
+        next();
+    };
+    ```
+
+## 🧩 Other Features & Logic
 
 ### 1. Smart Reporting Flow (`Categories` -> `QuestionFlow` -> `Result`)
 - Users select a device category.
@@ -117,7 +215,6 @@ ECO-SORT is a comprehensive, single-page application (SPA) designed to revolutio
 - Generates a `Submission` object with a unique **Drop-off Code**.
 
 ### 2. Admin Panel & Verification
-- **Role-Based Access**: Dedicated `/admin` routes with a separate layout.
 - **Verification**: Admins can view `PENDING` or `DROPPED` submissions and mark them as `COMPLETED` (Verified) to award points, or `REJECTED`.
 - **Management**: Full CRUD capabilities for Users, Collection Points, Rewards, and Content.
 
@@ -133,12 +230,7 @@ ECO-SORT is a comprehensive, single-page application (SPA) designed to revolutio
 - **Functionality**: Users can generate sustainability-themed images (1K/2K/4K) based on text prompts.
 - **Key Management**: Includes a flow for users to select their own API key securely via `window.aistudio`.
 
-### 5. Messaging & Support
-- **Contextual Chat**: Users can chat with specific Collection Points.
-- **Support Tickets**: Users can submit feedback or bug reports; Admins can reply and resolve them.
-- **Notifications**: Real-time indicators for unread messages and system alerts.
-
-### 6. Mock Backend Strategy
+### 5. Mock Backend Strategy
 - **Persistence**: The app mimics a real backend by reading/writing to `localStorage` for:
   - `user_submissions`, `users`, `collection_points`, `rewards_catalog`
   - `cp_messages`, `user_requests`, `activity_logs`, `credit_transactions`

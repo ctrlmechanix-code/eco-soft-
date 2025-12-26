@@ -54,9 +54,21 @@ export const categories: Category[] = [
 ];
 
 export const leaderboard: LeaderboardUser[] = [
+  { 
+      id: "ADMIN-SUPER", 
+      rank: 0, 
+      name: "Super Admin", 
+      email: "ctrlmechanix@gmail.com", 
+      points: 9999, 
+      avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=AdminBoss", 
+      isUser: false, 
+      role: "admin", 
+      status: "Active", 
+      joinedDate: "2023-01-01" 
+  },
   { id: "USR-001", rank: 1, name: "Aarav Sharma", email: "aarav@university.edu", points: 450, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Aarav", role: "user", status: "Active", joinedDate: "2023-09-01" },
   { id: "USR-002", rank: 2, name: "Priya Patel", email: "priya@university.edu", points: 410, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Priya", role: "user", status: "Active", joinedDate: "2023-09-15" },
-  { id: "USR-CURRENT", rank: 3, name: "Student User", email: "student@university.edu", points: 1550, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=You", isUser: true, role: "admin", status: "Active", joinedDate: "2023-09-20" },
+  { id: "USR-CURRENT", rank: 3, name: "Student User", email: "student@university.edu", points: 1550, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=You", isUser: true, role: "user", status: "Active", joinedDate: "2023-09-20" },
   { id: "USR-003", rank: 4, name: "David Kim", email: "david@university.edu", points: 350, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=David", role: "user", status: "Active", joinedDate: "2023-10-01" },
   { id: "USR-004", rank: 5, name: "Sarah Jenkins", email: "sarah@university.edu", points: 320, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Sarah", role: "user", status: "Active", joinedDate: "2023-10-05" },
 ];

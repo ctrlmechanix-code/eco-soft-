@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { categories } from '../data/mockData';
 import type { Category } from '../types';
 import { ArrowRight, X } from 'lucide-react';
@@ -56,6 +56,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category, onClick }) => {
 
 const Categories = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [customItem, setCustomItem] = useState('');
 
@@ -67,7 +68,18 @@ const Categories = () => {
         },
     };
 
+    const checkAuth = () => {
+        const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+        if (!isAuthenticated) {
+            navigate('/auth', { state: { from: location } });
+            return false;
+        }
+        return true;
+    };
+
     const handleCategoryClick = (category: Category) => {
+        if (!checkAuth()) return;
+
         if (category.name === 'Other') {
             setIsModalOpen(true);
         } else {
@@ -180,3 +192,4 @@ const Categories = () => {
 };
 
 export default Categories;
+        
