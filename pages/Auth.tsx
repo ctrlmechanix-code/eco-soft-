@@ -344,7 +344,7 @@ const Auth = () => {
                 {view === 'initial' && (
                     <div className="mt-8 text-center">
                         <p className="text-xs text-slate-400">
-                            By continuing, you agree to our <Link to="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-emerald-600">Terms</Link> and <Link to="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-emerald-600">Privacy Policy</Link>.
+                            By continuing, you agree to our <Link to="/terms" className="underline hover:text-emerald-600">Terms</Link> and <Link to="/privacy" className="underline hover:text-emerald-600">Privacy Policy</Link>.
                         </p>
                     </div>
                 )}
