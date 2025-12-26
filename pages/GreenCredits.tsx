@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate, Link } from 'react-router-dom';
-import { leaderboard, achievements, mockSubmissions, rewardCatalog as mockRewards } from '../data/mockData';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { leaderboard as mockLeaderboard, achievements, mockSubmissions, rewardCatalog as mockRewards } from '../data/mockData';
 import AnimatedCounter from '../components/ui/AnimatedCounter';
-import { Trophy, Award, Zap, Crown, Clock, Gift, ArrowRight } from 'lucide-react';
+import { Trophy, Award, Zap, Crown, Clock, Gift, ArrowRight, Medal, LogIn, Loader2 } from 'lucide-react';
 import Icon from '../components/ui/Icon';
-import type { Submission, Reward } from '../types';
+import type { Submission, Reward, LeaderboardUser } from '../types';
 
 const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
     <motion.div
@@ -22,34 +22,126 @@ const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
 
 const GreenCredits = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [pendingTotal, setPendingTotal] = useState(0);
-    const [awardedTotal, setAwardedTotal] = useState(0);
     const [userPoints, setUserPoints] = useState(0);
     const [featuredRewards, setFeaturedRewards] = useState<Reward[]>([]);
+    const [rankedUsers, setRankedUsers] = useState<LeaderboardUser[]>([]);
+    
+    // Auth State
+    const [isLoading, setIsLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
     useEffect(() => {
-      // 1. Calculate credits from submissions
-      const localSubmissions = JSON.parse(localStorage.getItem('user_submissions') || '[]');
-      const allSubmissions = [...mockSubmissions, ...localSubmissions];
-      
-      const pending = allSubmissions.reduce((acc: number, sub: Submission) => {
-        return (sub.status === 'PENDING' || sub.status === 'DROPPED') ? acc + sub.creditsPending : acc;
-      }, 0);
-
-      // In a real scenario, points come from user profile, not just raw sum of submissions (due to spending)
-      // We will read from 'users' in localStorage for the "current balance"
-      const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
-      const currentUser = storedUsers.find((u: any) => u.id === 'USR-CURRENT') || leaderboard.find(u => u.isUser);
-      
-      setPendingTotal(pending);
-      setUserPoints(currentUser ? currentUser.points : 0);
-
-      // Load Featured Rewards (Top 3 by lowest cost usually, or just first 3)
-      const storedRewards = JSON.parse(localStorage.getItem('rewards_catalog') || '[]');
-      const catalog = storedRewards.length > 0 ? storedRewards : mockRewards;
-      setFeaturedRewards(catalog.slice(0, 3));
-
+        checkAuthAndLoad();
     }, []);
+
+    const checkAuthAndLoad = () => {
+        const auth = localStorage.getItem('isAuthenticated') === 'true';
+        const currentUserStr = localStorage.getItem('currentUser');
+        const currentUserObj = currentUserStr ? JSON.parse(currentUserStr) : null;
+        
+        setIsAuthenticated(auth);
+        if (currentUserObj) setCurrentUserId(currentUserObj.id);
+        
+        // --- 1. Leaderboard Logic (Dynamic Sorting) ---
+        const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+        
+        // Merge Strategy:
+        // 1. Start with mock users.
+        // 2. If a mock user exists in storedUsers (by ID), update their points from storage.
+        // 3. Add any new users from storedUsers that aren't in mock data.
+        
+        const mergedMap = new Map();
+        
+        // Add mock users first
+        mockLeaderboard.forEach(u => mergedMap.set(u.id, u));
+        
+        // Update/Add stored users
+        storedUsers.forEach((u: LeaderboardUser) => {
+            // Ensure ID exists
+            if (u.id) {
+                mergedMap.set(u.id, u);
+            }
+        });
+
+        const allUsers = Array.from(mergedMap.values());
+
+        // Sort by Points (Descending)
+        const sortedUsers = allUsers.sort((a, b) => b.points - a.points);
+
+        // Assign Rank dynamically based on index
+        const dynamicRanking = sortedUsers.map((u, index) => ({
+            ...u,
+            rank: index + 1,
+            // Check if this entry belongs to the currently logged-in user
+            isUser: currentUserObj ? (u.id === currentUserObj.id) : false
+        }));
+
+        setRankedUsers(dynamicRanking);
+
+        if (auth && currentUserObj) {
+            // --- 2. Calculate User Specific Stats ---
+            
+            // Find current user's latest data in the ranked list
+            const activeUser = dynamicRanking.find(u => u.id === currentUserObj.id) || currentUserObj;
+            setUserPoints(activeUser.points);
+
+            // Calculate Pending Credits
+            const localSubmissions = JSON.parse(localStorage.getItem('user_submissions') || '[]');
+            const allSubmissions = [...mockSubmissions, ...localSubmissions];
+            
+            const pending = allSubmissions.reduce((acc: number, sub: Submission) => {
+                // Only count submissions for this user
+                if (sub.userId === currentUserObj.id && (sub.status === 'PENDING' || sub.status === 'DROPPED')) {
+                    return acc + sub.creditsPending;
+                }
+                return acc;
+            }, 0);
+            
+            setPendingTotal(pending);
+
+            // --- 3. Load Featured Rewards ---
+            const storedRewards = JSON.parse(localStorage.getItem('rewards_catalog') || '[]');
+            const catalog = storedRewards.length > 0 ? storedRewards : mockRewards;
+            setFeaturedRewards(catalog.slice(0, 3));
+        }
+        
+        setIsLoading(false);
+    };
+
+    if (!isLoading && !isAuthenticated) {
+        return (
+            <PageWrapper>
+                <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+                    <div className="w-24 h-24 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-8 text-slate-400 dark:text-slate-500">
+                        <Medal className="w-10 h-10" />
+                    </div>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Your Impact Profile</h1>
+                    <p className="text-xl text-slate-500 dark:text-slate-400 max-w-md mb-10 leading-relaxed">
+                        Log in to view your Green Credits balance, track your ranking on the campus leaderboard, and view your sustainability achievements.
+                    </p>
+                    <button 
+                        onClick={() => navigate('/auth', { state: { from: location } })}
+                        className="px-8 py-4 bg-emerald-600 text-white rounded-xl font-bold text-lg hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20 flex items-center gap-2"
+                    >
+                        <LogIn className="w-5 h-5" /> Sign In to View Credits
+                    </button>
+                </div>
+            </PageWrapper>
+        );
+    }
+
+    if (isLoading) {
+        return (
+            <PageWrapper>
+                <div className="flex justify-center py-20">
+                    <Loader2 className="w-10 h-10 animate-spin text-emerald-500" />
+                </div>
+            </PageWrapper>
+        );
+    }
 
     return (
         <PageWrapper>
@@ -84,20 +176,61 @@ const GreenCredits = () => {
                                 <Gift className="w-5 h-5 text-emerald-600" /> Browse Rewards
                              </button>
                              <div className="inline-flex items-center justify-center gap-2 px-4 py-3 bg-white/10 rounded-xl text-sm font-medium border border-white/10">
-                                <Zap className="w-4 h-4 text-yellow-400" /> Top 5% Contributor
+                                <Zap className="w-4 h-4 text-yellow-400" /> Top Contributor
                              </div>
                         </div>
                     </div>
                 </div>
                 
-                <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-8 text-white flex flex-col justify-center items-center text-center shadow-lg shadow-emerald-500/20">
-                     <Crown className="w-12 h-12 mb-4 text-white" />
-                     <h3 className="text-2xl font-bold mb-1">Gold Tier</h3>
-                     <p className="text-emerald-100 text-sm">Next tier at 3000 pts</p>
-                     <div className="w-full bg-black/20 h-1.5 rounded-full mt-4 overflow-hidden">
-                         <div className="bg-white h-full rounded-full" style={{width: '75%'}}></div>
+                <motion.div 
+                    whileHover={{ y: -5, scale: 1.02 }}
+                    className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-8 text-white flex flex-col justify-center items-center text-center shadow-xl shadow-emerald-500/30 relative overflow-hidden group border border-white/10 cursor-default"
+                >
+                     {/* Glossy overlay effect */}
+                     <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/0 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                     
+                     <div className="relative z-10 flex flex-col items-center">
+                         <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-md shadow-inner ring-1 ring-white/20 group-hover:bg-white/20 transition-all duration-300">
+                            <Crown className="w-8 h-8 text-white drop-shadow-md" />
+                         </div>
+                         
+                         <h3 className="text-sm font-bold text-emerald-100 uppercase tracking-widest mb-1">Current Tier</h3>
+                         
+                         {/* Dynamic Tier Display */}
+                         {userPoints >= 3000 ? (
+                             <>
+                                <h2 className="text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm">PLATINUM</h2>
+                                <span className="inline-flex items-center px-3 py-1 rounded-full bg-white/20 border border-white/20 text-xs font-medium backdrop-blur-sm">
+                                    Max Level Reached
+                                </span>
+                             </>
+                         ) : userPoints >= 1500 ? (
+                             <>
+                                <h2 className="text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm">GOLD</h2>
+                                <div className="w-full max-w-[140px] h-1.5 bg-black/20 rounded-full overflow-hidden mb-2">
+                                    <div className="h-full bg-white/90 rounded-full" style={{ width: `${((userPoints - 1500) / 1500) * 100}%` }}></div>
+                                </div>
+                                <p className="text-xs text-emerald-50 font-medium">{3000 - userPoints} pts to Platinum</p>
+                             </>
+                         ) : userPoints >= 500 ? (
+                             <>
+                                <h2 className="text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm">SILVER</h2>
+                                <div className="w-full max-w-[140px] h-1.5 bg-black/20 rounded-full overflow-hidden mb-2">
+                                    <div className="h-full bg-white/90 rounded-full" style={{ width: `${((userPoints - 500) / 1000) * 100}%` }}></div>
+                                </div>
+                                <p className="text-xs text-emerald-50 font-medium">{1500 - userPoints} pts to Gold</p>
+                             </>
+                         ) : (
+                             <>
+                                <h2 className="text-4xl font-black text-white mb-2 tracking-tight drop-shadow-sm">BRONZE</h2>
+                                <div className="w-full max-w-[140px] h-1.5 bg-black/20 rounded-full overflow-hidden mb-2">
+                                    <div className="h-full bg-white/90 rounded-full" style={{ width: `${(userPoints / 500) * 100}%` }}></div>
+                                </div>
+                                <p className="text-xs text-emerald-50 font-medium">{500 - userPoints} pts to Silver</p>
+                             </>
+                         )}
                      </div>
-                </div>
+                </motion.div>
             </div>
 
             {/* Featured Rewards Preview */}
@@ -145,7 +278,7 @@ const GreenCredits = () => {
                             <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                                 <Trophy className="w-5 h-5 text-amber-500" /> Leaderboard
                             </h3>
-                            <span className="text-sm text-slate-400">This Month</span>
+                            <span className="text-sm text-slate-400">Live Rankings</span>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
@@ -157,8 +290,8 @@ const GreenCredits = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                                    {leaderboard.map((entry) => (
-                                        <tr key={entry.rank} className={entry.isUser ? "bg-emerald-50/50 dark:bg-emerald-900/20" : "hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"}>
+                                    {rankedUsers.slice(0, 10).map((entry) => (
+                                        <tr key={entry.id} className={entry.isUser ? "bg-emerald-50/50 dark:bg-emerald-900/20" : "hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"}>
                                             <td className="px-6 py-4">
                                                 <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold ${entry.rank <= 3 ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900' : 'text-slate-500 dark:text-slate-400'}`}>
                                                     {entry.rank}

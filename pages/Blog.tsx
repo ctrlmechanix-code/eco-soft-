@@ -1,9 +1,10 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Calendar, User, ArrowRight, Lightbulb } from 'lucide-react';
-import { blogPosts } from '../data/mockData';
+import { blogPosts as mockPosts } from '../data/mockData';
+import { BlogPost } from '../types';
 
 const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
     <motion.div
@@ -18,6 +19,20 @@ const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
 );
 
 const Blog = () => {
+    const [posts, setPosts] = useState<BlogPost[]>([]);
+
+    useEffect(() => {
+        const stored = JSON.parse(localStorage.getItem('blog_posts') || '[]');
+        if (stored.length > 0) {
+            setPosts(stored);
+        } else {
+            setPosts(mockPosts);
+            localStorage.setItem('blog_posts', JSON.stringify(mockPosts));
+        }
+    }, []);
+
+    const publishedPosts = posts.filter(p => p.status === 'Published' || !p.status);
+
     return (
         <PageWrapper>
             <div className="mb-16">
@@ -38,7 +53,7 @@ const Blog = () => {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
-                {blogPosts.map((post, index) => (
+                {publishedPosts.map((post, index) => (
                     <motion.div 
                         key={post.id}
                         initial={{ opacity: 0, y: 20 }}

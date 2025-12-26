@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { mockSubmissions } from '../data/mockData';
 import type { Submission } from '../types';
-import { ListTodo, CheckCircle2, Clock, MapPin, Ticket, ChevronRight, Package, Loader2, AlertCircle, X, Info } from 'lucide-react';
+import { ListTodo, CheckCircle2, Clock, MapPin, Ticket, ChevronRight, Package, Loader2, AlertCircle, X, Info, LogIn } from 'lucide-react';
 
 const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
     <motion.div
@@ -20,14 +20,27 @@ const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
 
 const Submissions = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [activeTab, setActiveTab] = useState<'active' | 'completed'>('active');
     const [submissions, setSubmissions] = useState<Submission[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
 
     useEffect(() => {
-        loadSubmissions();
+        checkAuthAndLoad();
     }, []);
+
+    const checkAuthAndLoad = () => {
+        const auth = localStorage.getItem('isAuthenticated') === 'true';
+        setIsAuthenticated(auth);
+        
+        if (auth) {
+            loadSubmissions();
+        } else {
+            setIsLoading(false);
+        }
+    };
 
     const loadSubmissions = () => {
         setIsLoading(true);
@@ -77,6 +90,28 @@ const Submissions = () => {
             localStorage.setItem('user_submissions', JSON.stringify(newStored));
         }
     };
+
+    if (!isLoading && !isAuthenticated) {
+        return (
+            <PageWrapper>
+                <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+                    <div className="w-24 h-24 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-8 text-slate-400 dark:text-slate-500">
+                        <ListTodo className="w-10 h-10" />
+                    </div>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Track Your Contributions</h1>
+                    <p className="text-xl text-slate-500 dark:text-slate-400 max-w-md mb-10 leading-relaxed">
+                        To view your submission history, check the status of pending items, and manage your drop-offs, please sign in to your account.
+                    </p>
+                    <button 
+                        onClick={() => navigate('/auth', { state: { from: location } })}
+                        className="px-8 py-4 bg-emerald-600 text-white rounded-xl font-bold text-lg hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20 flex items-center gap-2"
+                    >
+                        <LogIn className="w-5 h-5" /> Sign In to View Submissions
+                    </button>
+                </div>
+            </PageWrapper>
+        );
+    }
 
     const activeSubmissions = submissions.filter(s => s.status === 'PENDING' || s.status === 'DROPPED');
     const completedSubmissions = submissions.filter(s => s.status === 'COMPLETED' || s.status === 'REJECTED');
@@ -241,7 +276,7 @@ const Submissions = () => {
                 )}
             </AnimatePresence>
 
-            {/* Details Modal - Z-Index Increased to 100 */}
+            {/* Details Modal */}
             <AnimatePresence>
                 {selectedSubmission && (
                     <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
@@ -343,4 +378,3 @@ const Submissions = () => {
 };
 
 export default Submissions;
-        

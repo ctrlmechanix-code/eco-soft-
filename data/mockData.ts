@@ -70,7 +70,7 @@ export const leaderboard: LeaderboardUser[] = [
   { id: "USR-002", rank: 2, name: "Priya Patel", email: "priya@university.edu", points: 410, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Priya", role: "user", status: "Active", joinedDate: "2023-09-15" },
   { id: "USR-CURRENT", rank: 3, name: "Student User", email: "student@university.edu", points: 1550, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=You", isUser: true, role: "user", status: "Active", joinedDate: "2023-09-20" },
   { id: "USR-003", rank: 4, name: "David Kim", email: "david@university.edu", points: 350, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=David", role: "user", status: "Active", joinedDate: "2023-10-01" },
-  { id: "USR-004", rank: 5, name: "Sarah Jenkins", email: "sarah@university.edu", points: 320, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Sarah", role: "user", status: "Active", joinedDate: "2023-10-05" },
+  { id: "USR-004", rank: 5, name: "Raj", email: "raj@py.in", points: 320, avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Sarah", role: "user", status: "Active", joinedDate: "2023-10-05" },
 ];
 
 export const impactStats: ImpactStats = {
@@ -84,55 +84,55 @@ export const impactStats: ImpactStats = {
 export const collectionPoints: CollectionPoint[] = [
   { 
     id: 1, 
-    name: "Student Center Hub", 
-    location: "Building A, Ground Floor", 
-    address: "123 Campus Drive, Building A",
+    name: "CWRS Building", 
+    location: "Room t4, Ground Floor", 
+    address: "Near Seminer Hall, NIT Patna",
     hours: "9 AM - 6 PM", 
-    coordinates: { lat: 12.9716, lng: 77.5946 },
-    phone: "+91 80-2211-3344",
-    email: "studenthub@ecosort.edu",
-    mapUrl: "https://www.google.com/maps/search/?api=1&query=Student+Center+Hub",
+    coordinates: { lat: 25.6207, lng: 85.1720 },
+    phone: "+91 88-0984-0470",
+    email: "ctrlmechanix@gmail.com",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=CWRS+Building+NIT+Patna",
     status: 'Active',
     totalCollected: 1240
   },
   { 
     id: 2, 
-    name: "Engineering Lab Drop-off", 
-    location: "Tech Block B, Room 102", 
-    address: "Tech Block B, 2nd Floor",
+    name: "Main Building", 
+    location: "Civil Department, Room 102", 
+    address: "Civil Department, 1st Floor, NIT Patna",
     hours: "8 AM - 8 PM", 
-    coordinates: { lat: 12.9720, lng: 77.5950 },
-    phone: "+91 80-2211-5566",
-    email: "engglab@ecosort.edu",
-    mapUrl: "https://www.google.com/maps/search/?api=1&query=Engineering+Lab",
+    coordinates: { lat: 25.6195, lng: 85.1725 },
+    phone: "+91 88-0984-0470",
+    email: "ctrlmechanix@gmail.com",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Department+of+Civil+NITP",
     status: 'Active',
     totalCollected: 850
   },
   { 
     id: 3, 
-    name: "Hostel 4 Recycling Zone", 
-    location: "North Campus Hostel Area", 
-    address: "Hostel Block 4, Common Area",
-    hours: "24/7", 
-    coordinates: { lat: 12.9730, lng: 77.5960 },
-    phone: "+91 80-2211-7788",
-    email: "hostel4@ecosort.edu",
-    mapUrl: "https://www.google.com/maps/search/?api=1&query=North+Campus+Hostel",
+    name: "SAC (Headquater)", 
+    location: "Near Student Activity Office", 
+    address: "Near Cafeteria 1, Ground Floor, NIT Patna",
+    hours: "8 AM - 8 PM", 
+    coordinates: { lat: 25.6210, lng: 85.1730 },
+    phone: "+91 88-0984-0470",
+    email: "ctrlmechanix@gmail.com",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Student+Activity+Centre+NIT+Patna",
     status: 'Active',
     totalCollected: 420
   },
   { 
     id: 4, 
-    name: "Library E-Waste Bin", 
-    location: "Main Library Entrance", 
-    address: "Central Library, Foyer",
-    hours: "8 AM - 10 PM", 
-    coordinates: { lat: 12.9700, lng: 77.5930 },
-    phone: "+91 80-2211-9900",
-    email: "library@ecosort.edu",
-    mapUrl: "https://www.google.com/maps/search/?api=1&query=Main+Library",
-    status: 'Maintenance',
-    totalCollected: 310
+    name: "Kosi Hostel Recycling Zone", 
+    location: "Campus Second gate", 
+    address: "Near Ganga River, NIT Patna",
+    hours: "24/7", 
+    coordinates: { lat: 25.6220, lng: 85.1710 },
+    phone: "+91 88-0984-0470",
+    email: "ctrlmechanix@gmail.com",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Kosi+Hostel+NITP",
+    status: 'Active',
+    totalCollected: 420
   },
 ];
 
@@ -153,13 +153,13 @@ export const questionFlowData = [
     {
         id: 2,
         question: "What would you like to do with it?",
-        options: ["Recycle it safely", "Donate it", "Repair it", "Get advice"],
+        options: ["Formally recycle it", "Donate it", "Repair it", "Get advice"],
         key: "intent"
     },
     {
         id: 3,
         question: "Are you a student or staff member?",
-        options: ["Student", "Faculty/Staff", "Visitor", "Alumni"],
+        options: ["Student", "Faculty/Staff", "Visitor"],
         key: "userType"
     }
 ];
@@ -633,21 +633,21 @@ export const mockNotifications: AppNotification[] = [
 export const mockTestimonials: Testimonial[] = [
     {
         id: "t1",
-        name: "Elena Rodriguez",
+        name: "Senha Sharma",
         role: "Architecture Student",
         avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=Elena",
         content: "ECO-SORT made it incredibly easy to find a place for my old drafting tablet. The credits system is a huge bonus!"
     },
     {
         id: "t2",
-        name: "Prof. James Chen",
+        name: "Prof. Anil Kumar",
         role: "Computer Science Dept.",
         avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=James",
         content: "We've diverted over 200kg of e-waste from our labs thanks to this platform. It's essential for a modern campus."
     },
     {
         id: "t3",
-        name: "Sarah Miller",
+        name: "Rohit Kumar",
         role: "Sustainability Club Lead",
         avatar: "https://api.dicebear.com/8.x/avataaars/svg?seed=SarahM",
         content: "Finally, a way to track our actual impact. Seeing the CO2 saved numbers go up motivates the whole team."

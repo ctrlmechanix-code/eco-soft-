@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Recycle, Twitter, Github, Linkedin, ArrowRight, Instagram, Mail, MapPin } from 'lucide-react';
+import { Recycle, Twitter , Github, Linkedin, ArrowRight, Instagram, Mail, MapPin } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 const FooterLink = ({ to, children }: { to: string; children?: React.ReactNode }) => (
@@ -67,8 +67,8 @@ const Footer = () => {
                         
                         <div className="flex gap-4 pt-2">
                             <SocialIcon href="https://twitter.com" label="Twitter"><Twitter className="w-5 h-5" /></SocialIcon>
-                            <SocialIcon href="https://github.com" label="GitHub"><Github className="w-5 h-5" /></SocialIcon>
-                            <SocialIcon href="https://linkedin.com" label="LinkedIn"><Linkedin className="w-5 h-5" /></SocialIcon>
+                            <SocialIcon href="https://github.com/ctrlmechanix-code" label="GitHub"><Github className="w-5 h-5" /></SocialIcon>
+                            <SocialIcon href="https://www.linkedin.com/in/ctrlmechanix-801b8a3a2" label="LinkedIn"><Linkedin className="w-5 h-5" /></SocialIcon>
                             <SocialIcon href="https://instagram.com" label="Instagram"><Instagram className="w-5 h-5" /></SocialIcon>
                         </div>
                     </div>
@@ -130,7 +130,7 @@ const Footer = () => {
 
                 <div className="pt-8 border-t border-slate-800/50 flex flex-col md:flex-row justify-between items-center gap-4">
                     <p className="text-xs text-slate-600 font-medium">
-                        © {new Date().getFullYear()} ECO-SORT Inc. All rights reserved.
+                        © {new Date().getFullYear()} CTRLMechanix Inc. All rights reserved.
                     </p>
                     <div className="flex gap-8">
                          <Link to="/privacy" className="text-xs text-slate-500 hover:text-emerald-400 transition-colors">Privacy</Link>

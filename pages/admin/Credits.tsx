@@ -3,13 +3,17 @@ import React, { useState, useEffect } from 'react';
 import { Coins, CheckCircle2 } from 'lucide-react';
 
 const AdminCredits = () => {
-    const [rates, setRates] = useState({ recycle: 30, donate: 50, repair: 70 });
+    // Updated default values to match QuestionFlow logic
+    const [rates, setRates] = useState({ recycle: 40, donate: 30, repair: 20, advice: 20 });
     const [saved, setSaved] = useState(false);
 
     useEffect(() => {
         const stored = localStorage.getItem('credit_rates');
         if (stored) {
             setRates(JSON.parse(stored));
+        } else {
+            // Initialize storage with defaults if not present
+            localStorage.setItem('credit_rates', JSON.stringify({ recycle: 40, donate: 30, repair: 20, advice: 20 }));
         }
     }, []);
 
@@ -62,6 +66,15 @@ const AdminCredits = () => {
                             type="number" 
                             value={rates.repair}
                             onChange={(e) => setRates({...rates, repair: parseInt(e.target.value) || 0})}
+                            className={inputClasses}
+                        />
+                    </div>
+                    <div className="flex justify-between items-center p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
+                        <span className="font-medium text-slate-700 dark:text-slate-200">Seek Advice</span>
+                        <input 
+                            type="number" 
+                            value={rates.advice}
+                            onChange={(e) => setRates({...rates, advice: parseInt(e.target.value) || 0})}
                             className={inputClasses}
                         />
                     </div>

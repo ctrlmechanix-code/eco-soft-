@@ -21,19 +21,44 @@ const AdminSubmissions = () => {
     }, []);
 
     const updateUserCredits = (userId: string, amount: number) => {
-        // Load users from storage or fall back to mock
+        // 1. Get existing users from storage
         const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
-        let users: LeaderboardUser[] = storedUsers.length > 0 ? storedUsers : [...leaderboard];
         
-        // Find user
-        const userIndex = users.findIndex(u => u.id === userId || u.name === userId); // Fallback to name if ID missing in mock
+        // 2. We need to handle a mix of "Mock Users" (who might not be in storage yet)
+        // and "New Users" (who are definitely in storage).
         
-        if (userIndex >= 0) {
-            users[userIndex] = {
-                ...users[userIndex],
-                points: users[userIndex].points + amount
+        // Create a map of all known users from mock data + storage
+        const userMap = new Map<string, LeaderboardUser>();
+        leaderboard.forEach(u => { if (u.id) userMap.set(u.id, u); });
+        storedUsers.forEach((u: LeaderboardUser) => { if (u.id) userMap.set(u.id, u); });
+
+        // 3. Find the specific user to update
+        const targetUser = userMap.get(userId);
+
+        if (targetUser) {
+            // Update points
+            const updatedUser = {
+                ...targetUser,
+                points: targetUser.points + amount
             };
-            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Put updated user back into the map
+            userMap.set(userId, updatedUser);
+            
+            // 4. Save the ENTIRE state of users back to localStorage so GreenCredits.tsx can read it.
+            // We convert map values back to array.
+            const allUsers = Array.from(userMap.values());
+            localStorage.setItem('users', JSON.stringify(allUsers));
+            
+            // Also update 'currentUser' if the admin happens to be verifying their own submission (edge case)
+            const currentSession = localStorage.getItem('currentUser');
+            if (currentSession) {
+                const currentUser = JSON.parse(currentSession);
+                if (currentUser.id === userId) {
+                    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+                }
+            }
+            
             return true;
         }
         return false;
@@ -42,6 +67,12 @@ const AdminSubmissions = () => {
     const updateSubmissionStatus = (id: string, status: Submission['status'], reason?: string) => {
         const submission = submissions.find(s => s.id === id);
         if (!submission) return;
+
+        // Prevent double credits if already completed
+        if (submission.status === 'COMPLETED' && status === 'COMPLETED') {
+            alert("This submission is already verified.");
+            return;
+        }
 
         const updatedSub: Submission = {
             ...submission,
@@ -60,7 +91,7 @@ const AdminSubmissions = () => {
             id: `ACT-${Date.now()}`,
             action: status === 'COMPLETED' ? 'SUBMISSION_VERIFIED' : 'SUBMISSION_REJECTED',
             adminId: 'USR-CURRENT',
-            adminName: 'Student User',
+            adminName: 'Student User', // In real app, get from auth context
             targetId: id,
             details: status === 'COMPLETED' 
                 ? `Verified submission ${id}. Awarded ${submission.creditsPending} credits.` 
@@ -74,7 +105,10 @@ const AdminSubmissions = () => {
 
         // Award Credits if completed
         if (status === 'COMPLETED' && submission.userId) {
-            updateUserCredits(submission.userId, submission.creditsPending);
+            const success = updateUserCredits(submission.userId, submission.creditsPending);
+            if (!success) {
+                console.warn(`Could not find user ${submission.userId} to award credits.`);
+            }
         }
     };
 

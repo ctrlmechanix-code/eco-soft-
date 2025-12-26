@@ -1,9 +1,10 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { collectionPoints } from '../data/mockData';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { collectionPoints as mockPoints } from '../data/mockData';
 import { CollectionPoint, CollectionPointMessage } from '../types';
-import { MapPin, Clock, ArrowUpRight, Phone, Mail, MessageSquare, ArrowLeft, Send, CheckCircle2 } from 'lucide-react';
+import { MapPin, Clock, ArrowUpRight, Phone, Mail, MessageSquare, ArrowLeft, Send, CheckCircle2, X, LogIn } from 'lucide-react';
 
 const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
     <motion.div
@@ -18,13 +19,64 @@ const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
 );
 
 const CollectionPoints = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [searchParams, setSearchParams] = useSearchParams();
+    
+    const [points, setPoints] = useState<CollectionPoint[]>([]);
     const [selectedPoint, setSelectedPoint] = useState<CollectionPoint | null>(null);
     const [chatMessage, setChatMessage] = useState('');
     const [isSending, setIsSending] = useState(false);
     const [showSentSuccess, setShowSentSuccess] = useState(false);
+    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
+    // Load Data
+    useEffect(() => {
+        const storedPoints = JSON.parse(localStorage.getItem('collection_points') || '[]');
+        if (storedPoints.length > 0) {
+            setPoints(storedPoints);
+        } else {
+            setPoints(mockPoints);
+            // Initialize storage to ensure admin sees data if they visit first
+            localStorage.setItem('collection_points', JSON.stringify(mockPoints));
+        }
+    }, []);
+
+    // Sync state with URL params
+    useEffect(() => {
+        if (points.length > 0) {
+            const pointId = searchParams.get('point');
+            if (pointId) {
+                const point = points.find(p => p.id.toString() === pointId);
+                if (point) {
+                    setSelectedPoint(point);
+                } else {
+                    setSelectedPoint(null);
+                }
+            } else {
+                setSelectedPoint(null);
+            }
+        }
+    }, [searchParams, points]);
+
+    const handlePointClick = (point: CollectionPoint) => {
+        setSearchParams({ point: point.id.toString() });
+    };
+
+    const handleBack = () => {
+        setSearchParams({});
+    };
 
     const handleSendMessage = (e: React.FormEvent) => {
         e.preventDefault();
+        
+        // Auth Check
+        const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+        if (!isAuthenticated) {
+            setShowLoginPrompt(true);
+            return;
+        }
+
         if (!chatMessage.trim() || !selectedPoint) return;
 
         setIsSending(true);
@@ -81,11 +133,11 @@ const CollectionPoints = () => {
                     </div>
                     
                     <div className="flex-grow overflow-y-auto pr-2 space-y-4 max-h-[70vh]">
-                        {collectionPoints.map((point) => (
+                        {points.filter(p => p.status !== 'Closed').map((point) => (
                             <motion.div
                                 key={point.id}
                                 whileHover={{ scale: 1.02 }}
-                                onClick={() => setSelectedPoint(point)}
+                                onClick={() => handlePointClick(point)}
                                 className={`group p-5 rounded-2xl border cursor-pointer transition-all ${
                                     selectedPoint?.id === point.id 
                                     ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-500 shadow-md ring-1 ring-emerald-200 dark:ring-emerald-800' 
@@ -107,6 +159,9 @@ const CollectionPoints = () => {
                                         <Clock className="w-4 h-4 text-slate-400 dark:text-slate-500" />
                                         {point.hours}
                                     </div>
+                                    {point.status === 'Maintenance' && (
+                                        <span className="inline-block px-2 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-700 rounded-md">Maintenance</span>
+                                    )}
                                 </div>
                             </motion.div>
                         ))}
@@ -125,7 +180,7 @@ const CollectionPoints = () => {
                                 className="bg-white dark:bg-slate-900 rounded-3xl md:rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-xl p-6 md:p-8 lg:p-10 flex flex-col h-full overflow-hidden"
                             >
                                 <button 
-                                    onClick={() => setSelectedPoint(null)}
+                                    onClick={handleBack}
                                     className="lg:hidden flex items-center gap-2 text-slate-400 hover:text-slate-900 dark:hover:text-white mb-6 transition-colors"
                                 >
                                     <ArrowLeft className="w-4 h-4" /> Back to List
@@ -179,14 +234,19 @@ const CollectionPoints = () => {
                                         </div>
                                     </div>
 
-                                    {/* Map Preview Placeholder */}
+                                    {/* Real Location Map Placeholder */}
                                     <div className="h-full min-h-[150px] bg-slate-100 dark:bg-slate-800 rounded-3xl overflow-hidden relative border border-slate-200 dark:border-slate-700">
-                                         <img 
-                                            src={`https://loremflickr.com/600/400/map,building/all?lock=${selectedPoint.id}`} 
-                                            alt="Location Map" 
-                                            className="w-full h-full object-cover opacity-80 dark:opacity-60"
-                                        />
-                                        <div className="absolute inset-0 bg-slate-900/10 hover:bg-transparent transition-colors duration-500" />
+                                        <iframe
+                                            width="100%"
+                                            height="100%"
+                                            frameBorder="0"
+                                            scrolling="no"
+                                            marginHeight={0}
+                                            marginWidth={0}
+                                            src={`https://maps.google.com/maps?q=${selectedPoint.coordinates.lat},${selectedPoint.coordinates.lng}&z=15&output=embed`}
+                                            className="w-full h-full opacity-90 hover:opacity-100 transition-opacity duration-500 grayscale hover:grayscale-0"
+                                            title="Point Location"
+                                        ></iframe>
                                     </div>
                                 </div>
 
@@ -206,7 +266,7 @@ const CollectionPoints = () => {
                                         />
                                         <button 
                                             type="submit"
-                                            disabled={!chatMessage.trim() || isSending}
+                                            disabled={!chatMessage.trim() && !isSending} // Allow click if sending (to show spinner) or prompt
                                             className="absolute right-3 bottom-3 p-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl hover:bg-emerald-600 dark:hover:bg-emerald-400 disabled:bg-slate-200 dark:disabled:bg-slate-700 disabled:text-slate-400 dark:disabled:text-slate-500 transition-all shadow-lg active:scale-95"
                                         >
                                             {isSending ? (
@@ -243,24 +303,76 @@ const CollectionPoints = () => {
                                 animate={{ opacity: 1 }}
                                 className="h-96 lg:h-full bg-slate-100 dark:bg-slate-800 rounded-[2.5rem] overflow-hidden border border-slate-200 dark:border-slate-700 relative shadow-inner group"
                             >
-                                <img 
-                                    src="https://loremflickr.com/1200/800/city,map/all?lock=456" 
-                                    alt="Interactive Map" 
-                                    className="w-full h-full object-cover opacity-80 dark:opacity-60 group-hover:opacity-100 transition-opacity duration-500"
-                                />
+                                <iframe
+                                    width="100%"
+                                    height="100%"
+                                    frameBorder="0"
+                                    scrolling="no"
+                                    marginHeight={0}
+                                    marginWidth={0}
+                                    // Defaulting to NIT Patna as the central location
+                                    src="https://maps.google.com/maps?q=National+Institute+of+Technology+Patna&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                                    className="w-full h-full opacity-90 group-hover:opacity-100 transition-opacity duration-500"
+                                    title="Campus Map"
+                                ></iframe>
+                                
                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent pointer-events-none" />
-                                <div className="absolute bottom-8 left-8 right-8 text-white">
+                                <div className="absolute bottom-8 left-8 right-8 text-white pointer-events-none">
                                     <h3 className="text-xl font-bold mb-1">Campus Interactive Map</h3>
                                     <p className="text-white/80 text-sm">Select a point on the left to view specific contact details and start a direct inquiry.</p>
                                 </div>
-                                <div className="absolute top-6 right-6 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-bold shadow-sm text-slate-700 dark:text-slate-200 uppercase tracking-widest border border-slate-100 dark:border-slate-800">
-                                    Interactive View
+                                <div className="absolute top-6 right-6 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-bold shadow-sm text-slate-700 dark:text-slate-200 uppercase tracking-widest border border-slate-100 dark:border-slate-800 pointer-events-none">
+                                    Live View
                                 </div>
                             </motion.div>
                         )}
                     </AnimatePresence>
                 </div>
             </div>
+
+            {/* Login Prompt Modal */}
+            <AnimatePresence>
+                {showLoginPrompt && (
+                    <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
+                        <motion.div 
+                            initial={{ opacity: 0 }} 
+                            animate={{ opacity: 1 }} 
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+                            onClick={() => setShowLoginPrompt(false)}
+                        />
+                        <motion.div 
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            className="relative w-full max-w-sm bg-white dark:bg-slate-900 rounded-3xl shadow-2xl p-8 text-center border border-slate-100 dark:border-slate-800"
+                        >
+                            <button 
+                                onClick={() => setShowLoginPrompt(false)}
+                                className="absolute top-4 right-4 p-2 bg-slate-100 dark:bg-slate-800 rounded-full text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                            
+                            <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/20 rounded-2xl flex items-center justify-center mx-auto mb-6 text-blue-600 dark:text-blue-400 rotate-[-10deg]">
+                                <LogIn className="w-8 h-8" />
+                            </div>
+                            
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Join the Conversation</h3>
+                            <p className="text-slate-500 dark:text-slate-400 mb-8 leading-relaxed">
+                                You need to be logged in to send messages to collection points. It only takes a moment!
+                            </p>
+                            
+                            <button
+                                onClick={() => navigate('/auth', { state: { from: location } })}
+                                className="w-full py-3.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold hover:bg-slate-800 dark:hover:bg-slate-200 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                            >
+                                Sign In to Chat
+                            </button>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </PageWrapper>
     );
 };

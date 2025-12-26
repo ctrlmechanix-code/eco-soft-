@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { Recycle, Mail, ArrowRight, ArrowLeft, Key, CheckCircle2, AlertCircle, Loader2, Info, X } from 'lucide-react';
+import { Recycle, Mail, ArrowRight, ArrowLeft, Key, CheckCircle2, AlertCircle, Loader2, Info, X, Eye, EyeOff } from 'lucide-react';
 import { leaderboard } from '../data/mockData';
 
 const GoogleLogo = () => (
@@ -24,6 +24,7 @@ const Auth = () => {
     const [error, setError] = useState<string | null>(null);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [showDevPopup, setShowDevPopup] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     // Get return path from location state or default to categories
     const from = location.state?.from?.pathname || '/categories';
@@ -78,7 +79,7 @@ const Auth = () => {
             }
 
             if (user && !isValid) {
-                setError("Invalid password. For demo users, use 'user123'. For Admin, check documentation.");
+                setError("Invalid email or password.");
                 return;
             }
 
@@ -236,13 +237,23 @@ const Auth = () => {
                                             Forgot password?
                                         </button>
                                     </div>
-                                    <input 
-                                        type="password" 
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-slate-900 dark:text-white font-medium placeholder:text-slate-400 dark:placeholder:text-slate-500"
-                                        placeholder="••••••••"
-                                    />
+                                    <div className="relative">
+                                        <input 
+                                            type={showPassword ? "text" : "password"} 
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            className="w-full px-4 py-3 pr-12 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-slate-900 dark:text-white font-medium placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                                            placeholder="••••••••"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors focus:outline-none"
+                                            aria-label={showPassword ? "Hide password" : "Show password"}
+                                        >
+                                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                        </button>
+                                    </div>
                                 </div>
 
                                 {error && (
@@ -381,4 +392,3 @@ const Auth = () => {
 };
 
 export default Auth;
-        

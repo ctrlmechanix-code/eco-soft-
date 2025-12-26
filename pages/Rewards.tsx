@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { rewardCatalog as mockRewards, leaderboard } from '../data/mockData';
 import { Reward, RedemptionTransaction, CreditTransaction, LeaderboardUser } from '../types';
-import { Coins, Filter, Lock, CheckCircle2, AlertCircle, ShoppingBag, Leaf, Trophy, School, Package, X } from 'lucide-react';
+import { Coins, Filter, Lock, CheckCircle2, AlertCircle, ShoppingBag, Leaf, Trophy, School, Package, X, LogIn } from 'lucide-react';
 import AnimatedCounter from '../components/ui/AnimatedCounter';
 
 const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
@@ -21,6 +21,7 @@ const PageWrapper = ({ children }: { children?: React.ReactNode }) => (
 
 const Rewards = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [user, setUser] = useState<LeaderboardUser | null>(null);
     const [rewards, setRewards] = useState<Reward[]>([]);
     const [filterCategory, setFilterCategory] = useState<string>('all');
@@ -28,17 +29,26 @@ const Rewards = () => {
     const [showAffordable, setShowAffordable] = useState(false);
     const [selectedReward, setSelectedReward] = useState<Reward | null>(null);
     const [isRedeeming, setIsRedeeming] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        // Load user data
-        const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
-        let currentUser = storedUsers.find((u: any) => u.id === 'USR-CURRENT') || leaderboard.find(u => u.isUser);
-        
-        // If not in storage yet, put it there
-        if (!currentUser) {
-             currentUser = { ...leaderboard.find(u => u.isUser), id: 'USR-CURRENT' };
+        // Check Auth
+        const auth = localStorage.getItem('isAuthenticated') === 'true';
+        setIsAuthenticated(auth);
+
+        if (auth) {
+            // Load user data only if authenticated
+            const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+            let currentUser = storedUsers.find((u: any) => u.id === 'USR-CURRENT') || leaderboard.find(u => u.isUser);
+            
+            // If not in storage yet but is 'authenticated' (mock scenario), put it there
+            if (!currentUser) {
+                 currentUser = { ...leaderboard.find(u => u.isUser), id: 'USR-CURRENT' };
+            }
+            setUser(currentUser);
+        } else {
+            setUser(null);
         }
-        setUser(currentUser);
 
         // Load Rewards Data
         const storedRewards = JSON.parse(localStorage.getItem('rewards_catalog') || '[]');
@@ -65,7 +75,15 @@ const Rewards = () => {
         return tiers.indexOf(userTier) >= tiers.indexOf(requiredTier);
     };
 
-    const handleRedeem = (reward: Reward) => {
+    const handleRedeemClick = (reward: Reward) => {
+        if (!isAuthenticated) {
+            navigate('/auth', { state: { from: location } });
+            return;
+        }
+        setSelectedReward(reward);
+    };
+
+    const confirmRedeem = (reward: Reward) => {
         if (!user) return;
         setIsRedeeming(true);
 
@@ -134,7 +152,7 @@ const Rewards = () => {
     const filteredRewards = rewards.filter(reward => {
         const matchesCategory = filterCategory === 'all' || reward.category === filterCategory;
         const matchesTier = filterTier === 'all' || reward.minTier === filterTier;
-        const matchesAffordability = !showAffordable || (user ? user.points >= reward.creditCost : false);
+        const matchesAffordability = !showAffordable || (user ? user.points >= reward.creditCost : true); // Show all if guest
         return matchesCategory && matchesTier && matchesAffordability;
     });
 
@@ -160,7 +178,8 @@ const Rewards = () => {
                     <p className="text-slate-500 dark:text-slate-400 mt-1">Spend your Green Credits on exclusive perks and items.</p>
                 </div>
                 
-                {user && (
+                {/* Only show stats if logged in */}
+                {isAuthenticated && user && (
                     <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
                         <div className="text-right">
                             <p className="text-xs font-bold text-slate-400 uppercase">Available Credits</p>
@@ -211,15 +230,18 @@ const Rewards = () => {
                         <option value="platinum">Platinum</option>
                     </select>
                     
-                    <label className="flex items-center gap-2 text-sm font-bold text-slate-600 dark:text-slate-300 cursor-pointer select-none">
-                        <input 
-                            type="checkbox" 
-                            checked={showAffordable}
-                            onChange={(e) => setShowAffordable(e.target.checked)}
-                            className="w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
-                        />
-                        Affordable Only
-                    </label>
+                    {/* Only show affordable filter if logged in */}
+                    {isAuthenticated && (
+                        <label className="flex items-center gap-2 text-sm font-bold text-slate-600 dark:text-slate-300 cursor-pointer select-none">
+                            <input 
+                                type="checkbox" 
+                                checked={showAffordable}
+                                onChange={(e) => setShowAffordable(e.target.checked)}
+                                className="w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                            />
+                            Affordable Only
+                        </label>
+                    )}
                 </div>
             </div>
 
@@ -227,9 +249,14 @@ const Rewards = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {filteredRewards.map((reward) => {
                     const isUnlocked = checkTierAccess(currentTier, reward.minTier);
-                    const canAfford = user ? user.points >= reward.creditCost : false;
+                    // Guests can effectively afford nothing, but we want the button enabled to prompt login
+                    const canAfford = user ? user.points >= reward.creditCost : true; 
                     const Icon = categoryIcons[reward.category];
                     const hasStock = reward.stock === 'unlimited' || (reward.stock as number) > 0;
+
+                    // Button State Logic
+                    const isButtonDisabled = !hasStock || (isAuthenticated && (!isUnlocked || !canAfford));
+                    const buttonText = !hasStock ? 'Out of Stock' : (!isAuthenticated ? 'Sign in to Redeem' : 'Redeem');
 
                     return (
                         <motion.div 
@@ -239,7 +266,7 @@ const Rewards = () => {
                             whileHover={{ y: -5 }}
                             className={`bg-white dark:bg-slate-900 rounded-3xl border ${isUnlocked ? 'border-slate-200 dark:border-slate-800' : 'border-slate-100 dark:border-slate-800 opacity-80'} shadow-sm overflow-hidden flex flex-col relative group`}
                         >
-                            {!isUnlocked && (
+                            {!isUnlocked && isAuthenticated && (
                                 <div className="absolute inset-0 bg-slate-100/50 dark:bg-slate-900/50 backdrop-blur-[1px] z-10 flex flex-col items-center justify-center text-center p-6">
                                     <div className="w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center text-slate-500 dark:text-slate-400 mb-2">
                                         <Lock className="w-6 h-6" />
@@ -273,15 +300,15 @@ const Rewards = () => {
                                         {reward.creditCost}
                                     </div>
                                     <button 
-                                        onClick={() => setSelectedReward(reward)}
-                                        disabled={!isUnlocked || !canAfford || !hasStock}
+                                        onClick={() => handleRedeemClick(reward)}
+                                        disabled={isButtonDisabled}
                                         className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                                            isUnlocked && canAfford && hasStock
+                                            !isButtonDisabled
                                             ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-emerald-600 dark:hover:bg-emerald-400 shadow-md' 
                                             : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed'
                                         }`}
                                     >
-                                        Redeem
+                                        {buttonText}
                                     </button>
                                 </div>
                             </div>
@@ -290,7 +317,7 @@ const Rewards = () => {
                 })}
             </div>
 
-            {/* Redemption Modal */}
+            {/* Redemption Modal - Only shows if selectedReward is set (which implies auth is checked) */}
             <AnimatePresence>
                 {selectedReward && user && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
@@ -342,7 +369,7 @@ const Rewards = () => {
                                 </div>
 
                                 <button
-                                    onClick={() => handleRedeem(selectedReward)}
+                                    onClick={() => confirmRedeem(selectedReward)}
                                     disabled={isRedeeming}
                                     className="w-full py-4 bg-emerald-600 text-white rounded-xl font-bold text-lg hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-900/20 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                                 >

@@ -47,13 +47,20 @@ const Result = () => {
     const state = location.state as { answers: QuestionFlowAnswers, submission: Submission } | null;
 
     const recommendation = useMemo(() => {
-        if (!state?.answers) return { action: "Recycle", explanation: "Based on your inputs, safe recycling is the best option to recover valuable materials.", credits: 30 };
+        // Load rates from storage or use defaults
+        const storedRates = localStorage.getItem('credit_rates');
+        const rates = storedRates 
+            ? JSON.parse(storedRates) 
+            : { recycle: 40, donate: 30, repair: 20, advice: 20 };
+
+        if (!state?.answers) return { action: "Recycle", explanation: "Based on your inputs, safe recycling is the best option to recover valuable materials.", credits: rates.recycle };
         
         const ans = state.answers;
-        if (ans.intent === "Repair it") return { action: "Repair", explanation: "Repairing extends device life and conserves valuable resources.", credits: 70 };
-        if (ans.deviceCondition === "Yes, perfectly" || ans.intent === "Donate it") return { action: "Donate", explanation: "Donating gives devices a second life, helping those in need while reducing waste.", credits: 50 };
+        if (ans.intent === "Repair it") return { action: "Repair", explanation: "Repairing extends device life and conserves valuable resources.", credits: rates.repair };
+        if (ans.intent === "Donate it") return { action: "Donate", explanation: "Donating gives devices a second life, helping those in need while reducing waste.", credits: rates.donate };
+        if (ans.intent === "Get advice") return { action: "Recycle", explanation: "Our experts will guide you on the best disposal method.", credits: rates.advice };
 
-        return { action: "Recycle", explanation: "Recycling recovers valuable materials like gold and copper while preventing toxic pollution.", credits: 30 };
+        return { action: "Recycle", explanation: "Recycling recovers valuable materials like gold and copper while preventing toxic pollution.", credits: rates.recycle };
     }, [state?.answers]);
     
     const theme = THEMES[recommendation.action as keyof typeof THEMES] || THEMES.Recycle;
@@ -228,7 +235,7 @@ const Result = () => {
 
                     {/* Actions */}
                     <div className="space-y-4">
-                         {['Recycle', 'Donate'].includes(recommendation.action) ? (
+                         {['Recycle', 'Donate', 'Advice'].includes(recommendation.action) || recommendation.action === 'Repair' ? (
                             <motion.button
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}

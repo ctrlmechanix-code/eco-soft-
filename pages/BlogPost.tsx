@@ -1,15 +1,30 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, User, Tag, Clock, Share2, Check } from 'lucide-react';
-import { blogPosts } from '../data/mockData';
+import { blogPosts as mockPosts } from '../data/mockData';
+import { BlogPost as BlogPostType } from '../types';
 
 const BlogPost = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [copied, setCopied] = useState(false);
-    const post = blogPosts.find(p => p.id === id);
+    const [post, setPost] = useState<BlogPostType | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        // Look up post in storage or fallback
+        const stored = JSON.parse(localStorage.getItem('blog_posts') || '[]');
+        let found = stored.find((p: BlogPostType) => p.id === id);
+        
+        if (!found) {
+            found = mockPosts.find(p => p.id === id);
+        }
+        
+        setPost(found || null);
+        setIsLoading(false);
+    }, [id]);
 
     const handleShare = async (e: React.MouseEvent) => {
         // Prevent event bubbling to ensure the click is captured solely by the button
@@ -72,6 +87,10 @@ const BlogPost = () => {
             }
         }
     };
+
+    if (isLoading) {
+        return <div className="min-h-screen bg-white dark:bg-slate-950" />;
+    }
 
     if (!post) {
         return (
